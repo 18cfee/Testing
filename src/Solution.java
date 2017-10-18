@@ -15,7 +15,7 @@ public class Solution {
     }
     public static int functione(int[] S){
         int uBound = S.length -1;
-        int i = 1;
+        int i = 2;
         while (i < uBound){
             if(S[i+1] >= S[i] && S[i] <= S[i-1]){ // found local min
                 return i;

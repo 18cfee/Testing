@@ -13,23 +13,26 @@ public class Solution {
             in = new Scanner(new File("sol.in"));
         }
         /////////////////////// Scannnner
-       System.out.println(stairs(6,2));
+        int t = in.nextInt();
+        for (int i = 0; i < t; i++) {
+            int n = in.nextInt();
+            int maxVal = 0;
+            int minVal = 0;
+            int prev = in.nextInt();
+            for (int j = 0; j < n - 1; j++) {
+                int current = in.nextInt();
+                int temp = maxVal;
+                maxVal = Math.max(maxVal+(Math.abs(prev - current)), minVal + (Math.abs(1 - current)));
+                minVal = Math.max(temp+(Math.abs(prev - 1)), minVal);
+                prev = current;
+            }
+            System.out.println(Math.max(minVal,maxVal));
+        }
         /////////////////////// Main End\\
         in.close();
     }
     ////////////////////////Methods for current Project/////////////////
 
-    public static int stairs(int n, int k){
-        int n_1 = n + 1;
-        int[] numWaysToGetToStair = new int[n_1];
-        numWaysToGetToStair[0] = 1;
-        for (int i = 1; i < n_1; i++) {
-            for (int j = 1; j <= k; j++) {
-                numWaysToGetToStair[i] += i - j >= 0 ? numWaysToGetToStair[i-j]:0;
-            }
-        }
-        return numWaysToGetToStair[n];
-    }
 
     ////////////////////////////////////////////////////////////////////
 

@@ -20,15 +20,15 @@ public class Solution {
     ////////////////////////Methods for current Project/////////////////
 
     public static int stairs(int n, int k){
-        n++;
-        int[] numWaysToGetToStair = new int[n];
+        int n_1 = n + 1;
+        int[] numWaysToGetToStair = new int[n_1];
         numWaysToGetToStair[0] = 1;
-        for (int i = 1; i < n; i++) {
+        for (int i = 1; i < n_1; i++) {
             for (int j = 1; j <= k; j++) {
                 numWaysToGetToStair[i] += i - j >= 0 ? numWaysToGetToStair[i-j]:0;
             }
         }
-        return numWaysToGetToStair[n-1];
+        return numWaysToGetToStair[n];
     }
 
     ////////////////////////////////////////////////////////////////////

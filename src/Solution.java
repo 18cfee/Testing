@@ -13,81 +13,24 @@ public class Solution {
             in = new Scanner(new File("sol.in"));
         }
         /////////////////////// Scannnner
-        int n = in.nextInt();
-        int[] array = new int[n];
-        for (int i = 0; i < n; i++) {
-            array[i] = in.nextInt();
-        }
-        printArray(array);
-        array = quickSort(array);
-        printArray(array);
+       System.out.println(stairs(6,2));
         /////////////////////// Main End\\
         in.close();
     }
     ////////////////////////Methods for current Project/////////////////
-    public static int[] quickSort(int[] array){
-        if(array == null) return null;
-        int sizeArray = array.length;
-        if(sizeArray == 0) return array;
-        Stack<Tuple> stack = new Stack<Tuple>();
-        shuffleArray(array);
-        int index1 = 0;
-        int index2 = sizeArray - 1;
-        Tuple tup = new Tuple(index1,index2);
-        stack.push(tup);
-        while(!stack.isEmpty()){
-            tup = stack.pop();
-            int first = tup.firstT;
-            int last = tup.lastT;
-            int pivot = array[last];
-            last--;
-            while(first < last) {
-                int temp = array[first];
-                // if less leave than pivot, otherwise swap it with end item and decrement + more comment
-                if(temp < pivot){
-                    first++;
-                } else{
-                    array[first] = array[last];
-                    array[last] = temp;
-                    last--;
-                }
-            }
-            // equal goes in first section
-            if(array[first] > pivot){
-                array[tup.lastT] = array[first];
-                array[first] = pivot;
-                first--;
-            } else{
 
-                last++;
-            }
-            if(first - tup.firstT > 0){
-                Tuple firstP = new Tuple(tup.firstT,first);
-                stack.push(firstP);
-            }
-            if(tup.lastT - last > 0){
-                Tuple lastP = new Tuple(last,tup.lastT);
-                stack.push(lastP);
+    public static int stairs(int n, int k){
+        n++;
+        int[] numWaysToGetToStair = new int[n];
+        numWaysToGetToStair[0] = 1;
+        for (int i = 1; i < n; i++) {
+            for (int j = 1; j <= k; j++) {
+                numWaysToGetToStair[i] += i - j >= 0 ? numWaysToGetToStair[i-j]:0;
             }
         }
-        return array;
+        return numWaysToGetToStair[n-1];
     }
 
-    private static void shuffleArray(int[] array)
-    {
-        int index;
-        Random random = new Random();
-        for (int i = array.length - 1; i > 0; i--)
-        {
-            index = random.nextInt(i + 1);
-            if (index != i)
-            {
-                array[index] ^= array[i];
-                array[i] ^= array[index];
-                array[index] ^= array[i];
-            }
-        }
-    }
     ////////////////////////////////////////////////////////////////////
 
     ////////////////////////////////////3-Way Max////////////////////////////////////////////////

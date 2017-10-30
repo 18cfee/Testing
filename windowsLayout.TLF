@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<TASKLAYOUT_LAYOUT DESCRIPTION="" AUTO_RUN="0" AUTO_RUN_TYPE="0" AUTO_RUN_SIZE="1" APP_RUN="2" CLOSE_ACTIVE_LAYOUT="2" HOTKEY="838" HOTKEY1="0" ACTIVATE_WINDOWS="2">
+    <WINDOW ENABLED="1" NAME="Testing - [C:\Users\cfee\git\Testing] - Solution.java - IntelliJ IDEA 2017.2.5" COMMANDLINE='&quot;C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2017.2.5\bin\idea64.exe&quot; ' OPERATION="0" CURRENT_FOLDER="C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2017.2.5\bin" ACTION="0" CLASSNAME="SunAwtFrame" CLASSNAME_REGEX="0" CLASSNAME_IGNORECASE="0" WINDOWNAME="Testing - [C:\Users\cfee\git\Testing] - Solution.java - IntelliJ IDEA 2017.2.5" WINDOWNAME_REGEX="0" WINDOWNAME_IGNORECASE="0" IGNORE_PID="0">
+        <POSITIONS>
+            <POSITION X="1917" Y="-983" WIDTH="1590" HEIGHT="1038" STATE="0" />
+        </POSITIONS>
+    </WINDOW>
+    <WINDOW ENABLED="1" NAME="SystemGoods - Home - Google Chrome" COMMANDLINE='&quot;C:\Program Files (x86)\Google\Chrome\Application\chrome.exe&quot; --new-window &quot;http://www.systemgoods.com/&quot;' OPERATION="0" CURRENT_FOLDER="C:\Program Files (x86)\Google\Chrome\Application" ACTION="0" CLASSNAME="Chrome_WidgetWin_1" CLASSNAME_REGEX="0" CLASSNAME_IGNORECASE="0" WINDOWNAME="SystemGoods - Home - Google Chrome" WINDOWNAME_REGEX="0" WINDOWNAME_IGNORECASE="0" IGNORE_PID="1">
+        <POSITIONS>
+            <POSITION X="3492" Y="-986" WIDTH="997" HEIGHT="948" STATE="0" />
+        </POSITIONS>
+    </WINDOW>
+    <WINDOW ENABLED="1" NAME="MINGW64:/c/Users/cfee/git/Team20" COMMANDLINE='usr\bin\mintty.exe --nodaemon -o AppID=GitForWindows.Bash -o AppLaunchCmd=&quot;C:\Program Files\Git\git-bash.exe&quot; -o AppName=&quot;Git Bash&quot; -i &quot;C:\Program Files\Git\git-bash.exe&quot; --store-taskbar-properties -- /usr/bin/bash --login -i' OPERATION="0" CURRENT_FOLDER="usr\bin" ACTION="0" CLASSNAME="mintty" CLASSNAME_REGEX="0" CLASSNAME_IGNORECASE="0" WINDOWNAME="MINGW64:/c/Users/cfee/git/Team20" WINDOWNAME_REGEX="0" WINDOWNAME_IGNORECASE="0" IGNORE_PID="0">
+        <POSITIONS>
+            <POSITION X="3726" Y="-45" WIDTH="761" HEIGHT="457" STATE="0" />
+        </POSITIONS>
+    </WINDOW>
+</TASKLAYOUT_LAYOUT>

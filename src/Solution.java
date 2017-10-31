@@ -20,8 +20,8 @@ public class Solution {
             int minVal = 0;
             int prev = in.nextInt();
             for (int j = 0; j < n - 1; j++) {
-                int current = in.nextInt();
                 int temp = maxVal;
+                int current = in.nextInt();
                 maxVal = Math.max(maxVal+(Math.abs(prev - current)), minVal + (Math.abs(1 - current)));
                 minVal = Math.max(temp+(Math.abs(prev - 1)), minVal);
                 prev = current;

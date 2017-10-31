@@ -4,117 +4,92 @@ import java.time.LocalDate;
 import java.util.*;
 
 public class Solution {
-    static int[] array;
-    static int n;
     public static void main(String[] args) throws FileNotFoundException {
+        // This is just generic stuff I use for hackerrank to make it easy to use IDE (reusing though)
         File f = new File("sol.in");
         Scanner in = new Scanner(System.in);
         if (f.exists() && !f.isDirectory()) {
             in = new Scanner(new File("sol.in"));
         }
-        /////////////////////// Scannnner
-        int t = in.nextInt();
-        for (int i = 0; i < t; i++) {
-            int n = in.nextInt();
-            int maxVal = 0;
-            int minVal = 0;
-            int prev = in.nextInt();
-            for (int j = 0; j < n - 1; j++) {
-                int temp = maxVal;
-                int current = in.nextInt();
-                maxVal = Math.max(maxVal+(Math.abs(prev - current)), minVal + (Math.abs(1 - current)));
-                minVal = Math.max(temp+(Math.abs(prev - 1)), minVal);
-                prev = current;
-            }
-            System.out.println(Math.max(minVal,maxVal));
-        }
+        /////////////////////// This is code I wrote for this problem
+
+
+
+
+
         /////////////////////// Main End\\
         in.close();
     }
+
     ////////////////////////Methods for current Project/////////////////
+    static int[] sort_hotels(String keywords, int[] hotel_ids, String[] reviews) {
+        int[][] mentions = new int[2][hotel_ids.length + 1];
+        String[] main = keywords.toLowerCase().split(" ");
+        Set<String> keys = new HashSet<String>(main.length);
+        for (String s : main){
+            System.out.println("key: " + s);
+            keys.add(s);
+        }
+        int index = 0;
+        for(Integer id : hotel_ids){
+            String ws = reviews[index].replaceAll("[.|,|!]","");
+            ws = ws.toLowerCase();
+            String[] words = ws.split(" ");
+            int count = 0;
+            for(String word: words){
+
+                if(keys.contains(word)){
+                    count++;
+                    System.out.println(word);
+                }
+            }
+
+            mentions[id][1] += count;
+            mentions[id][0] = index;
+            index++;
+        }
+
+        java.util.Arrays.sort(mentions, java.util.Comparator.comparingDouble(a -> a[0]));
+        return mentions[1];
+    }
+
+
+
+
+
+
+  /*  static int howManyAgentsToAdd(int noOfCurrentAgents, int[][] callsTimes) {
+        int size = callsTimes.length;
+        int callsON = 0;
+        int time = 0;
+        int max = 0;
+        List<Integer> callOnEndTimes = new ArrayList<Integer>();
+        for(int i = 0; i < size; i++){
+            time = callsTimes[i][0];
+            int end = callsTimes[i][1];
+            callOnEndTimes.add(end);
+            int index = 0;
+            while(index < callOnEndTimes.size()){
+                int j = callOnEndTimes.get(index);
+                if(j <= time){
+                    callOnEndTimes.remove(index);
+                } else{
+                    index++;
+                }
+            }
+            int callsOn = callOnEndTimes.size();
+            max = Math.max(max,callsOn);
+        }
+
+        if(max > noOfCurrentAgents){
+            return max - noOfCurrentAgents;
+        } else{
+            return 0;
+        }
+    }*/
+
+
 
 
     ////////////////////////////////////////////////////////////////////
-
-    ////////////////////////////////////3-Way Max////////////////////////////////////////////////
-    public static int max(int aa, int bb, int cc){
-        return Math.max(aa,Math.max(bb,cc));
-    }
-    /////////////////////////////////////////////////////////////////////////////////////////////
-
-    //////////////////////////////////Print array/////////////////////////////////////////////
-    public static void printArray(int[][] thatAr){
-        int nnn = thatAr.length;
-        for(int i = 0; i < nnn; i++){
-            int[] current = thatAr[i];
-            for(int j= 0; j < current.length; j++){
-                System.out.print(current[j] + " ");
-            }
-            System.out.println();
-        }
-    }
-
-    public static void printArray(int[] thatAr){
-        int nnn = thatAr.length;
-        for(int i = 0; i < nnn; i++){
-            System.out.print(thatAr[i] + " ");
-        }
-        System.out.println();
-    }
-
-    public static void printList(List<Integer> thatAr){
-        int nnn = thatAr.size();
-        for(int i = 0; i < nnn; i++){
-            System.out.print(thatAr.get(i) + " ");
-        }
-        System.out.println();
-    }
-    /////////////////////////////////////////////////////////////////////////////////////////////
-
-
-    //////////////////////////////// Reverse an Int /////////////////////////////////////////////
-    public static int reverseInt(int x){
-        StringBuilder in = new StringBuilder();
-        in.append(Integer.toString(x));
-        in.reverse();
-        x = Integer.parseInt(in.toString());
-        return x;
-    }
-    /////////////////////////////////////////////////////////////////////////////////////////////
-
-    /////////////////////Sum the Numeric digits in a String//////////////////////////////////////
-    public static long sumDigits(String x){
-        int tot = 0;
-        for(int i = 0; i < x.length(); i++){
-            tot += x.charAt(i) - '0';
-        }
-        return tot;
-    }
-    ////////////////////////////////////////////////////////////////////////////////////////////
-
-    ////////////////////////Default Dictionary//////////////////////////////////////////////////
-
-    ////////////////////////////////////////////////////////////////////////////////////////////
-
-    /////////////////////////Return List Prime Factorization////////////////////////////////////
-
-    ////////////////////////////////////////////////////////////////////////////////////////////
 }
-////////////////////////////////// Tuple Classes Here //////////////////////////////////////
-class Tuple{
-    public int firstT = 0;
-    public int lastT = 0;
-    Tuple(int first, int last){
-        this.firstT = first;
-        this.lastT = last;
-    }
-}
-class TupleXY{
-    public int xT = 0;
-    public int yT = 0;
-    TupleXY(int first, int last){
-        this.xT = first;
-        this.yT = last;
-    }
-}
-////////////////////////////////////////////////////////////////////////////////////////////////

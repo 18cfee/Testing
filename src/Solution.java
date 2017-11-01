@@ -14,12 +14,7 @@ public class Solution {
             in = new Scanner(new File("sol.in"));
         }
         /////////////////////// This is code I wrote for this problem
-        n = in.nextInt();
-        List<Tuple> array = new ArrayList<Tuple>(n);
-        for (int i = 0; i < n; i++) {
-            array.add(new Tuple(in.nextInt(),in.nextInt()));
-        }
-        Collections.sort(array,new Tuple(1,2));
+
         /////////////////////// Main End\\
         in.close();
     }
@@ -33,6 +28,13 @@ public class Solution {
 
 
     ///////////////////////////////////////////////////////////////////
+    ////////////////////////////////Handy/////////////////////////////
+    /*n = in.nextInt();
+    List<Tuple> array = new ArrayList<Tuple>(n);
+        for (int i = 0; i < n; i++) {
+        array.add(new Tuple(in.nextInt(),in.nextInt()));
+    }
+        Collections.sort(array,new Tuple(1,2));*/
 
     //////////////////////Distance Between Tuples (X,Y) (X,Y)/////////////
     public static double distanceBetween(TupXY one, TupXY two){

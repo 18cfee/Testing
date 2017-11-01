@@ -17,14 +17,34 @@ public class Solution {
 
         TupleXY[] plot= {new TupleXY(1,1),new TupleXY(1,1),new TupleXY(1,1),new TupleXY(1,1)};
         double y_int = 14.5;
-        double slope = 1.4;
-        System.out.println("Hello");
+        double slope = -1.8;
+        System.out.println("R_2: " + rSquared(plot,y_int,slope));
+        y_int = 15;
+        slope = -1.4;
+        System.out.println("R_2: " + rSquared(plot,y_int,slope));
+        y_int = 14.5;
+        slope = -1.7;
+        System.out.println("R_2: " + rSquared(plot,y_int,slope));
+        y_int = 15;
+        slope = -1.8;
+        System.out.println("R_2: " + rSquared(plot,y_int,slope));
+        y_int = 14.43;
+        slope = -1.617;
+        System.out.println("R_2: " + rSquared(plot,y_int,slope));
 
         /////////////////////// Main End\\
         in.close();
     }
 
     ////////////////////////Methods for current Project/////////////////
+
+    public static double rSquared(TupleXY[] plot, double y_int, double slope){
+        double r_2 = 0;
+        for(TupleXY tup: plot){
+            r_2 += distanceToLine(tup,y_int,slope);
+        }
+        return r_2;
+    }
 
     public static double distanceToLine(TupleXY cor, double y_int, double slope){
         double upper = Math.abs(y_int + cor.xT*slope + cor.yT*-1);

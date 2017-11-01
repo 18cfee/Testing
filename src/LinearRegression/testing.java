@@ -24,6 +24,13 @@ public class testing {
         assertEquals(one, two);
     }
 
+    @Test
+    public void testDistanceLine(){
+        long one = decToLong(Solution.distanceToLine(new TupleXY(1,1), 0,0));
+        long two = decToLong(1);
+        assertEquals(one, two);
+    }
+
     //// Helpers after this point
     public long decToLong(double num){
         return (long)(prec * num);

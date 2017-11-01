@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.*;
 
 public class Solution {
+    public static int n;
+    public static int t;
     public static void main(String[] args) throws FileNotFoundException {
         // This is just generic stuff I use for hackerrank to make it easy to use IDE (reusing though)
         File f = new File("sol.in");
@@ -12,11 +14,12 @@ public class Solution {
             in = new Scanner(new File("sol.in"));
         }
         /////////////////////// This is code I wrote for this problem
-
-
-
-        System.out.println("Hello");
-
+        n = in.nextInt();
+        List<Tuple> array = new ArrayList<Tuple>(n);
+        for (int i = 0; i < n; i++) {
+            array.add(new Tuple(in.nextInt(),in.nextInt()));
+        }
+        Collections.sort(array,new Tuple(1,2));
         /////////////////////// Main End\\
         in.close();
     }
@@ -32,7 +35,7 @@ public class Solution {
     ///////////////////////////////////////////////////////////////////
 
     //////////////////////Distance Between Tuples (X,Y) (X,Y)/////////////
-    public static double distanceBetween(TupleXY one, TupleXY two){
+    public static double distanceBetween(TupXY one, TupXY two){
         return Math.sqrt(Math.pow((one.xT - two.xT),2) + Math.pow(one.yT - two.yT, 2));
     }
 
@@ -107,18 +110,28 @@ public class Solution {
 
 }
 ////////////////////////////////// Tuple Classes Here //////////////////////////////////////
-class Tuple{
+
+class Tuple implements Comparator<Tuple>{
     public int firstT = 0;
     public int lastT = 0;
-    Tuple(int first, int last){
+    Tuple(int first, int last) {
         this.firstT = first;
         this.lastT = last;
     }
+
+    public Tuple[] sortByFirst(Tuple[] tuples) {
+        return new Tuple[0];
+    }
+
+    @Override
+    public int compare(Tuple a, Tuple b){
+        return a.lastT - b.lastT;
+    }
 }
-class TupleXY{
+class TupXY{
     public int xT = 0;
     public int yT = 0;
-    TupleXY(int first, int last){
+    TupXY(int first, int last){
         this.xT = first;
         this.yT = last;
     }

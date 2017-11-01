@@ -31,6 +31,11 @@ public class Solution {
 
     ///////////////////////////////////////////////////////////////////
 
+    //////////////////////Distance Between Tuples (X,Y) (X,Y)/////////////
+    public static double distanceBetween(TupleXY one, TupleXY two){
+        return Math.sqrt(Math.pow((one.xT - two.xT),2) + Math.pow(one.yT - two.yT, 2));
+    }
+
 
     ////////////////////////////////////3-Way Max////////////////////////////////////////////////
     public static int max(int aa, int bb, int cc){

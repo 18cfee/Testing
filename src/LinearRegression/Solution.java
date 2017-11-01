@@ -15,8 +15,9 @@ public class Solution {
         }
         /////////////////////// This is code I wrote for this problem
 
-
-
+        TupleXY[] plot= {new TupleXY(1,1),new TupleXY(1,1),new TupleXY(1,1),new TupleXY(1,1)};
+        double y_int = 14.5;
+        double slope = 1.4;
         System.out.println("Hello");
 
         /////////////////////// Main End\\
@@ -24,8 +25,12 @@ public class Solution {
     }
 
     ////////////////////////Methods for current Project/////////////////
-    
 
+    public static double distanceToLine(TupleXY cor, double y_int, double slope){
+        double upper = Math.abs(y_int + cor.xT*slope + cor.yT*-1);
+        double lower = Math.sqrt(slope*slope + 1); // 1 from (-1)^2 - coe in front of y
+        return upper/lower;
+    }
 
 
 

@@ -14,6 +14,41 @@ public class Solution {
             in = new Scanner(new File("sol.in"));
         }
         /////////////////////// This is code I wrote for this problem
+        n = in.nextInt();
+        int decSince = 0;
+        int[] array = new int[n];
+        Arrays.fill(array,1);
+        int prev = in.nextInt();
+        int rating = 0;
+        for (int i = 1; i < n; i++) {
+            rating = in.nextInt();
+            if(rating >= prev && decSince < i -1){
+                array[i - 1] = 1;
+                for (int j = i - 2; j >= decSince ; j--) {
+                    if(array[j] <= array[j+1]){
+                        array[j] = array[j+1] + 1;
+                    }
+                }
+            }
+            if (rating > prev){
+                array[i] = array[i - 1] + 1;
+                decSince = i;
+            }
+            if (rating == prev){
+                decSince = i;
+            }
+            if(i < n -1) prev = rating;
+        }
+        if(rating < prev && decSince < n){
+            array[n - 1] = 1;
+            for (int j = n - 2; j >= decSince ; j--) {
+                if(array[j] <= array[j+1]){
+                    array[j] = array[j+1] + 1;
+                }
+            }
+        }
+        System.out.println(sumArray(array));
+
 
         /////////////////////// Main End\\
         in.close();
@@ -35,6 +70,15 @@ public class Solution {
         array.add(new Tuple(in.nextInt(),in.nextInt()));
     }
         Collections.sort(array,new Tuple(1,2));*/
+
+    ///////////////// Sum Array Elements /////////////////////////////////
+    public static long sumArray(int[] array){
+        long tot = 0;
+        for (int i = 0; i < array.length; i++) {
+            tot += array[i];
+        }
+        return tot;
+    }
 
     //////////////////////Distance Between Tuples (X,Y) (X,Y)/////////////
     public static double distanceBetween(TupXY one, TupXY two){

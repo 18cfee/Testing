@@ -1,0 +1,14 @@
+Page 8 of "Competitive Programming 3"
+<= 10..11 n! n^6
+<= 15..18 2^n * n^2
+<= 18..22 2^n * n
+<=100 n^4
+<=400 n^3
+<=2K n^2 lg n
+<=10K n^2
+<=1M n lg n
+<=100M n, lg n
+<= inf 1
+IO bottlenock prevents n>1M for most problems
+
+Array.fill(array, -1);

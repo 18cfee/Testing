@@ -15,7 +15,7 @@ public class Solution {
         }
         /////////////////////// This is code I wrote for this problem
 
-        TupleXY[] plot= {new TupleXY(1,1),new TupleXY(1,1),new TupleXY(1,1),new TupleXY(1,1)};
+        TupleXY[] plot= {new TupleXY(1,13),new TupleXY(4,9),new TupleXY(6,2),new TupleXY(8,3)};
         double y_int = 14.5;
         double slope = -1.8;
         System.out.println("R_2: " + rSquared(plot,y_int,slope));
@@ -41,9 +41,15 @@ public class Solution {
     public static double rSquared(TupleXY[] plot, double y_int, double slope){
         double r_2 = 0;
         for(TupleXY tup: plot){
-            r_2 += distanceToLine(tup,y_int,slope);
+            r_2 += dY(tup,y_int,slope);
         }
         return r_2;
+    }
+
+    public static double dY(TupleXY cor, double y_int, double slope){
+        //System.out.println(cor.yT - (y_int + slope*cor.xT));
+        return Math.abs(cor.yT - (y_int + slope*cor.xT));
+
     }
 
     public static double distanceToLine(TupleXY cor, double y_int, double slope){

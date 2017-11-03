@@ -26,6 +26,8 @@ public class testing {
     public long decToLong(double num){
         return (long)(prec * num);
     }
+
+    //TODO read from multiple files for test cases?
 }
 
 

@@ -41,7 +41,7 @@ public class Solution {
     public static double rSquared(TupleXY[] plot, double y_int, double slope){
         double r_2 = 0;
         for(TupleXY tup: plot){
-            r_2 += dY(tup,y_int,slope);
+            r_2 += Math.pow(dY(tup,y_int,slope),2);
         }
         return r_2;
     }

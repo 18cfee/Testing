@@ -5,17 +5,45 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
 
+class Fold{
+    public Point[] fold;
+    public int foldId;
+    Fold(Point[] fold, int id){
+        this.fold = fold;
+        foldId = id;
+    }
+}
+
+class Point{
+    public int val;
+    public TupleXY tup;
+    Point(TupleXY tup, int val){
+        this.val = val;
+        this.tup = tup;
+    }
+}
+
 public class Solution {
     public static void main(String[] args) throws FileNotFoundException {
         // This is just generic stuff I use for hackerrank to make it easy to use IDE (reusing though)
-        File f = new File("sol.in");
+        File f = new File("/src/LinearRegression/input.txt");
         Scanner in = new Scanner(System.in);
         if (f.exists() && !f.isDirectory()) {
-            in = new Scanner(new File("sol.in"));
+            in = new Scanner(new File("/src/LinearRegression/input.txt"));
         }
         /////////////////////// This is code I wrote for this problem
+        int n = 20;
+        Fold[] foldes = new Fold[5];
+        for (int i = 0; i < 5; i++) {
+            Point[] points = new Point[5];
+            for (int j = 0; j < 5; j++) {
+                points[j] = new Point(new TupleXY(in.nextInt(),in.nextInt()),in.nextInt());
+            }
+        }
+        n = 0;
 
-        TupleXY[] plot= {new TupleXY(1,13),new TupleXY(4,9),new TupleXY(6,2),new TupleXY(8,3)};
+
+        /*TupleXY[] plot= {new TupleXY(1,13),new TupleXY(4,9),new TupleXY(6,2),new TupleXY(8,3)};
         double y_int = 14.5;
         double slope = -1.8;
         System.out.println("R_2: " + rSquared(plot,y_int,slope));
@@ -30,7 +58,10 @@ public class Solution {
         System.out.println("R_2: " + rSquared(plot,y_int,slope));
         y_int = 14.43;
         slope = -1.617;
-        System.out.println("R_2: " + rSquared(plot,y_int,slope));
+        System.out.println("R_2: " + rSquared(plot,y_int,slope));*/
+
+
+
 
         /////////////////////// Main End\\
         in.close();

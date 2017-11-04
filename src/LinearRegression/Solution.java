@@ -26,10 +26,10 @@ class Point{
 public class Solution {
     public static void main(String[] args) throws FileNotFoundException {
         // This is just generic stuff I use for hackerrank to make it easy to use IDE (reusing though)
-        File f = new File("/src/LinearRegression/input.txt");
+        File f = new File("src/LinearRegression/input");
         Scanner in = new Scanner(System.in);
         if (f.exists() && !f.isDirectory()) {
-            in = new Scanner(new File("/src/LinearRegression/input.txt"));
+            in = new Scanner(new File("src/LinearRegression/input"));
         }
         /////////////////////// This is code I wrote for this problem
         int n = 20;
@@ -37,10 +37,23 @@ public class Solution {
         for (int i = 0; i < 5; i++) {
             Point[] points = new Point[5];
             for (int j = 0; j < 5; j++) {
-                points[j] = new Point(new TupleXY(in.nextInt(),in.nextInt()),in.nextInt());
+                int delete = in.nextInt();
+                points[j] = new Point(new TupleXY(in.nextDouble(),in.nextDouble()),in.nextInt());
+            }
+            foldes[i] = new Fold(points,i);
+        }
+        int correct = 0;
+        for (Fold ff : foldes){
+            for( Fold fff : foldes){
+                if(fff.foldId != ff.foldId){
+                    for(Point p : ff.fold){
+                        for(Point pp : fff.fold){
+
+                        }
+                    }
+                }
             }
         }
-        n = 0;
 
 
         /*TupleXY[] plot= {new TupleXY(1,13),new TupleXY(4,9),new TupleXY(6,2),new TupleXY(8,3)};
@@ -172,17 +185,17 @@ public class Solution {
 }
 ////////////////////////////////// Tuple Classes Here //////////////////////////////////////
 class Tuple{
-    public int firstT = 0;
+    public double firstT = 0;
     public int lastT = 0;
-    Tuple(int first, int last){
+    Tuple(double first, int last){
         this.firstT = first;
         this.lastT = last;
     }
 }
 class TupleXY{
-    public int xT = 0;
-    public int yT = 0;
-    TupleXY(int first, int last){
+    public double xT = 0;
+    public double yT = 0;
+    TupleXY(double first, double last){
         this.xT = first;
         this.yT = last;
     }

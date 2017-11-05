@@ -23,6 +23,32 @@ class Point{
     }
 }
 
+class Tuple implements Comparator<Tuple>{
+    public double firstT = 0;
+    public int lastT = 0;
+    Tuple(double first, int last){
+        this.firstT = first;
+        this.lastT = last;
+    }
+    public Tuple[] sortByFirst(Tuple[] tuples) {
+        return new Tuple[0];
+    }
+
+    @Override
+    public int compare(Tuple a, Tuple b){
+        int out = -Double.compare(b.firstT, a.firstT);
+        return out;
+    }
+}
+class TupleXY{
+    public double xT = 0;
+    public double yT = 0;
+    TupleXY(double first, double last){
+        this.xT = first;
+        this.yT = last;
+    }
+}
+
 public class Solution {
     public static void main(String[] args) throws FileNotFoundException {
         // This is just generic stuff I use for hackerrank to make it easy to use IDE (reusing though)
@@ -44,16 +70,40 @@ public class Solution {
         }
         int correct = 0;
         for (Fold ff : foldes){
-            for( Fold fff : foldes){
-                if(fff.foldId != ff.foldId){
-                    for(Point p : ff.fold){
+            for(Point p : ff.fold){
+                Tuple[] distance = new Tuple[20];
+                int index = 0;
+                for( Fold fff : foldes){
+                    if(fff.foldId != ff.foldId){
                         for(Point pp : fff.fold){
-
+                            double distanceBetweenPoints = distanceBetween(pp.tup, p.tup);
+                            distance[index] = new Tuple(distanceBetweenPoints,pp.val);
+                            index++;
                         }
+                    }
+                }
+                List<Tuple> list = new ArrayList<Tuple>(Arrays.asList(distance));
+                Collections.sort(list ,new Tuple(1,2));
+                if(!doublesEqiv(list.get(0).firstT,list.get(1).firstT) && list.get(0).lastT == p.val){
+                    correct++;
+                }
+                else{
+                    int tempCount = 0;
+                    for (int i = 0; i < 3; i++) {
+                        if(list.get(i).lastT == p.val){
+                            tempCount++;
+                        }
+                    }
+                    if(tempCount > 1){
+                        correct++;
+                    } else{
+                        int stop = 0;
                     }
                 }
             }
         }
+        System.out.println(correct);
+
 
 
         /*TupleXY[] plot= {new TupleXY(1,13),new TupleXY(4,9),new TupleXY(6,2),new TupleXY(8,3)};
@@ -78,6 +128,10 @@ public class Solution {
 
         /////////////////////// Main End\\
         in.close();
+    }
+
+    public static boolean doublesEqiv(double a, double b){
+        return (Math.abs(a-b) < .000000001);
     }
 
     ////////////////////////Methods for current Project/////////////////
@@ -184,20 +238,5 @@ public class Solution {
 
 }
 ////////////////////////////////// Tuple Classes Here //////////////////////////////////////
-class Tuple{
-    public double firstT = 0;
-    public int lastT = 0;
-    Tuple(double first, int last){
-        this.firstT = first;
-        this.lastT = last;
-    }
-}
-class TupleXY{
-    public double xT = 0;
-    public double yT = 0;
-    TupleXY(double first, double last){
-        this.xT = first;
-        this.yT = last;
-    }
-}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////

@@ -14,6 +14,8 @@ public class Solution {
             in = new Scanner(new File("sol.in"));
         }
         /////////////////////// This is code I wrote for this problem
+
+        System.out.println("Time: ");
         n = in.nextInt();
         int decSince = 0;
         int[] array = new int[n];

@@ -15,45 +15,20 @@ public class Solution {
             in = new Reader(fileName);
         }
         /////////////////////// This is code I wrote for this problem
-        long startTime = System.nanoTime();
         n = in.nextInt();
-        int decSince = 0;
-        int[] array = new int[n];
-        Arrays.fill(array,1);
-        int prev = in.nextInt();
-        int rating = 0;
-        for (int i = 1; i < n; i++) {
-            rating = in.nextInt();
-            if(rating >= prev && decSince < i -1){
-                array[i - 1] = 1;
-                for (int j = i - 2; j >= decSince ; j--) {
-                    if(array[j] <= array[j+1]){
-                        array[j] = array[j+1] + 1;
-                    }
-                }
-            }
-            if (rating > prev){
-                array[i] = array[i - 1] + 1;
-                decSince = i;
-            }
-            if (rating == prev){
-                decSince = i;
-            }
-            if(i < n -1) prev = rating;
-        }
-        if(rating < prev && decSince < n){
-            array[n - 1] = 1;
-            for (int j = n - 2; j >= decSince ; j--) {
-                if(array[j] <= array[j+1]){
-                    array[j] = array[j+1] + 1;
-                }
+        int k = in.nextInt();
+        int[] array = populateIntArray(in,n);
+        int count = 100;
+        for (int i = 0; i < n; i+=k) {
+            count -=1;
+            if(array[i] == 1){
+                count -=2;
             }
         }
-        System.out.println(sumArray(array));
-        long endTime = System.nanoTime();
-        System.out.println("Total Run Time: " + (endTime - startTime)/1000);
-
-
+        /*if(array[0] == 1){
+            count -=2;
+        }*/
+        System.out.print(count);
         /////////////////////// Main End\\
         in.close();
     }
@@ -127,6 +102,14 @@ public class Solution {
     }
     /////////////////////////////////////////////////////////////////////////////////////////////
 
+
+    public static int[] populateIntArray(Reader in, int size) throws IOException{
+        int[] array = new int[size];
+        for (int i = 0; i < size; i++) {
+            array[i] = in.nextInt();
+        }
+        return array;
+    }
 
     //////////////////////////////// Reverse an Int /////////////////////////////////////////////
     public static int reverseInt(int x){

@@ -15,20 +15,32 @@ public class Solution {
             in = new Reader(fileName);
         }
         /////////////////////// This is code I wrote for this problem
-        t = in.nextInt();
-        for (int j = 0; j < t; j++) {
-            n = in.nextInt();
-            int count = 0;
-            String s = Integer.toString(n);
-            for (int i = 0; i < s.length(); i++) {
-                int check = Integer.valueOf(s.substring(i,i+1));
-                if(check != 0 && n%check == 0){
-                    count++;
+        int dayRet = in.nextInt();
+        int monRet = in.nextInt();
+        int yearRet = in.nextInt();
+        int dayExp = in.nextInt();
+        int monExp = in.nextInt();
+        int yearExp = in.nextInt();
+        int fine = 0;
+        if(yearExp == yearRet){
+            if (monExp == monRet){
+                if(dayRet <= dayExp){
+                    //nothing
+                } else{
+                    fine = 15*(dayRet - dayExp);
                 }
+            }else if (monExp > monRet){
+                //nothing
+            }else{
+                fine = 500*(monRet - monExp);
             }
-            System.out.println(count);
-        }
+        }else if (yearExp < yearRet){
+            fine = 10000;
 
+        } else{
+            // nothing
+        }
+        System.out.println(fine);
         /////////////////////// Main End\\
         in.close();
     }

@@ -15,20 +15,20 @@ public class Solution {
             in = new Reader(fileName);
         }
         /////////////////////// This is code I wrote for this problem
-        n = in.nextInt();
-        int k = in.nextInt();
-        int[] array = populateIntArray(in,n);
-        int count = 100;
-        for (int i = 0; i < n; i+=k) {
-            count -=1;
-            if(array[i] == 1){
-                count -=2;
+        t = in.nextInt();
+        for (int j = 0; j < t; j++) {
+            n = in.nextInt();
+            int count = 0;
+            String s = Integer.toString(n);
+            for (int i = 0; i < s.length(); i++) {
+                int check = Integer.valueOf(s.substring(i,i+1));
+                if(check != 0 && n%check == 0){
+                    count++;
+                }
             }
+            System.out.println(count);
         }
-        /*if(array[0] == 1){
-            count -=2;
-        }*/
-        System.out.print(count);
+
         /////////////////////// Main End\\
         in.close();
     }

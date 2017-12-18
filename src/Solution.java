@@ -15,22 +15,27 @@ public class Solution {
             in = new Reader(fileName);
         }
         /////////////////////// This is code I wrote for this problem
-        ArrayList<Integer> array =  populateListIntArray(in, n = in.nextInt());
-        while(true){
-            int minA = Collections.min(array);
-            System.out.println(array.size());
-            for (int i = array.size() - 1; i >= 0; i--) {
-                int val = array.get(i) - minA;
-                if(val == 0){
-                    array.remove(i);
-                } else{
-                    array.set(i, val);
-                }
+        n = in.nextInt();
+        int k = in.nextInt();
+        int [] array = new int[k];
+        for (int i = 0; i < n; i++) {
+            int index = in.nextInt()%k;
+            array[index]++;
+        }
+        int count = 0;
+        if (array[0] > 0) count++;
+
+        if(k%2 == 0 ){
+            if(array[k/2] > 0) count++;
+            for (int i = 1; i < k/2; i++) {
+                count += Math.max(array[i], array[k-i]);
             }
-            if(array.size() == 0){
-                break;
+        }else{
+            for (int i = 1; i <= k/2; i++) {
+                count += Math.max(array[i], array[k-i]);
             }
         }
+        System.out.print(count);
         /////////////////////// Main End\\
         in.close();
     }

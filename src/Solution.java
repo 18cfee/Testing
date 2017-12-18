@@ -70,13 +70,11 @@ public class Solution {
     }
 
 
-    ////////////////////////////////////3-Way Max////////////////////////////////////////////////
+    //3-Way Max
     public static int max(int aa, int bb, int cc){
         return Math.max(aa,Math.max(bb,cc));
     }
-    /////////////////////////////////////////////////////////////////////////////////////////////
-
-    //////////////////////////////////Print array/////////////////////////////////////////////
+    //Print  2D array
     public static void printArray(int[][] thatAr){
         int nnn = thatAr.length;
         for(int i = 0; i < nnn; i++){
@@ -87,7 +85,6 @@ public class Solution {
             System.out.println();
         }
     }
-
     public static void printArray(int[] thatAr){
         int nnn = thatAr.length;
         for(int i = 0; i < nnn; i++){
@@ -95,7 +92,6 @@ public class Solution {
         }
         System.out.println();
     }
-
     public static void printList(List<Integer> thatAr){
         int nnn = thatAr.size();
         for(int i = 0; i < nnn; i++){
@@ -103,9 +99,6 @@ public class Solution {
         }
         System.out.println();
     }
-    /////////////////////////////////////////////////////////////////////////////////////////////
-
-
     public static int[] populateIntArray(Reader in, int size) throws IOException{
         int[] array = new int[size];
         for (int i = 0; i < size; i++) {
@@ -113,7 +106,6 @@ public class Solution {
         }
         return array;
     }
-
     public static ArrayList<Integer> populateListIntArray(Reader in, int size) throws IOException{
         ArrayList<Integer> array = new ArrayList<Integer>(size);
         for (int i = 0; i < size; i++) {
@@ -121,7 +113,6 @@ public class Solution {
         }
         return array;
     }
-    
     public static int minArray(int [] array){
         int min = Integer.MAX_VALUE;
         for (int i = 0; i < array.length; i++) {
@@ -129,7 +120,6 @@ public class Solution {
         }
         return min;
     }
-
     public static int maxArray(int [] array){
         int max = Integer.MIN_VALUE;
         for (int i = 0; i < array.length; i++) {
@@ -137,8 +127,6 @@ public class Solution {
         }
         return max;
     }
-
-    //////////////////////////////// Reverse an Int /////////////////////////////////////////////
     public static int reverseInt(int x){
         StringBuilder in = new StringBuilder();
         in.append(Integer.toString(x));
@@ -146,9 +134,7 @@ public class Solution {
         x = Integer.parseInt(in.toString());
         return x;
     }
-    /////////////////////////////////////////////////////////////////////////////////////////////
-
-    /////////////////////Sum the Numeric digits in a String//////////////////////////////////////
+    //Sum the Numeric digits in a String
     public static long sumDigits(String x){
         int tot = 0;
         for(int i = 0; i < x.length(); i++){

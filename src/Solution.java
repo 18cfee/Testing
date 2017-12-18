@@ -15,32 +15,22 @@ public class Solution {
             in = new Reader(fileName);
         }
         /////////////////////// This is code I wrote for this problem
-        int dayRet = in.nextInt();
-        int monRet = in.nextInt();
-        int yearRet = in.nextInt();
-        int dayExp = in.nextInt();
-        int monExp = in.nextInt();
-        int yearExp = in.nextInt();
-        int fine = 0;
-        if(yearExp == yearRet){
-            if (monExp == monRet){
-                if(dayRet <= dayExp){
-                    //nothing
+        ArrayList<Integer> array =  populateListIntArray(in, n = in.nextInt());
+        while(true){
+            int minA = Collections.min(array);
+            System.out.println(array.size());
+            for (int i = array.size() - 1; i >= 0; i--) {
+                int val = array.get(i) - minA;
+                if(val == 0){
+                    array.remove(i);
                 } else{
-                    fine = 15*(dayRet - dayExp);
+                    array.set(i, val);
                 }
-            }else if (monExp > monRet){
-                //nothing
-            }else{
-                fine = 500*(monRet - monExp);
             }
-        }else if (yearExp < yearRet){
-            fine = 10000;
-
-        } else{
-            // nothing
+            if(array.size() == 0){
+                break;
+            }
         }
-        System.out.println(fine);
         /////////////////////// Main End\\
         in.close();
     }
@@ -122,6 +112,30 @@ public class Solution {
             array[i] = in.nextInt();
         }
         return array;
+    }
+
+    public static ArrayList<Integer> populateListIntArray(Reader in, int size) throws IOException{
+        ArrayList<Integer> array = new ArrayList<Integer>(size);
+        for (int i = 0; i < size; i++) {
+            array.add(in.nextInt());
+        }
+        return array;
+    }
+    
+    public static int minArray(int [] array){
+        int min = Integer.MAX_VALUE;
+        for (int i = 0; i < array.length; i++) {
+            min = Math.min(min,array[i]);
+        }
+        return min;
+    }
+
+    public static int maxArray(int [] array){
+        int max = Integer.MIN_VALUE;
+        for (int i = 0; i < array.length; i++) {
+            max = Math.max(max,array[i]);
+        }
+        return max;
     }
 
     //////////////////////////////// Reverse an Int /////////////////////////////////////////////

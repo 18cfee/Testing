@@ -26,18 +26,18 @@ public class Solution {
         BigInteger one = new BigInteger("1");
         for (int i = 0; i < e; i++) {
             if(s.charAt(i) == 'a'){
-                count.add(one);
+                count = count.add(one);
             }
         }
-        count *= n/size + 1;
-        int count2 = 0;
+        count = count.multiply(n.divide(ss).add(one));
+        BigInteger count2 = new BigInteger("0");
         for (int i = e; i < size; i++) {
             if(s.charAt(i) == 'a'){
-                count2++;
+                count2 = count2.add(one);
             }
         }
-        count2 *= n/size;
-        count += count2;
+        count2 = count2.multiply(n.divide(ss));
+        count = count.add(count2);
         System.out.print(count);
         /////////////////////// Main End\\
         in.close();
@@ -233,7 +233,7 @@ class Reader
                 break;
             buf[cnt++] = (byte) c;
         }
-        return new String(buf, 0, cnt - 1); // get rid of extra line char
+        return new String(buf, 0, cnt).trim(); // get rid of extra line char
     }
 
     public int nextInt() throws IOException

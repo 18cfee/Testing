@@ -11,13 +11,13 @@ public class Solution {
         // This is just generic stuff I use for hackerrank to make it easy to use IDE (reusing though)
         String fileName = "sol.in";
         File f = new File(fileName);
-        Reader in = new Reader();
-        if (f.exists() && !f.isDirectory()) {
-            in = new Reader(fileName);
-        }
+        Scanner in = new Scanner(System.in);
+//        if (f.exists() && !f.isDirectory()) {
+//            in = new Reader(fileName);
+//        }
         /////////////////////// This is code I wrote for this problem
-        String s = in.readLine();
-        BigInteger n = new BigInteger(in.readLine());
+        String s = in.next();
+        BigInteger n = new BigInteger(in.next());
         int size = s.length();
         BigInteger ss = new BigInteger(Integer.toString(size));
         int e = n.mod(ss).intValue();

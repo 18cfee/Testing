@@ -12,3 +12,4 @@ Page 8 of "Competitive Programming 3"
 IO bottlenock prevents n>1M for most problems
 
 Array.fill(array, -1);
+int: 2,147,483,647, 2^32

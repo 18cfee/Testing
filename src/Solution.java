@@ -1,10 +1,11 @@
 import java.io.*;
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
 
 public class Solution {
-    public static int n;
+    //public static int n;
     public static int t;
     public static void main(String[] args) throws IOException {
         // This is just generic stuff I use for hackerrank to make it easy to use IDE (reusing though)
@@ -15,26 +16,28 @@ public class Solution {
             in = new Reader(fileName);
         }
         /////////////////////// This is code I wrote for this problem
-        n = in.nextInt();
-        int k = in.nextInt();
-        int [] array = new int[k];
-        for (int i = 0; i < n; i++) {
-            int index = in.nextInt()%k;
-            array[index]++;
-        }
-        int count = 0;
-        if (array[0] > 0) count++;
+        String s = in.readLine();
+        BigInteger n = new BigInteger(in.readLine());
+        int size = s.length();
+        BigInteger ss = new BigInteger(Integer.toString(size));
+        int e = n.mod(ss).intValue();
 
-        if(k%2 == 0 ){
-            if(array[k/2] > 0) count++;
-            for (int i = 1; i < k/2; i++) {
-                count += Math.max(array[i], array[k-i]);
-            }
-        }else{
-            for (int i = 1; i <= k/2; i++) {
-                count += Math.max(array[i], array[k-i]);
+        BigInteger count = new BigInteger("0");
+        BigInteger one = new BigInteger("1");
+        for (int i = 0; i < e; i++) {
+            if(s.charAt(i) == 'a'){
+                count.add(one);
             }
         }
+        count *= n/size + 1;
+        int count2 = 0;
+        for (int i = e; i < size; i++) {
+            if(s.charAt(i) == 'a'){
+                count2++;
+            }
+        }
+        count2 *= n/size;
+        count += count2;
         System.out.print(count);
         /////////////////////// Main End\\
         in.close();
@@ -147,6 +150,13 @@ public class Solution {
         }
         return tot;
     }
+    public static int mod(String num, int mod){
+        int ret = 0;
+        for (int i = 0; i < num.length(); i++) {
+            ret = (ret*10 + num.charAt(i) - '0')%mod;
+        }
+        return ret;
+    }
     ////////////////////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////Default Dictionary//////////////////////////////////////////////////
@@ -223,7 +233,7 @@ class Reader
                 break;
             buf[cnt++] = (byte) c;
         }
-        return new String(buf, 0, cnt);
+        return new String(buf, 0, cnt - 1); // get rid of extra line char
     }
 
     public int nextInt() throws IOException

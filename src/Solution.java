@@ -1,5 +1,3 @@
-import com.sun.deploy.util.ArrayUtil;
-
 import java.io.*;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
@@ -18,8 +16,8 @@ public class Solution {
             in = new Reader(fileName);
         }
         /////////////////////// This is code I wrote for this problem
-        String s = in.readLine();
-        BigInteger n = new BigInteger(in.readLine());
+        String s = in.next();
+        BigInteger n = new BigInteger(in.next());
         int size = s.length();
         BigInteger ss = new BigInteger(Integer.toString(size));
         int e = n.mod(ss).intValue();
@@ -241,16 +239,22 @@ class Reader
     // edited this one
     public String next() throws IOException
     {
-        ArrayList<Byte> buf = new ArrayList<Byte>(64); // line length
+        byte[] buf = new byte[64]; // line length
         int cnt = 0, c;
         while ((c = read()) != -1)
         {
             if (c == '\n')
                 break;
-            buf.add((byte) c);
+            buf[cnt++] = (byte) c;
+            if (cnt == buf.length){
+                byte[] temp = buf;
+                buf = new byte[temp.length + 64];
+                for (int i = 0; i < temp.length; i++) {
+                    buf[i] = temp[i];
+                }
+            }
         }
-        String buffer = new String(buf.toArray());
-        return new String(buffer, 0, cnt).trim(); // get rid of extra line char
+        return new String(buf, 0, cnt).trim(); // get rid of extra line char
     }
 
     public int nextInt() throws IOException

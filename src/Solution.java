@@ -1,3 +1,5 @@
+import com.sun.deploy.util.ArrayUtil;
+
 import java.io.*;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
@@ -234,6 +236,21 @@ class Reader
             buf[cnt++] = (byte) c;
         }
         return new String(buf, 0, cnt).trim(); // get rid of extra line char
+    }
+
+    // edited this one
+    public String next() throws IOException
+    {
+        ArrayList<Byte> buf = new ArrayList<Byte>(64); // line length
+        int cnt = 0, c;
+        while ((c = read()) != -1)
+        {
+            if (c == '\n')
+                break;
+            buf.add((byte) c);
+        }
+        String buffer = new String(buf.toArray());
+        return new String(buffer, 0, cnt).trim(); // get rid of extra line char
     }
 
     public int nextInt() throws IOException

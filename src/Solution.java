@@ -19,24 +19,12 @@ public class Solution {
         n = in.nextInt();
         int count = 0;
         int [] array = populateIntArray(in,n);
-        int index = 0;
-        while(true){
-            if(overshoot(index,n)){
-                count++;
-                break;
-            } else if(index + 2 == n - 1){
-                count++;
-                break;
-            } else if(array[index + 2] == 0){
-                index+=2;
-                count++;
-            } else {
-                index++;
-                count++;
-            }
+        int [] arrayV = new int[101];
+        for (int i = 0; i < array.length; i++) {
+            arrayV[array[i]]++;
         }
-
-        System.out.print(count);
+        int max = maxArray(arrayV);
+        System.out.print(array.length - max);
         /////////////////////// Main End\\
         in.close();
     }

@@ -18,9 +18,22 @@ public class Solution {
         /////////////////////// This is code I wrote for this problem
         n = in.nextInt();
         int count = 0;
-        for (int i = 0; i < n; i++) {
-            int a = in.nextInt();
-            System.out.println(a);
+        int [] array = populateIntArray(in,n);
+        int index = 0;
+        while(true){
+            if(overshoot(index,n)){
+                count++;
+                break;
+            } else if(index + 2 == n - 1){
+                count++;
+                break;
+            } else if(array[index + 2] == 0){
+                index+=2;
+                count++;
+            } else {
+                index++;
+                count++;
+            }
         }
 
         System.out.print(count);
@@ -30,7 +43,9 @@ public class Solution {
 
 
     ////////////////////////Methods for current Project/////////////////
-
+    public static boolean overshoot(int index, int size){
+        return(index == size - 2);
+    }
 
 
 

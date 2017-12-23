@@ -21,7 +21,7 @@ public class Solution {
         }
         /////////////////////// This is code I wrote for this problem
         t = in.nextInt();
-        in.next();
+        //in.next();
         for (int i = 0; i < t; i++) {
             String cur = in.next();
             boolean found = false;
@@ -295,7 +295,11 @@ class Reader
                 }
             }
         }
-        return new String(buf, 0, cnt).trim(); // get rid of extra line char
+        String ret = new String(buf, 0, cnt).trim(); // get rid of extra line char
+        if(ret.length() == 0){
+            ret = next();
+        }
+        return ret; // get rid of extra line char
     }
 
     public int nextInt() throws IOException

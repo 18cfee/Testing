@@ -20,22 +20,38 @@ public class Solution {
             in = new Reader(fileName);
         }
         /////////////////////// This is code I wrote for this problem
-        int p = in.nextInt();
-        int q = in.nextInt();
-        boolean found = false;
-        for (int i = p; i <= q; i++) {
-            if(isKaprekar(i)){
-                System.out.print(i + " ");
-                found = true;
+        n = in.nextInt();
+        int d = in.nextInt();
+        int [] array = populateIntArray(in, n);
+        int count = 0;
+        for (int i = 0; i < n; i++) {
+            int index1 = nextIndex(array,i,d);
+            int index2 = nextIndex(array,index1,d);
+            if(index1 != -1 && index2 != -1){
+                count++;
             }
         }
-        if (found){
-            System.out.println();
-        } else {
-            System.out.println("INVALID RANGE");
-        }
+        System.out.println(count);
         /////////////////////// Main End\\
         in.close();
+    }
+
+    public static int nextIndex(int [] a, int index, int d){
+        if(index == -1) return -1;
+        int val = a[index];
+        int searchVal = val + d;
+        index += 1;
+        while(isInArray(a,index)){
+            int cur = a[index];
+            if(cur == searchVal) return index;
+            if(cur > searchVal) break;
+            index++;
+        }
+        return -1;
+    }
+
+    public static boolean isInArray(int [] a, int index){
+        return (0 <= index && index < a.length);
     }
 
     public static boolean isKaprekar(int i){

@@ -16,15 +16,18 @@ public class Solution {
             in = new Reader(fileName);
         }
         /////////////////////// This is code I wrote for this problem
-        n = in.nextInt();
-        int count = 0;
-        int [] array = populateIntArray(in,n);
-        int [] arrayV = new int[101];
-        for (int i = 0; i < array.length; i++) {
-            arrayV[array[i]]++;
+        t = in.nextInt();
+        for (int i = 0; i < t; i++) {
+            long b = in.nextInt();
+            long w = in.nextInt();
+            long bc = in.nextInt();
+            long wc = in.nextInt();
+            long convert = in.nextInt();
+            long noConvert = b*bc + w*wc;
+            long conWhite = wc*(b + w) + convert*b;
+            long conBlack = bc*(b + w) + convert*w;
+            System.out.println(min(noConvert,conBlack, conWhite));
         }
-        int max = maxArray(arrayV);
-        System.out.print(array.length - max);
         /////////////////////// Main End\\
         in.close();
     }
@@ -70,6 +73,19 @@ public class Solution {
     public static int max(int aa, int bb, int cc){
         return Math.max(aa,Math.max(bb,cc));
     }
+    //3-Way Min
+    public static int min(int aa, int bb, int cc){
+        return Math.min(aa,Math.min(bb,cc));
+    }
+    //3-Way Max
+    public static long max(long aa, long bb, long cc){
+        return Math.max(aa,Math.max(bb,cc));
+    }
+    //3-Way Min
+    public static long min(long aa, long bb, long cc){
+        return Math.min(aa,Math.min(bb,cc));
+    }
+
     //Print  2D array
     public static void printArray(int[][] thatAr){
         int nnn = thatAr.length;

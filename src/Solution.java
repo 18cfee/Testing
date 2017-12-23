@@ -16,28 +16,20 @@ public class Solution {
             in = new Reader(fileName);
         }
         /////////////////////// This is code I wrote for this problem
-        boolean found = false;
         t = in.nextInt();
         in.next();
         for (int i = 0; i < t; i++) {
-            StringBuilder cur = new StringBuilder(in.next());
+            String cur = in.next();
+            boolean found = false;
             int val = cur.charAt(cur.length() - 1);
-            int minIndex = cur.length() - 1;
-            for (int j = 0; j < cur.length(); j++) {
-                int curVal = cur.charAt(cur.length() - 1 - j);
-                if(curVal > val){
+            for (int j = cur.length() - 2; j >= 0; j--) {
+                int curVal = cur.charAt(j);
+                if(curVal < val){
                     found = true;
-                    char[] temp = cur.toString().toCharArray();
-                    char tt = cur.charAt(cur.length() - 1 - j);
-                    temp[cur.length() - 1 - j] = (char)val;
-                    temp[minIndex] = tt;
-                    String sub = (new StringBuilder(cur.substring(cur.length() - 1 - j, cur.length()))).reverse().toString();
-                    String fin = cur.toString().substring(0,cur.length() - 1 - j) + sub;
-                    System.out.println(fin);
+                    System.out.println(outPut(cur,j));
                     break;
                 } else {
                     val = curVal;
-                    minIndex = (cur.length() - 1 - j);
                 }
             }
             if(!found){
@@ -48,12 +40,36 @@ public class Solution {
         /////////////////////// Main End\\
         in.close();
     }
+    public static String outPut(String a, int index){
+        String pre = a.substring(0,index);
+        int val = a.charAt(index);
+        for (int i = a.length() - 1; i > index; i--) {
+            if(val < a.charAt(i)){
+                a = swap(a, index, i);
+                break;
+            }
+        }
+        String post = a.substring(index,a.length());
+        //System.out.println(post);
+        post = post.substring(0,1) + reverse(post.substring(1,post.length()));
+        return pre + post;
+    }
 
+    public static String reverse(String a){
+        return (new StringBuilder(a)).reverse().toString();
+    }
+
+    public static String swap(String a, int in1, int in2){
+        char [] array = a.toCharArray();
+        char temp = array[in1];
+        array[in1] = array[in2];
+        array[in2] = temp;
+        a = new String(array);
+        return a;
+    }
 
     ////////////////////////Methods for current Project/////////////////
-    public static boolean overshoot(int index, int size){
-        return(index == size - 2);
-    }
+
 
 
 

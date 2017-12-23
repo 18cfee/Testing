@@ -16,18 +16,34 @@ public class Solution {
             in = new Reader(fileName);
         }
         /////////////////////// This is code I wrote for this problem
+        boolean found = false;
         t = in.nextInt();
+        in.next();
         for (int i = 0; i < t; i++) {
-            long b = in.nextInt();
-            long w = in.nextInt();
-            long bc = in.nextInt();
-            long wc = in.nextInt();
-            long convert = in.nextInt();
-            long noConvert = b*bc + w*wc;
-            long conWhite = wc*(b + w) + convert*b;
-            long conBlack = bc*(b + w) + convert*w;
-            System.out.println(min(noConvert,conBlack, conWhite));
+            StringBuilder cur = new StringBuilder(in.next());
+            int val = cur.charAt(cur.length() - 1);
+            int minIndex = cur.length() - 1;
+            for (int j = 0; j < cur.length(); j++) {
+                int curVal = cur.charAt(cur.length() - 1 - i);
+                if(curVal > val){
+                    found = true;
+                    char[] temp = cur.toString().toCharArray();
+                    char tt = cur.charAt(cur.length() - 1 - i);
+                    temp[cur.length() - 1 - i] = (char)val;
+                    temp[minIndex] = tt;
+                    String sub = (new StringBuilder(cur.substring(cur.length() - 1 - i, cur.length()))).reverse().toString();
+                    String fin = cur.toString().substring(0,cur.length() - 1 - i) + sub;
+                    System.out.println(fin);
+                } else {
+                    val = curVal;
+                    minIndex = (cur.length() - 1 - i);
+                }
+            }
+            if(!found){
+                System.out.println("no answer");
+            }
         }
+
         /////////////////////// Main End\\
         in.close();
     }

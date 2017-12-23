@@ -21,18 +21,42 @@ public class Solution {
         }
         /////////////////////// This is code I wrote for this problem
         n = in.nextInt();
-        int min = 1000000;
-        int [] ray = populateIntArray(in,n);
-        for (int i = 0; i < n; i++) {
-            min = Math.min(min,dis(ray,i));
+        char[][] ray = populateCharArray(in,n);
+        //printArray(ray);
+        for (int i = 1; i < n-1; i++) {
+            for (int j = 1; j < n-1; j++) {
+                checkSpot(i,j,ray);
+            }
         }
-        if(min == 1000000){
-            System.out.println(-1);
-        } else {
-            System.out.println(min);
-        }
+        printArray(ray);
         /////////////////////// Main End\\
         in.close();
+    }
+
+    public static void checkSpot(int i, int j, char[][] ray){
+        boolean cav = true;
+        int valSpot = ray[i][j];
+        for (int k = 0; k < 8; k+=2) {
+            int index1 = i+directions[k][0];
+            int index2 = j+directions[k][1];
+            int curVal = ray[index1][index2];
+            if(curVal >= valSpot){
+                cav = false;
+                break;
+            }
+        }
+        if(cav){
+            ray[i][j] = 'X';
+        }
+    }
+
+    public static int[][] directions = {{0,1},{1,1},{1,0},{1,-1},{0,-1},{-1,-1},{-1,0},{-1,1}};
+
+    public static void printArray(char[][] ray){
+        int height = ray.length;
+        for (int i = 0; i < height; i++) {
+            System.out.println(ray[i]);
+        }
     }
 
     public static int dis(int [] ray, int index){
@@ -196,6 +220,13 @@ public class Solution {
         int[] array = new int[size];
         for (int i = 0; i < size; i++) {
             array[i] = in.nextInt();
+        }
+        return array;
+    }
+    public static char[][] populateCharArray(Reader in, int size) throws IOException{
+        char[][] array = new char[size][size];
+        for (int i = 0; i < size; i++) {
+            array[i] = in.next().toCharArray();
         }
         return array;
     }

@@ -20,30 +20,45 @@ public class Solution {
             in = new Reader(fileName);
         }
         /////////////////////// This is code I wrote for this problem
-        t = in.nextInt();
-        //in.next();
-        for (int i = 0; i < t; i++) {
-            String cur = in.next();
-            boolean found = false;
-            int val = cur.charAt(cur.length() - 1);
-            for (int j = cur.length() - 2; j >= 0; j--) {
-                int curVal = cur.charAt(j);
-                if(curVal < val){
-                    found = true;
-                    System.out.println(outPut(cur,j));
-                    break;
-                } else {
-                    val = curVal;
-                }
-            }
-            if(!found){
-                System.out.println("no answer");
+        int p = in.nextInt();
+        int q = in.nextInt();
+        boolean found = false;
+        for (int i = p; i <= q; i++) {
+            if(isKaprekar(i)){
+                System.out.print(i + " ");
+                found = true;
             }
         }
-
+        if (found){
+            System.out.println();
+        } else {
+            System.out.println("INVALID RANGE");
+        }
         /////////////////////// Main End\\
         in.close();
     }
+
+    public static boolean isKaprekar(int i){
+        long l = i;
+        String full = Long.toString(l*l);
+        int half = full.length()/2;
+        String left = full.substring(0,half);
+        left = convertEmptyTo0(left);
+        String right = full.substring(half,full.length());
+        right = convertEmptyTo0(right);
+        int total = Integer.parseInt(left) + Integer.parseInt(right);
+        return (total == i);
+    }
+
+    public static String convertEmptyTo0(String a){
+        if(a.equals("")){
+            return "0";
+        } else{
+            return a;
+        }
+    }
+
+    //for next highest char
     public static String outPut(String a, int index){
         String pre = a.substring(0,index);
         int val = a.charAt(index);

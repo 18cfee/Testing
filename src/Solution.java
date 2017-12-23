@@ -21,19 +21,32 @@ public class Solution {
         }
         /////////////////////// This is code I wrote for this problem
         n = in.nextInt();
-        int d = in.nextInt();
-        int [] array = populateIntArray(in, n);
-        int count = 0;
+        int min = 1000000;
+        int [] ray = populateIntArray(in,n);
         for (int i = 0; i < n; i++) {
-            int index1 = nextIndex(array,i,d);
-            int index2 = nextIndex(array,index1,d);
-            if(index1 != -1 && index2 != -1){
-                count++;
-            }
+            min = Math.min(min,dis(ray,i));
         }
-        System.out.println(count);
+        if(min == 1000000){
+            System.out.println(-1);
+        } else {
+            System.out.println(min);
+        }
         /////////////////////// Main End\\
         in.close();
+    }
+
+    public static int dis(int [] ray, int index){
+        int val = ray[index];
+        int origIndex = index;
+        index++;
+        while(isInArray(ray,index)){
+            if(ray[index] == val){
+                return index - origIndex;
+            } else {
+                index++;
+            }
+        }
+        return 1000000;
     }
 
     public static int nextIndex(int [] a, int index, int d){

@@ -24,19 +24,20 @@ public class Solution {
             int val = cur.charAt(cur.length() - 1);
             int minIndex = cur.length() - 1;
             for (int j = 0; j < cur.length(); j++) {
-                int curVal = cur.charAt(cur.length() - 1 - i);
+                int curVal = cur.charAt(cur.length() - 1 - j);
                 if(curVal > val){
                     found = true;
                     char[] temp = cur.toString().toCharArray();
-                    char tt = cur.charAt(cur.length() - 1 - i);
-                    temp[cur.length() - 1 - i] = (char)val;
+                    char tt = cur.charAt(cur.length() - 1 - j);
+                    temp[cur.length() - 1 - j] = (char)val;
                     temp[minIndex] = tt;
-                    String sub = (new StringBuilder(cur.substring(cur.length() - 1 - i, cur.length()))).reverse().toString();
-                    String fin = cur.toString().substring(0,cur.length() - 1 - i) + sub;
+                    String sub = (new StringBuilder(cur.substring(cur.length() - 1 - j, cur.length()))).reverse().toString();
+                    String fin = cur.toString().substring(0,cur.length() - 1 - j) + sub;
                     System.out.println(fin);
+                    break;
                 } else {
                     val = curVal;
-                    minIndex = (cur.length() - 1 - i);
+                    minIndex = (cur.length() - 1 - j);
                 }
             }
             if(!found){

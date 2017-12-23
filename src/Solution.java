@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 public class Solution {
-    //public static int n;
+    public static int n;
     public static int t;
     public static void main(String[] args) throws IOException {
         // This is just generic stuff I use for hackerrank to make it easy to use IDE (reusing though)
@@ -16,28 +16,13 @@ public class Solution {
             in = new Reader(fileName);
         }
         /////////////////////// This is code I wrote for this problem
-        String s = in.next();
-        BigInteger n = new BigInteger(in.next());
-        int size = s.length();
-        BigInteger ss = new BigInteger(Integer.toString(size));
-        int e = n.mod(ss).intValue();
+        n = in.nextInt();
+        int count = 0;
+        for (int i = 0; i < n; i++) {
+            int a = in.nextInt();
+            System.out.println(a);
+        }
 
-        BigInteger count = new BigInteger("0");
-        BigInteger one = new BigInteger("1");
-        for (int i = 0; i < e; i++) {
-            if(s.charAt(i) == 'a'){
-                count = count.add(one);
-            }
-        }
-        count = count.multiply(n.divide(ss).add(one));
-        BigInteger count2 = new BigInteger("0");
-        for (int i = e; i < size; i++) {
-            if(s.charAt(i) == 'a'){
-                count2 = count2.add(one);
-            }
-        }
-        count2 = count2.multiply(n.divide(ss));
-        count = count.add(count2);
         System.out.print(count);
         /////////////////////// Main End\\
         in.close();
@@ -316,7 +301,6 @@ class Reader
                 ret += (c - '0') / (div *= 10);
             }
         }
-
         if (neg)
             return -ret;
         return ret;
@@ -333,7 +317,13 @@ class Reader
     {
         if (bufferPointer == bytesRead)
             fillBuffer();
-        return buffer[bufferPointer++];
+        byte buf = buffer[bufferPointer++];
+//        if (buf == -1){
+//            System.out.println("here");
+//        } else {
+//            System.out.println("nada");
+//        }
+        return buf;
     }
 
     public void close() throws IOException

@@ -20,15 +20,25 @@ public class Solution {
             in = new Reader(fileName);
         }
         /////////////////////// This is code I wrote for this problem
-        n = in.nextInt();
-        char[][] ray = populateCharArray(in,n);
-        //printArray(ray);
-        for (int i = 1; i < n-1; i++) {
-            for (int j = 1; j < n-1; j++) {
-                checkSpot(i,j,ray);
+        t = in.nextInt();
+        for (int i = 0; i < t; i++) {
+            n = in.nextInt();
+            int cost = in.nextInt();
+            int monB = in.nextInt();
+            int tot = 0;
+            int curCandy = n/cost;
+            int wrappers = 0;
+            while(true){
+                tot += curCandy;
+                wrappers += curCandy;
+                curCandy = wrappers/monB;
+                wrappers -= curCandy*monB;
+                if (curCandy < 1){
+                    break;
+                }
             }
+            System.out.println(tot);
         }
-        printArray(ray);
         /////////////////////// Main End\\
         in.close();
     }

@@ -21,17 +21,18 @@ public class Solution {
         }
         /////////////////////// This is code I wrote for this problem
         n = in.nextInt();
-        t = in.nextInt();
+        int people = in.nextInt();
         int [] array = populateIntArray(in, n);
-        for (int i = 0; i < t; i++) {
-            int min = 3;
-            int start = in.nextInt();
-            int end = in.nextInt();
-            for (int ff = start; ff <= end; ff++) {
-                min = Math.min(min,array[ff]);
-            }
-            System.out.println(min);
+        Arrays.sort(array);
+        int round = 1;
+        int roundTrack = 0;
+        int sum = 0;
+        for (int i = array.length - 1; i >= 0; i--) {
+            sum += round*array[i];
+            roundTrack++;
+            if (roundTrack%people == 0) round++;
         }
+        System.out.println(sum);
         /////////////////////// Main End\\
         in.close();
     }

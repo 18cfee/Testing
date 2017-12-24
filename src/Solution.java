@@ -20,24 +20,17 @@ public class Solution {
             in = new Reader(fileName);
         }
         /////////////////////// This is code I wrote for this problem
+        n = in.nextInt();
         t = in.nextInt();
+        int [] array = populateIntArray(in, n);
         for (int i = 0; i < t; i++) {
-            n = in.nextInt();
-            int cost = in.nextInt();
-            int monB = in.nextInt();
-            int tot = 0;
-            int curCandy = n/cost;
-            int wrappers = 0;
-            while(true){
-                tot += curCandy;
-                wrappers += curCandy;
-                curCandy = wrappers/monB;
-                wrappers -= curCandy*monB;
-                if (curCandy < 1){
-                    break;
-                }
+            int min = 3;
+            int start = in.nextInt();
+            int end = in.nextInt();
+            for (int ff = start; ff <= end; ff++) {
+                min = Math.min(min,array[ff]);
             }
-            System.out.println(tot);
+            System.out.println(min);
         }
         /////////////////////// Main End\\
         in.close();

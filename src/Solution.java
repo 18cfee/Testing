@@ -20,21 +20,45 @@ public class Solution {
             in = new Reader(fileName);
         }
         /////////////////////// This is code I wrote for this problem
+        int num = in.nextInt();
         n = in.nextInt();
-        int people = in.nextInt();
-        int [] array = populateIntArray(in, n);
-        Arrays.sort(array);
-        int round = 1;
-        int roundTrack = 0;
-        int sum = 0;
-        for (int i = array.length - 1; i >= 0; i--) {
-            sum += round*array[i];
-            roundTrack++;
-            if (roundTrack%people == 0) round++;
-        }
-        System.out.println(sum);
+        int [] ray = populateIntArray(in,n);
+        Arrays.sort(ray);
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        list.add(1);
+        ArrayList<Integer> ans = recurse(num,ray, 0,list);
+        printList(ans);
         /////////////////////// Main End\\
         in.close();
+    }
+
+    public static ArrayList<Integer> genMaxList(){
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        for (int i = 0; i < 31; i++) {
+            list.add(2);
+        }
+        return list;
+    }
+
+    public static boolean tooLarge(ArrayList<Integer> list, int n){
+        BigInteger num = new BigInteger(Integer.toString(n));
+        BigInteger l = new BigInteger(list.toString());
+        int res = num.compareTo(l);
+        return(res == -1);
+    }
+
+    public static ArrayList<Integer> recurse(int num, int [] ray, int index, ArrayList<Integer> list){
+        ArrayList<Integer> maxList = genMaxList();
+        if (tooLarge(list,n)) {
+            return maxList;
+        }
+        ArrayList<Integer> minList = maxList;
+        for (int i = index; i < ray.length; i++) {
+            ArrayList<Integer> curList = (ArrayList<Integer>) list.clone();
+            curList.add(ray[i]);
+            minList = findMinList(minList, recurse(num, ray, i, list));
+        }
+        return minList;
     }
 
     public static void checkSpot(int i, int j, char[][] ray){

@@ -25,13 +25,12 @@ public class Solution {
         int [] ray = populateIntArray(in,n);
         Arrays.sort(ray);
         ArrayList<Integer> list = new ArrayList<Integer>();
-        list.add(1);
-        ArrayList<Integer> ans = recurse(num,ray, 0,list);
+        list.add(num);
+        ArrayList<Integer> ans = recurse(num,ray, ray.length - 1,list);
         if (ans.size() == 31){
             System.out.println(-1);
         } else {
             printList(ans);
-
         }
         /////////////////////// Main End\\
         in.close();
@@ -53,21 +52,20 @@ public class Solution {
         return a;
     }
 
-    public static boolean tooLarge(ArrayList<Integer> list, int num){
-        int s = list.get(list.size() - 1);
-        return(s > num || list.size() > minList);
+    public static boolean wrong(ArrayList<Integer> list, int num){
+        int s = list.get(0);
+        return(s == 0 || list.size() > minList);
     }
 
     public static boolean rightSize(ArrayList<Integer> list, int num){
-        int s = list.get(list.size() - 1);
-        return(s == num);
+        return(list.get(0) == 1);
     }
 
     public static int minList = Integer.MAX_VALUE;
 
     public static ArrayList<Integer> recurse(int num, int [] ray, int index, ArrayList<Integer> list){
         ArrayList<Integer> maxList = genMaxList();
-        if (tooLarge(list,num)) {
+        if (wrong(list,num)) {
             return maxList;
         }
         if (rightSize(list,num)){
@@ -75,10 +73,12 @@ public class Solution {
             return list;
         }
         ArrayList<Integer> minList = maxList;
-        for (int i = index; i < ray.length; i++) {
+        for (int i = index; i >=0; i--) {
             ArrayList<Integer> curList = (ArrayList<Integer>) list.clone();
-            curList.add(ray[i]*list.get(list.size()-1));
-            minList = findMinList(minList, recurse(num, ray, i, curList));
+            if (list.get(0)%ray[i] == 0) {
+                curList.add(0,list.get(0)/ray[i]);
+                minList = findMinList(minList, recurse(num, ray, i, curList));
+            }
         }
         return minList;
     }
@@ -87,14 +87,24 @@ public class Solution {
         String a = listToString(list1);
         String b = listToString(list2);
         int c = a.compareTo(b);
-        if(a.length() == b.length()){
-            if (c == -1){
-                return list1;
-            } else {
+        if(list1.size() == list2.size()){
+            int minLength = Math.min(list1.size(),list2.size());
+            boolean listOneG = true;
+            for (int i = 0; i < minLength; i++) {
+                if (list1.get(i) > list2.get(i)){
+                    break;
+                } else if (list2.get(i) > list1.get(i)){
+                    listOneG = false;
+                    break;
+                }
+            }
+            if (listOneG){
                 return list2;
+            } else {
+                return list1;
             }
         } else{
-            if(a.length() > b.length()){
+            if(list1.size() > list2.size()){
                 return list2;
             } else {
                 return  list1;

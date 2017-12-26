@@ -1,4 +1,5 @@
 import java.io.*;
+import java.net.CookieHandler;
 import java.util.*;
 
 public class Solution {
@@ -26,8 +27,23 @@ class Solver{
         m = new CarlNumbers();
         r = new Ray();
     }
-    public void solve(){
-        
+    public void solve() throws IOException{
+        int n = in.nextInt();
+        int k = in.nextInt();
+        int sum = 0;
+        ArrayList<Integer> games = new ArrayList<Integer>(n);
+        for (int i = 0; i < n; i++) {
+            int score = in.nextInt();
+            int imp = in.nextInt();
+            sum += score;
+            if(imp == 1) games.add(score);
+        }
+        Collections.sort(games);
+        int remove = games.size() - k;
+        for (int i = 0; i < remove; i++) {
+            sum -= games.get(i)*2;
+        }
+        System.out.println(sum);
     }
 }
 class DataStructures{

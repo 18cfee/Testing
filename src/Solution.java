@@ -40,25 +40,58 @@ public class Solution {
         return list;
     }
 
-    public static boolean tooLarge(ArrayList<Integer> list, int n){
-        BigInteger num = new BigInteger(Integer.toString(n));
-        BigInteger l = new BigInteger(list.toString());
-        int res = num.compareTo(l);
-        return(res == -1);
+    public static String listToString(ArrayList<Integer> list){
+        String a = "";
+        for (int i = 0; i < list.size(); i++) {
+            a += list.get(i).toString();
+        }
+        return a;
+    }
+
+    public static boolean tooLarge(ArrayList<Integer> list, int num){
+        int s = list.get(list.size() - 1);
+        return(s > num);
+    }
+
+    public static boolean rightSize(ArrayList<Integer> list, int num){
+        int s = list.get(list.size() - 1);
+        return(s == num);
     }
 
     public static ArrayList<Integer> recurse(int num, int [] ray, int index, ArrayList<Integer> list){
         ArrayList<Integer> maxList = genMaxList();
-        if (tooLarge(list,n)) {
+        if (tooLarge(list,num)) {
             return maxList;
+        }
+        if (rightSize(list,num)){
+            return list;
         }
         ArrayList<Integer> minList = maxList;
         for (int i = index; i < ray.length; i++) {
             ArrayList<Integer> curList = (ArrayList<Integer>) list.clone();
-            curList.add(ray[i]);
-            minList = findMinList(minList, recurse(num, ray, i, list));
+            curList.add(ray[i]*list.get(list.size()-1));
+            minList = findMinList(minList, recurse(num, ray, i, curList));
         }
         return minList;
+    }
+
+    public static ArrayList<Integer> findMinList(ArrayList<Integer> list1, ArrayList<Integer> list2){
+        String a = listToString(list1);
+        String b = listToString(list2);
+        int c = a.compareTo(b);
+        if(a.length() == b.length()){
+            if (c == -1){
+                return list1;
+            } else {
+                return list2;
+            }
+        } else{
+            if(a.length() > b.length()){
+                return list2;
+            } else {
+                return  list1;
+            }
+        }
     }
 
     public static void checkSpot(int i, int j, char[][] ray){

@@ -29,22 +29,29 @@ class Solver{
     }
     public void solve() throws IOException{
         int n = in.nextInt();
-        int k = in.nextInt();
-        int sum = 0;
-        ArrayList<Integer> games = new ArrayList<Integer>(n);
-        for (int i = 0; i < n; i++) {
-            int score = in.nextInt();
-            int imp = in.nextInt();
-            sum += score;
-            if(imp == 1) games.add(score);
+        int [] ray = r.populateIntArray(in,n);
+        Arrays.sort(ray);
+        int index = ray.length - 3;
+        boolean found = false;
+        while(r.indexInArray(ray, index)){
+            if(works(ray,index)){
+                System.out.println(ray[index] + " " + ray[index + 1] + " " + ray[index + 2]);
+                found = true;
+                break;
+            } else {
+                index--;
+            }
         }
-        Collections.sort(games);
-        int remove = games.size() - k;
-        for (int i = 0; i < remove; i++) {
-            sum -= games.get(i)*2;
+        if (!found){
+            System.out.println(-1);
         }
-        System.out.println(sum);
     }
+    private boolean works(int [] ray, int index){
+        int longSide = ray[index + 2];
+        int shorters = ray[index] + ray[index + 1];
+        return (shorters > longSide);
+    }
+
 }
 class DataStructures{
     DataStructures(){}

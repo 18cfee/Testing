@@ -27,7 +27,12 @@ public class Solution {
         ArrayList<Integer> list = new ArrayList<Integer>();
         list.add(1);
         ArrayList<Integer> ans = recurse(num,ray, 0,list);
-        printList(ans);
+        if (ans.size() == 31){
+            System.out.println(-1);
+        } else {
+            printList(ans);
+
+        }
         /////////////////////// Main End\\
         in.close();
     }
@@ -50,7 +55,7 @@ public class Solution {
 
     public static boolean tooLarge(ArrayList<Integer> list, int num){
         int s = list.get(list.size() - 1);
-        return(s > num);
+        return(s > num || list.size() > minList);
     }
 
     public static boolean rightSize(ArrayList<Integer> list, int num){
@@ -58,12 +63,15 @@ public class Solution {
         return(s == num);
     }
 
+    public static int minList = Integer.MAX_VALUE;
+
     public static ArrayList<Integer> recurse(int num, int [] ray, int index, ArrayList<Integer> list){
         ArrayList<Integer> maxList = genMaxList();
         if (tooLarge(list,num)) {
             return maxList;
         }
         if (rightSize(list,num)){
+            minList = list.size();
             return list;
         }
         ArrayList<Integer> minList = maxList;

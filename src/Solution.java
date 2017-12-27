@@ -27,25 +27,43 @@ class Solver{
         r = new Ray();
     }
     public void solve() throws IOException{
-        String a = in.next();
-        int size = a.length()/3;
-        String b = "SOS";
-        String c = "";
-        for (int i = 0; i < size; i++) {
-            c += b;
+        int n = in.nextInt();
+        int e = in.nextInt();
+        ArrayList<ArrayList<Integer>> graph = new ArrayList<ArrayList<Integer>>(n + 1);
+        for (int i = 0; i < n + 1; i++) {
+            ArrayList<Integer> list = new ArrayList<Integer>();
+            graph.add(list);
         }
-        System.out.println(dif(c,a));
+        for (int i = 0; i < e; i++) {
+            int a = in.nextInt();
+            int b = in.nextInt();
+            ArrayList<Integer> cur1 = graph.get(a);
+            cur1.add(b);
+            ArrayList<Integer> cur2 = graph.get(b);
+            cur2.add(a);
+        }
+        isOddTree(1,graph,0);
+        System.out.println(count - 1);
     }
-    int dif(String a, String b){
-        int count = 0;
-        for (int i = 0; i < a.length(); i++) {
-            char aa = a.charAt(i);
-            char bb = b.charAt(i);
-            if (aa != bb){
-                count++;
+    int count = 0;
+    int isOddTree(int node, ArrayList<ArrayList<Integer>> graph, int from){
+        if(even(node, graph, from)) {
+            count++;
+            return 0;
+        }
+        else {
+            return 1;
+        }
+    }
+    boolean even(int node, ArrayList<ArrayList<Integer>> graph, int from){
+        ArrayList<Integer> toCheck = graph.get(node);
+        int sum = 1;
+        for (Integer i: toCheck) {
+            if(from != i){
+                sum += isOddTree(i, graph, node);
             }
         }
-        return count;
+        return sum%2 == 0;
     }
 }
 class DataStructures{

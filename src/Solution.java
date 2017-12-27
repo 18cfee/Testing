@@ -1,5 +1,4 @@
 import java.io.*;
-import java.net.CookieHandler;
 import java.util.*;
 
 public class Solution {
@@ -28,30 +27,25 @@ class Solver{
         r = new Ray();
     }
     public void solve() throws IOException{
-        int n = in.nextInt();
-        int [] ray = r.populateIntArray(in,n);
-        Arrays.sort(ray);
-        int index = ray.length - 3;
-        boolean found = false;
-        while(r.indexInArray(ray, index)){
-            if(works(ray,index)){
-                System.out.println(ray[index] + " " + ray[index + 1] + " " + ray[index + 2]);
-                found = true;
-                break;
-            } else {
-                index--;
-            }
+        boolean[] ray = new boolean[101];
+        ray[0] = false;
+        ray[1] = false;
+        for (int i = 2; i < 101; i++) {
+            ray[i] = willWin(ray, i);
         }
-        if (!found){
-            System.out.println(-1);
+        int t = in.nextInt();
+        for (int i = 0; i < t; i++) {
+            int n = in.nextInt();
+            if (ray[n]) System.out.println("First");
+            else System.out.println("Second");
         }
     }
-    private boolean works(int [] ray, int index){
-        int longSide = ray[index + 2];
-        int shorters = ray[index] + ray[index + 1];
-        return (shorters > longSide);
+    boolean willWin(boolean [] ray, int index){
+        if (r.indexInArray(ray,index - 2) && ray[index - 2] == false) return true;
+        if (r.indexInArray(ray,index - 3) && ray[index - 3] == false) return true;
+        if (r.indexInArray(ray,index - 5) && ray[index - 5] == false) return true;
+        return false;
     }
-
 }
 class DataStructures{
     DataStructures(){}
@@ -142,6 +136,9 @@ class CarlNumbers {
 class Ray {
     Ray(){}
     public boolean indexInArray(int [] a, int index){
+        return (0 <= index && index < a.length);
+    }
+    public boolean indexInArray(boolean [] a, int index){
         return (0 <= index && index < a.length);
     }
     public void printArray(char[][] ray){

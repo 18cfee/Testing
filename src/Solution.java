@@ -27,24 +27,25 @@ class Solver{
         r = new Ray();
     }
     public void solve() throws IOException{
-        boolean[] ray = new boolean[101];
-        ray[0] = false;
-        ray[1] = false;
-        for (int i = 2; i < 101; i++) {
-            ray[i] = willWin(ray, i);
+        String a = in.next();
+        int size = a.length()/3;
+        String b = "SOS";
+        String c = "";
+        for (int i = 0; i < size; i++) {
+            c += b;
         }
-        int t = in.nextInt();
-        for (int i = 0; i < t; i++) {
-            int n = in.nextInt();
-            if (ray[n]) System.out.println("First");
-            else System.out.println("Second");
-        }
+        System.out.println(dif(c,a));
     }
-    boolean willWin(boolean [] ray, int index){
-        if (r.indexInArray(ray,index - 2) && ray[index - 2] == false) return true;
-        if (r.indexInArray(ray,index - 3) && ray[index - 3] == false) return true;
-        if (r.indexInArray(ray,index - 5) && ray[index - 5] == false) return true;
-        return false;
+    int dif(String a, String b){
+        int count = 0;
+        for (int i = 0; i < a.length(); i++) {
+            char aa = a.charAt(i);
+            char bb = b.charAt(i);
+            if (aa != bb){
+                count++;
+            }
+        }
+        return count;
     }
 }
 class DataStructures{

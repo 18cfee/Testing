@@ -27,41 +27,23 @@ class Solver{
         r = new Ray();
     }
     public void solve() throws IOException{
-        int t = in.nextInt();
-        for (int i = 0; i < t; i++) {
-            int n = in.nextInt();
-            Tuple a = findNums(n);
-            if (a.x == -1){
-                System.out.println(-1);
-            } else {
-                StringBuffer tin = new StringBuffer(a.y + a.x);
-                for (int f = 0; f < a.x; f++) {
-                    tin.append("5");
-                }
-                for (int f = 0; f < a.y; f++) {
-                    tin.append("3");
-                }
-                System.out.println(tin);
-            }
-        }
+        String case1 = in.next();
+        System.out.println(reduce(case1));
     }
-    Tuple findNums(int n){
-        Tuple ans = new Tuple(-1, -1);
-        int threes = 0;
-        int remaining = n;
-        int count = 0;
-        while(threes <= n && count < 20){
-            if(remaining%3 == 0){
-                ans.x = remaining;
-                ans.y = threes;
-                return ans;
-            } else {
-                remaining -= 5;
-                threes += 5;
-            }
-            count++;
+    String reduce(String a){
+        int size = a.length();
+        if (size == 0){
+            return "Empty String";
         }
-        return ans;
+        for (int i = 1; i < size; i++) {
+            char one = a.charAt(i-1);
+            char two = a.charAt(i);
+            if (one == two){
+                String b = a.substring(0,i-1) + a.substring(i + 1, size);
+                return reduce(b);
+            }
+        }
+        return a;
     }
 }
 class DataStructures{

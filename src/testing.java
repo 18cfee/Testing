@@ -22,7 +22,10 @@ public class testing {
         long two = decToLong(Math.sqrt(2));
         assertEquals(one, two);
     }
-
+    @Test
+    public void findUniqueChars(){
+        String one = "asdffffaetsdfwe";
+    }
     //// Helpers after this point
     public long decToLong(double num){
         return (long)(prec * num);

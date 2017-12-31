@@ -18,32 +18,40 @@ public class Solution {
     }
 }
 class Solver{
-    Reader in; DataStructures d; CarlString s; CarlNumbers m; Ray r;
+    Reader in; DataStructures d; CarlString sLi; CarlNumbers m; Ray r;
     Solver(Reader in){
         this.in = in;
         d = new DataStructures();
-        s = new CarlString();
+        sLi = new CarlString();
         m = new CarlNumbers();
         r = new Ray();
     }
     public void solve() throws IOException{
+        int not = in.nextInt();
         String case1 = in.next();
-        System.out.println(reduce(case1));
-    }
-    String reduce(String a){
-        int size = a.length();
-        if (size == 0){
-            return "Empty String";
-        }
-        for (int i = 1; i < size; i++) {
-            char one = a.charAt(i-1);
-            char two = a.charAt(i);
-            if (one == two){
-                String b = a.substring(0,i-1) + a.substring(i + 1, size);
-                return reduce(b);
+        char[] cs = sLi.findUniqueChars(case1);
+        int max = 0;
+        for (int i = 0; i < cs.length; i++) {
+            for (int j = i; j < cs.length; j++) {
+                max = Math.max(max,alternatingPattern(cs[i],cs[j],case1));
+                max = Math.max(max,alternatingPattern(cs[j],cs[i],case1));
             }
         }
-        return a;
+        System.out.println(max);
+    }
+    int alternatingPattern(char a, char b, String s){
+        boolean onA = true;
+        int sum = 0;
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if(onA && c == a) return 0;
+            if(!onA && c == b) return 0;
+            if(onA && c == b || (!onA && c == a)){
+                onA = !onA;
+                sum++;
+            }
+        }
+        return sum;
     }
 }
 class DataStructures{
@@ -72,6 +80,19 @@ class DataStructures{
 }
 class CarlString{
     CarlString(){}
+    public char[] findUniqueChars(String s){
+        HashSet<Character> set = new HashSet<Character>(26);
+        for (int i = 0; i < s.length(); i++) {
+            set.add(s.charAt(i));
+        }
+        char[] ret = new char[set.size()];
+        int i = 0;
+        for(Character c : set){
+            ret[i] = c;
+            i++;
+        }
+        return ret;
+    }
     public String listToString(ArrayList<Integer> list){
         String a = "";
         for (int i = 0; i < list.size(); i++) {

@@ -27,43 +27,41 @@ class Solver{
         r = new Ray();
     }
     public void solve() throws IOException{
-        int n = in.nextInt();
-        int e = in.nextInt();
-        ArrayList<ArrayList<Integer>> graph = new ArrayList<ArrayList<Integer>>(n + 1);
-        for (int i = 0; i < n + 1; i++) {
-            ArrayList<Integer> list = new ArrayList<Integer>();
-            graph.add(list);
-        }
-        for (int i = 0; i < e; i++) {
-            int a = in.nextInt();
-            int b = in.nextInt();
-            ArrayList<Integer> cur1 = graph.get(a);
-            cur1.add(b);
-            ArrayList<Integer> cur2 = graph.get(b);
-            cur2.add(a);
-        }
-        isOddTree(1,graph,0);
-        System.out.println(count - 1);
-    }
-    int count = 0;
-    int isOddTree(int node, ArrayList<ArrayList<Integer>> graph, int from){
-        if(even(node, graph, from)) {
-            count++;
-            return 0;
-        }
-        else {
-            return 1;
-        }
-    }
-    boolean even(int node, ArrayList<ArrayList<Integer>> graph, int from){
-        ArrayList<Integer> toCheck = graph.get(node);
-        int sum = 1;
-        for (Integer i: toCheck) {
-            if(from != i){
-                sum += isOddTree(i, graph, node);
+        int t = in.nextInt();
+        for (int i = 0; i < t; i++) {
+            int n = in.nextInt();
+            Tuple a = findNums(n);
+            if (a.x == -1){
+                System.out.println(-1);
+            } else {
+                StringBuffer tin = new StringBuffer(a.y + a.x);
+                for (int f = 0; f < a.x; f++) {
+                    tin.append("5");
+                }
+                for (int f = 0; f < a.y; f++) {
+                    tin.append("3");
+                }
+                System.out.println(tin);
             }
         }
-        return sum%2 == 0;
+    }
+    Tuple findNums(int n){
+        Tuple ans = new Tuple(-1, -1);
+        int threes = 0;
+        int remaining = n;
+        int count = 0;
+        while(threes <= n && count < 20){
+            if(remaining%3 == 0){
+                ans.x = remaining;
+                ans.y = threes;
+                return ans;
+            } else {
+                remaining -= 5;
+                threes += 5;
+            }
+            count++;
+        }
+        return ans;
     }
 }
 class DataStructures{
@@ -225,6 +223,8 @@ class Tuple implements Comparator<Tuple>{
     Tuple(int first, int last) {
         this.x = first;
         this.y = last;
+    }
+    Tuple() {
     }
 
     public Tuple[] sortByFirst(Tuple[] tuples) {

@@ -30,26 +30,19 @@ class Solver{
         int t = in.nextInt();
         for (int i = 0; i < t; i++) {
             String s = in.next();
-            for (int j = 0; j < s.length(); j++) {
-                ray[i] = s.charAt(j);
-                int b = isBeaut(ray);
-                if (b == 0){
-                    System.out.println("NO");
-                } else {
-                    System.out.println("YES " + b);
+            String srev = sLi.reverse(s);
+            boolean funny = true;
+            for (int j = 1; j < s.length(); j++) {
+                if(Math.abs(s.charAt(j) - s.charAt(j - 1)) != Math.abs(srev.charAt(j) - srev.charAt(j -1))){
+                    funny = false;
                 }
             }
+            if (funny){
+                System.out.println("Funny");
+            } else {
+                System.out.println("Not Funny");
+            }
         }
-    }
-    int isBeaut(int[] ray){
-        int lastIndex1 = 0;
-        while(r.indexInArray(ray,lastIndex1)){
-            int firstNum = numFrom(ray,0,lastIndex1);
-            int curNum = firstNum;
-            while(hasNe)
-            lastIndex1++;
-        }
-        return 0;
     }
 }
 class DataStructures{

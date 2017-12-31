@@ -29,18 +29,12 @@ class Solver{
     public void solve() throws IOException{
         int t = in.nextInt();
         for (int i = 0; i < t; i++) {
-            String a = in.next();
-            int count = 0;
-            int index = 0;
-            char cur = a.charAt(0);
-            for (int j = 1; j < a.length(); j++) {
-                if(a.charAt(j) == cur) count ++;
-                else{
-                    index = j;
-                    cur = a.charAt(index);
-                }
-            }
-            System.out.println(count);
+            int n = in.nextInt();
+            int h = in.nextInt();
+            if(h == 1 || n%2 == 0){
+                System.out.println(2);
+            } else
+            System.out.println(1);
         }
     }
 }

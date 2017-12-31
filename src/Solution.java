@@ -28,12 +28,27 @@ class Solver{
     }
     public void solve() throws IOException{
         String s = in.next();
-        s = s.toLowerCase();
-        char[] c = sLi.findUniqueChars(s);
-        if(c.length == 27){
-            System.out.println("pangram");
-        } else {
-            System.out.println("not pangram");
+        int cur = 1;
+        char prev = s.charAt(0);
+        HashSet<Integer> set = new HashSet<Integer>();
+        for (int i = 1; i < s.length(); i++) {
+            set.add(cur*(prev-'a' + 1));
+            char c = s.charAt(i);
+            if(prev == c){
+                cur++;
+            }else{
+                prev = c;
+                cur = 1;
+            }
+        }
+        set.add(cur*(prev-'a' + 1));
+        int n = in.nextInt();
+        for (int i = 0; i < n; i++) {
+            String print = "No";
+            if(set.contains(in.nextInt())) {
+                print = "Yes";
+            }
+            System.out.println(print);
         }
     }
 }

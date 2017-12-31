@@ -27,28 +27,14 @@ class Solver{
         r = new Ray();
     }
     public void solve() throws IOException{
-        int n = in.nextInt();
-        String hacker ="hackerrank";
-        for (int i = 0; i < n; i++) {
-            String s = in.next();
-            if(contains(s,hacker)){
-                System.out.println("YES");
-            } else{
-                System.out.println("NO");
-            }
+        String s = in.next();
+        s = s.toLowerCase();
+        char[] c = sLi.findUniqueChars(s);
+        if(c.length == 27){
+            System.out.println("pangram");
+        } else {
+            System.out.println("not pangram");
         }
-    }
-    boolean contains(String a, String h){
-        int index = 0;
-        for (int i = 0; i < a.length(); i++) {
-            if(h.charAt(index) == a.charAt(i)){
-                index++;
-                if(index == h.length()){
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 }
 class DataStructures{

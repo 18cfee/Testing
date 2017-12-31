@@ -28,21 +28,12 @@ class Solver{
     }
     public void solve() throws IOException{
         int t = in.nextInt();
-        for (int i = 0; i < t; i++) {
-            String s = in.next();
-            String srev = sLi.reverse(s);
-            boolean funny = true;
-            for (int j = 1; j < s.length(); j++) {
-                if(Math.abs(s.charAt(j) - s.charAt(j - 1)) != Math.abs(srev.charAt(j) - srev.charAt(j -1))){
-                    funny = false;
-                }
-            }
-            if (funny){
-                System.out.println("Funny");
-            } else {
-                System.out.println("Not Funny");
-            }
+        HashSet<Character> set = sLi.findSetChars(in.next());
+        for (int i = 1; i < t; i++) {
+            HashSet<Character> set2 = sLi.findSetChars(in.next());
+            set.retainAll(set2);
         }
+        System.out.println(set.size());
     }
 }
 class DataStructures{
@@ -83,6 +74,13 @@ class CarlString{
             i++;
         }
         return ret;
+    }
+    public HashSet<Character> findSetChars(String s){
+        HashSet<Character> set = new HashSet<Character>(26);
+        for (int i = 0; i < s.length(); i++) {
+            set.add(s.charAt(i));
+        }
+        return set;
     }
     public String listToString(ArrayList<Integer> list){
         String a = "";

@@ -28,12 +28,20 @@ class Solver{
     }
     public void solve() throws IOException{
         int t = in.nextInt();
-        HashSet<Character> set = sLi.findSetChars(in.next());
-        for (int i = 1; i < t; i++) {
-            HashSet<Character> set2 = sLi.findSetChars(in.next());
-            set.retainAll(set2);
+        for (int i = 0; i < t; i++) {
+            String a = in.next();
+            int count = 0;
+            int index = 0;
+            char cur = a.charAt(0);
+            for (int j = 1; j < a.length(); j++) {
+                if(a.charAt(j) == cur) count ++;
+                else{
+                    index = j;
+                    cur = a.charAt(index);
+                }
+            }
+            System.out.println(count);
         }
-        System.out.println(set.size());
     }
 }
 class DataStructures{

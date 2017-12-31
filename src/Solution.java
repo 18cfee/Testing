@@ -28,26 +28,27 @@ class Solver{
     }
     public void solve() throws IOException{
         int n = in.nextInt();
-        char[] ray = r.populateCharArray(in,n);
-        int k = in.nextInt();
-        for (int i = 0; i < ray.length; i++) {
-            ray[i] = convertChar(ray[i],k);
+        String hacker ="hackerrank";
+        for (int i = 0; i < n; i++) {
+            String s = in.next();
+            if(contains(s,hacker)){
+                System.out.println("YES");
+            } else{
+                System.out.println("NO");
+            }
         }
-        System.out.println(ray);
     }
-    char convertChar(char c, int k){
-        if('a' <= c && c <= 'z'){
-            c -= 'a';
-            c += k;
-            c = (char)(c%26);
-            c += 'a';
-        }else if ('A' <= c && c <= 'Z') {
-            c -= 'A';
-            c += k;
-            c = (char) (c % 26);
-            c += 'A';
+    boolean contains(String a, String h){
+        int index = 0;
+        for (int i = 0; i < a.length(); i++) {
+            if(h.charAt(index) == a.charAt(i)){
+                index++;
+                if(index == h.length()){
+                    return true;
+                }
+            }
         }
-        return c;
+        return false;
     }
 }
 class DataStructures{

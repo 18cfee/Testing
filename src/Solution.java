@@ -27,29 +27,29 @@ class Solver{
         r = new Ray();
     }
     public void solve() throws IOException{
-        String s = in.next();
-        int cur = 1;
-        char prev = s.charAt(0);
-        HashSet<Integer> set = new HashSet<Integer>();
-        for (int i = 1; i < s.length(); i++) {
-            set.add(cur*(prev-'a' + 1));
-            char c = s.charAt(i);
-            if(prev == c){
-                cur++;
-            }else{
-                prev = c;
-                cur = 1;
+        int t = in.nextInt();
+        for (int i = 0; i < t; i++) {
+            String s = in.next();
+            for (int j = 0; j < s.length(); j++) {
+                ray[i] = s.charAt(j);
+                int b = isBeaut(ray);
+                if (b == 0){
+                    System.out.println("NO");
+                } else {
+                    System.out.println("YES " + b);
+                }
             }
         }
-        set.add(cur*(prev-'a' + 1));
-        int n = in.nextInt();
-        for (int i = 0; i < n; i++) {
-            String print = "No";
-            if(set.contains(in.nextInt())) {
-                print = "Yes";
-            }
-            System.out.println(print);
+    }
+    int isBeaut(int[] ray){
+        int lastIndex1 = 0;
+        while(r.indexInArray(ray,lastIndex1)){
+            int firstNum = numFrom(ray,0,lastIndex1);
+            int curNum = firstNum;
+            while(hasNe)
+            lastIndex1++;
         }
+        return 0;
     }
 }
 class DataStructures{

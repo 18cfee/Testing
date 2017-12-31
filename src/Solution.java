@@ -27,31 +27,27 @@ class Solver{
         r = new Ray();
     }
     public void solve() throws IOException{
-        int not = in.nextInt();
-        String case1 = in.next();
-        char[] cs = sLi.findUniqueChars(case1);
-        int max = 0;
-        for (int i = 0; i < cs.length; i++) {
-            for (int j = i; j < cs.length; j++) {
-                max = Math.max(max,alternatingPattern(cs[i],cs[j],case1));
-                max = Math.max(max,alternatingPattern(cs[j],cs[i],case1));
-            }
+        int n = in.nextInt();
+        char[] ray = r.populateCharArray(in,n);
+        int k = in.nextInt();
+        for (int i = 0; i < ray.length; i++) {
+            ray[i] = convertChar(ray[i],k);
         }
-        System.out.println(max);
+        System.out.println(ray);
     }
-    int alternatingPattern(char a, char b, String s){
-        boolean onA = true;
-        int sum = 0;
-        for (int i = 0; i < s.length(); i++) {
-            char c = s.charAt(i);
-            if(onA && c == a) return 0;
-            if(!onA && c == b) return 0;
-            if(onA && c == b || (!onA && c == a)){
-                onA = !onA;
-                sum++;
-            }
+    char convertChar(char c, int k){
+        if('a' <= c && c <= 'z'){
+            c -= 'a';
+            c += k;
+            c = (char)(c%26);
+            c += 'a';
+        }else if ('A' <= c && c <= 'Z') {
+            c -= 'A';
+            c += k;
+            c = (char) (c % 26);
+            c += 'A';
         }
-        return sum;
+        return c;
     }
 }
 class DataStructures{
@@ -188,11 +184,16 @@ class Ray {
         }
         return array;
     }
-    public char[][] populateCharArray(Reader in, int size) throws IOException{
+    public char[][] populate2DCharArray(Reader in, int size) throws IOException{
         char[][] array = new char[size][size];
         for (int i = 0; i < size; i++) {
             array[i] = in.next().toCharArray();
         }
+        return array;
+    }
+    public char[] populateCharArray(Reader in, int size) throws IOException{
+        char[] array = new char[size];
+        array = in.next().toCharArray();
         return array;
     }
     public int minArray(int [] array){

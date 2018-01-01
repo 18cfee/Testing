@@ -27,13 +27,15 @@ class Solver{
         r = new Ray();
     }
     public void solve() throws IOException{
-        int n = in.nextInt();
-        int [] ray = r.populateIntArray(in,n);
-        int ans = ray[0];
-        for (int i = 1; i < n; i++) {
-            ans ^= ray[i];
+        int a = in.nextInt();
+        int b = in.nextInt();
+        int max = 0;
+        for (int i = a; i <= b; i++) {
+            for (int j = i; j <= b; j++) {
+                max = Math.max(max,i^j);
+            }
         }
-        System.out.println(ans);
+        System.out.println(max);
     }
 }
 class DataStructures{

@@ -27,27 +27,17 @@ class Solver{
         r = new Ray();
     }
     public void solve() throws IOException{
-        int t = in.nextInt();
-        for (int i = 0; i < t; i++) {
-            int n = in.nextInt();
-            int a = in.nextInt();
-            int b = in.nextInt();
-            int temp = a;
-            a = Math.max(a,b);
-            b = Math.min(temp,b);
-            StringBuffer buffer = new StringBuffer(3100);
-            HashSet<Integer> set = new HashSet<>(1001);
-            for (int j = 0; j < n; j++) {
-                int tot = a*j + b*(n-j-1);
-                if (set.contains(tot)){
-
-                } else {
-                    set.add(tot);
-                    buffer.append(tot + " ");
-                }
-            }
-            System.out.println(buffer);
+        int n = in.nextInt();
+        int k = in.nextInt();
+        int [] ray = r.populateIntArray(in,n);
+        Arrays.sort(ray);
+        int index = 0;
+        int count = 0;
+        while(r.indexInArray(ray,index) && k >= ray[index]){
+            k -= ray[index];
+            index++;
         }
+        System.out.println(index);
     }
 }
 class DataStructures{

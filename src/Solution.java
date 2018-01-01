@@ -27,19 +27,26 @@ class Solver{
         r = new Ray();
     }
     public void solve() throws IOException{
-        int n = in.nextInt();
-        int [] ray = r.populateIntArray(in,n);
-        int count = 0;
-        for (int i = 0; i < ray.length - 1; i++) {
-            if (ray[i]%2 == 1){
-                ray[i+1]++;
-                count+=2;
+        int t = in.nextInt();
+        for (int i = 0; i < t; i++) {
+            int n = in.nextInt();
+            int a = in.nextInt();
+            int b = in.nextInt();
+            int temp = a;
+            a = Math.max(a,b);
+            b = Math.min(temp,b);
+            StringBuffer buffer = new StringBuffer(3100);
+            HashSet<Integer> set = new HashSet<>(1001);
+            for (int j = 0; j < n; j++) {
+                int tot = a*j + b*(n-j);
+                if (set.contains(tot)){
+
+                } else {
+                    set.add(tot);
+                    buffer.append(tot + " ");
+                }
             }
-        }
-        if(ray[ray.length - 1]%2 == 1){
-            System.out.println("NO");
-        } else {
-            System.out.println(count);
+            System.out.println(buffer);
         }
     }
 }

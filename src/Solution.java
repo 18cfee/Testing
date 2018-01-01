@@ -38,7 +38,7 @@ class Solver{
             StringBuffer buffer = new StringBuffer(3100);
             HashSet<Integer> set = new HashSet<>(1001);
             for (int j = 0; j < n; j++) {
-                int tot = a*j + b*(n-j);
+                int tot = a*j + b*(n-j-1);
                 if (set.contains(tot)){
 
                 } else {

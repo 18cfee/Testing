@@ -28,14 +28,31 @@ class Solver{
     }
     public void solve() throws IOException{
         int t = in.nextInt();
-        for (int i = 0; i < t; i++) {
-            int n = in.nextInt();
-            int h = in.nextInt();
-            if(h == 1 || n%2 == 0){
-                System.out.println(2);
-            } else
-            System.out.println(1);
+        boolean win[][] = new boolean[15][15];
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j <= i; j++) {
+                win[j][i-j] = findWinner(win,j,i-j);
+            }
         }
+        for (int i = 1; i < 15; i++) {
+            for (int j = i; j < 15; j++) {
+                win[j][14-j +i] = findWinner(win,j,14 - j+i);
+            }
+        }
+        for (int i = 0; i < t; i++) {
+            int x = in.nextInt() - 1;
+            int y = in.nextInt() - 1;
+            if(win[x][y]) System.out.println("First");
+            else System.out.println("Second");
+        }
+    }
+    boolean findWinner(boolean[][] ray,int x, int y){
+        for (int i = 0; i < 4; i++) {
+            int sx = x + m.partKnight[i][0];
+            int sy = y + m.partKnight[i][1];
+            if(r.indexInArray(ray,sx,sy) && !ray[sx][sy]) return true;
+        }
+        return false;
     }
 }
 class DataStructures{
@@ -119,6 +136,7 @@ class CarlString{
 }
 class CarlNumbers {
     public int[][] directions = {{0,1},{1,1},{1,0},{1,-1},{0,-1},{-1,-1},{-1,0},{-1,1}};
+    public int[][] partKnight = {{-2,1},{-2,-1},{-1,-2},{1,-2}};
     CarlNumbers(){}
     public double distanceBetween(Tuple one, Tuple two){
         return Math.sqrt(Math.pow((one.x - two.x),2) + Math.pow(one.y - two.y, 2));
@@ -151,6 +169,15 @@ class Ray {
     }
     public boolean indexInArray(boolean [] a, int index){
         return (0 <= index && index < a.length);
+    }
+    public boolean indexInArray(boolean [][] a, int x, int y){
+        if(0 <= x && x < a.length){
+            boolean[] temp = a[x];
+            if (0 <= y && y < a.length){
+                return true;
+            }
+        }
+        return false;
     }
     public void printArray(char[][] ray){
         int height = ray.length;

@@ -27,32 +27,20 @@ class Solver{
         r = new Ray();
     }
     public void solve() throws IOException{
-        int t = in.nextInt();
-        boolean win[][] = new boolean[15][15];
-        for (int i = 0; i < 15; i++) {
-            for (int j = 0; j <= i; j++) {
-                win[j][i-j] = findWinner(win,j,i-j);
+        int n = in.nextInt();
+        int [] ray = r.populateIntArray(in,n);
+        int count = 0;
+        for (int i = 0; i < ray.length - 1; i++) {
+            if (ray[i]%2 == 1){
+                ray[i+1]++;
+                count+=2;
             }
         }
-        for (int i = 1; i < 15; i++) {
-            for (int j = i; j < 15; j++) {
-                win[j][14-j +i] = findWinner(win,j,14 - j+i);
-            }
+        if(ray[ray.length - 1]%2 == 1){
+            System.out.println("NO");
+        } else {
+            System.out.println(count);
         }
-        for (int i = 0; i < t; i++) {
-            int x = in.nextInt() - 1;
-            int y = in.nextInt() - 1;
-            if(win[x][y]) System.out.println("First");
-            else System.out.println("Second");
-        }
-    }
-    boolean findWinner(boolean[][] ray,int x, int y){
-        for (int i = 0; i < 4; i++) {
-            int sx = x + m.partKnight[i][0];
-            int sy = y + m.partKnight[i][1];
-            if(r.indexInArray(ray,sx,sy) && !ray[sx][sy]) return true;
-        }
-        return false;
     }
 }
 class DataStructures{

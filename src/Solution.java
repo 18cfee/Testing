@@ -28,16 +28,12 @@ class Solver{
     }
     public void solve() throws IOException{
         int n = in.nextInt();
-        int k = in.nextInt();
         int [] ray = r.populateIntArray(in,n);
-        Arrays.sort(ray);
-        int index = 0;
-        int count = 0;
-        while(r.indexInArray(ray,index) && k >= ray[index]){
-            k -= ray[index];
-            index++;
+        int ans = ray[0];
+        for (int i = 1; i < n; i++) {
+            ans ^= ray[i];
         }
-        System.out.println(index);
+        System.out.println(ans);
     }
 }
 class DataStructures{

@@ -27,15 +27,28 @@ class Solver{
         r = new Ray();
     }
     public void solve() throws IOException{
-        int a = in.nextInt();
-        int b = in.nextInt();
-        int max = 0;
-        for (int i = a; i <= b; i++) {
-            for (int j = i; j <= b; j++) {
-                max = Math.max(max,i^j);
+        int n = in.nextInt();
+        int m = in.nextInt();
+        int count = 0;
+        ArrayList<HashSet<Integer>> sets = new ArrayList<HashSet<Integer>>(n+1);
+        for (int i = 0; i <= n; i++) {
+            HashSet<Integer> set = new HashSet<Integer>();
+            set.add(i);
+            sets.add(set);
+        }
+        ArrayList<Triplet> trips = new ArrayList<Triplet>(m);
+        for (int i = 0; i < m; i++) {
+            trips.add(new Triplet(in.nextInt(),in.nextInt(),in.nextInt()));
+        }
+        Collections.sort(trips,new Triplet(1,2,0));
+        for(Triplet edge : trips){
+            if (!sets.get(edge.x).contains(edge.y)){
+                sets.get(edge.x).addAll(sets.get(edge.y));
+                sets.get(edge.y).addAll(sets.get(edge.x));
+                count += edge.w;
             }
         }
-        System.out.println(max);
+        System.out.println(count);
     }
 }
 class DataStructures{
@@ -397,5 +410,31 @@ class Reader {
         if (din == null)
             return;
         din.close();
+    }
+}
+class Triplet implements Comparator<Triplet>{
+    public int x = 0;
+    public int y = 0;
+    public int w = 0;
+    Triplet(int first, int last, int w) {
+        this.x = first;
+        this.y = last;
+        this.w = w;
+    }
+    Triplet() {
+    }
+
+    public Tuple[] sort(Tuple[] tuples) {
+        return new Tuple[0];
+    }
+
+    @Override
+    public int compare(Triplet a, Triplet b){
+        int sol = a.w - b.w;
+        if (sol == 0){
+            return a.x + a.y - (b.x + b.y);
+        }else{
+            return sol;
+        }
     }
 }

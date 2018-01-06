@@ -49,6 +49,7 @@ class Solver{
         }
         System.out.println(count);
     }
+    // effecient set update
     void updateParent(int a, int b, int[][] ray){
         int aS = ray[a][1];
         int bS = ray[b][1];

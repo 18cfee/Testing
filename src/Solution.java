@@ -18,13 +18,14 @@ public class Solution {
     }
 }
 class Solver{
-    Reader in; DataStructures d; CarlString sLi; CarlNumbers m; Ray r;
+    Reader in; DataStructures d; CarlString sLi; CarlNumbers m; Ray r; Graph g;
     Solver(Reader in){
         this.in = in;
         d = new DataStructures();
         sLi = new CarlString();
         m = new CarlNumbers();
         r = new Ray();
+        g = new Graph();
     }
     public void solve() throws IOException{
         int n = in.nextInt();
@@ -40,15 +41,19 @@ class Solver{
         }
         Collections.sort(trips,new Triplet(1,2,0));
         for(Triplet edge : trips){
-            int p1 = parent(edge.x,ray);
-            int p2 = parent(edge.y,ray);
+            int p1 = g.parent(edge.x,ray);
+            int p2 = g.parent(edge.y,ray);
             if (p1 != p2){
-                updateParent(p1,p2,ray);
+                g.updateParent(p1,p2,ray);
                 count += edge.w;
             }
         }
         System.out.println(count);
     }
+
+}
+class Graph{
+    Graph(){}
     // effecient set update
     void updateParent(int a, int b, int[][] ray){
         int aS = ray[a][1];

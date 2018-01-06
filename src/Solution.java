@@ -30,11 +30,9 @@ class Solver{
         int n = in.nextInt();
         int m = in.nextInt();
         int count = 0;
-        ArrayList<HashSet<Integer>> sets = new ArrayList<HashSet<Integer>>(n+1);
+        int [][] ray = new int[n + 1][2];
         for (int i = 0; i <= n; i++) {
-            HashSet<Integer> set = new HashSet<Integer>();
-            set.add(i);
-            sets.add(set);
+            ray[i][0] = i;
         }
         ArrayList<Triplet> trips = new ArrayList<Triplet>(m);
         for (int i = 0; i < m; i++) {
@@ -42,13 +40,32 @@ class Solver{
         }
         Collections.sort(trips,new Triplet(1,2,0));
         for(Triplet edge : trips){
-            if (!sets.get(edge.x).contains(edge.y)){
-                sets.get(edge.x).addAll(sets.get(edge.y));
-                sets.get(edge.y).addAll(sets.get(edge.x));
+            int p1 = parent(edge.x,ray);
+            int p2 = parent(edge.y,ray);
+            if (p1 != p2){
+                updateParent(p1,p2,ray);
                 count += edge.w;
             }
         }
         System.out.println(count);
+    }
+    void updateParent(int a, int b, int[][] ray){
+        int aS = ray[a][1];
+        int bS = ray[b][1];
+        if (aS == bS){
+            ray[a][1]++;
+            ray[b][0] = a;
+        } else if (aS > bS){
+            ray[b][0] = a;
+        } else {
+            ray[a][0] = b;
+        }
+    }
+    int parent(int a, int[][] ray){
+        if (a == ray[a][0]) return a;
+        int p = parent(ray[ray[a][0]][0],ray);
+        ray[a][0] = p;
+        return p;
     }
 }
 class DataStructures{

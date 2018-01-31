@@ -31,23 +31,41 @@ class Solver{
     public void solve() throws IOException{
         int n = in.nextInt();
         in.readLine();
+        Trie test = new Trie();
         for (int i = 0; i < n; i++) {
             String next = in.readLine();
             String function = next.substring(0,3);
             if(function.equals("add")){
-                add(next.substring(4));
+                test.add(next.substring(4));
             } else {
-                fprintWords(next.substring(5));
+                System.out.println(test.numWords(next.substring(5)));
             }
         }
     }
-    private void add(String insert){
-
-    }
 }
 class Trie{
-    Trie(int lowerBound, int higherBound){
-
+    public int numInserted = 0;
+    Trie[] children;
+    Trie(){
+        children = new Trie[26];
+    }
+    public void add(String remaining){
+        if(remaining.length() == 0)return;
+        int a = remaining.charAt(0) - 'a';
+        if(children[a] == null){
+            children[a] = new Trie();
+        }
+        numInserted++;
+        children[a].add(remaining.substring(1));
+    }
+    public int numWords(String word){
+        if(word.length() == 0) return 0;
+        int cur = word.charAt(0) - 'a';
+        if(word.length() == 1 && children[cur] != null) {
+            return children[cur].numInserted;
+        } else if( children[cur] == null){
+            return 0;
+        } else return children[cur].numWords(word.substring(1));
     }
 }
 class Graph{

@@ -19,6 +19,7 @@ public class Solution {
 }
 class Solver{
     Reader in; DataStructures d; CarlString sLi; CarlNumbers m; Ray r; Graph g;
+
     Solver(Reader in){
         this.in = in;
         d = new DataStructures();
@@ -29,28 +30,24 @@ class Solver{
     }
     public void solve() throws IOException{
         int n = in.nextInt();
-        int m = in.nextInt();
-        int count = 0;
-        int [][] ray = new int[n + 1][2];
-        short one = 1;
-        System.out.println(1 == one);
-        for (int i = 0; i <= n; i++) {
-            ray[i][0] = i;
-        }
-        ArrayList<Triplet> trips = new ArrayList<Triplet>(m);
-        for (int i = 0; i < m; i++) {
-            trips.add(new Triplet(in.nextInt(),in.nextInt(),in.nextInt()));
-        }
-        Collections.sort(trips,new Triplet(1,2,0));
-        for(Triplet edge : trips){
-            int p1 = g.parent(edge.x,ray);
-            int p2 = g.parent(edge.y,ray);
-            if (p1 != p2){
-                g.updateParent(p1,p2,ray);
-                count += edge.w;
+        in.readLine();
+        for (int i = 0; i < n; i++) {
+            String next = in.readLine();
+            String function = next.substring(0,3);
+            if(function.equals("add")){
+                add(next.substring(4));
+            } else {
+                fprintWords(next.substring(5));
             }
         }
-        System.out.println(count);
+    }
+    private void add(String insert){
+
+    }
+}
+class Trie{
+    Trie(int lowerBound, int higherBound){
+
     }
 }
 class Graph{

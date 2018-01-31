@@ -33,43 +33,49 @@ class Solver{
         //in.next();
         Trie test = new Trie();
         for (int i = 0; i < t; i++) {
-            int n = in.nextInt();
-            int e = in.nextInt();
-            ArrayList<Integer>[] reachable = new ArrayList[n + 1];
-            for (int j = 0; j <= n; j++) {
-                ArrayList<Integer> list = new ArrayList<>();
-                reachable[j] = list;
-            }
-            for (int j = 0; j < e; j++) {
-                int a = in.nextInt();
-                int b = in.nextInt();
-                reachable[a].add(b);
-                reachable[b].add(a);
+            int l = in.nextInt();
+            int[] reachable = new int[101];
+            for (int j = 0; j < l; j++) {
+                int start = in.nextInt();
+                int end = in.nextInt();
+                reachable[start] = end;
             }
             int s = in.nextInt();
-            int[] distances = new int[n +1];
-            distances[s] = 0;
+            for (int j = 0; j < s; j++) {
+                int start = in.nextInt();
+                int end = in.nextInt();
+                reachable[start] = end;
+            }
+            int[] distances = new int[101];
             ArrayDeque<Integer> q = new ArrayDeque<>();
-            q.addLast(s);
+            q.addLast(1);
+            int finalDis = -1;
+            loop:
             while(!q.isEmpty()){
                 int cur = q.removeFirst();
                 int dis = distances[cur];
-                ArrayList<Integer> list = reachable[cur];
-                for(Integer node: list){
-                    if(distances[node] == 0 && node != s){
-                        distances[node] = dis+1;
-                       q.addLast(node);
+                if(cur == 100){
+                    finalDis = dis;
+                    break;
+                }
+                for (int node = cur+1; node <= cur+6; node++) {
+                    if(node == 100) {
+                        finalDis = dis + 1;
+                        break loop;
+                    } else if(distances[node] != 0){
+                        //skip been reached before
+                    } else if(reachable[node] == 0){
+                        if(distances[node] == 0){
+                            q.addLast(node);
+                            distances[node] = dis+1;
+                        }
+                    } else if(distances[reachable[node]] == 0){
+                        q.addLast(reachable[node]);
+                        distances[reachable[node]] = dis+1;
                     }
                 }
             }
-            for (int j = 1; j < distances.length; j++) {
-                if(j != s){
-                    int num = -1;
-                    if(distances[j] != 0) num = distances[j]*6;
-                    System.out.print(num + " ");
-                }
-            }
-            System.out.println();
+            System.out.println(finalDis);
         }
     }
 }

@@ -29,20 +29,47 @@ class Solver{
         g = new Graph();
     }
     public void solve() throws IOException{
-        int n = Integer.parseInt(in.readLine());
+        int t = Integer.parseInt(in.readLine());
         //in.next();
         Trie test = new Trie();
-        for (int i = 0; i < n; i++) {
-            String next = in.readLine();
-            //System.out.println(next);
-            String function = next.substring(0,3);
-            //System.out.println(function);
-            //System.out.println(next);
-            if(function.equals("add")){
-                test.add(next.substring(4));
-            } else {
-                System.out.println(test.numWords(next.substring(5)));
+        for (int i = 0; i < t; i++) {
+            int n = in.nextInt();
+            int e = in.nextInt();
+            ArrayList<Integer>[] reachable = new ArrayList[n + 1];
+            for (int j = 0; j <= n; j++) {
+                ArrayList<Integer> list = new ArrayList<>();
+                reachable[j] = list;
             }
+            for (int j = 0; j < e; j++) {
+                int a = in.nextInt();
+                int b = in.nextInt();
+                reachable[a].add(b);
+                reachable[b].add(a);
+            }
+            int s = in.nextInt();
+            int[] distances = new int[n +1];
+            distances[s] = 0;
+            ArrayDeque<Integer> q = new ArrayDeque<>();
+            q.addLast(s);
+            while(!q.isEmpty()){
+                int cur = q.removeFirst();
+                int dis = distances[cur];
+                ArrayList<Integer> list = reachable[cur];
+                for(Integer node: list){
+                    if(distances[node] == 0 && node != s){
+                        distances[node] = dis+1;
+                       q.addLast(node);
+                    }
+                }
+            }
+            for (int j = 1; j < distances.length; j++) {
+                if(j != s){
+                    int num = -1;
+                    if(distances[j] != 0) num = distances[j]*6;
+                    System.out.print(num + " ");
+                }
+            }
+            System.out.println();
         }
     }
 }

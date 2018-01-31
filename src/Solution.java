@@ -29,12 +29,16 @@ class Solver{
         g = new Graph();
     }
     public void solve() throws IOException{
-        int n = in.nextInt();
-        in.readLine();
+        Scanner in = new Scanner(System.in);
+        int n = Integer.parseInt(in.next());
+        //in.next();
         Trie test = new Trie();
         for (int i = 0; i < n; i++) {
-            String next = in.readLine();
+            String next = in.nextLine();
+            System.out.println(next);
             String function = next.substring(0,3);
+            System.out.println(function);
+            System.out.println(next);
             if(function.equals("add")){
                 test.add(next.substring(4));
             } else {
@@ -50,7 +54,10 @@ class Trie{
         children = new Trie[26];
     }
     public void add(String remaining){
-        if(remaining.length() == 0)return;
+        if(remaining.length() == 0){
+            numInserted++;
+            return;
+        }
         int a = remaining.charAt(0) - 'a';
         if(children[a] == null){
             children[a] = new Trie();

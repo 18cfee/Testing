@@ -32,6 +32,8 @@ class Solver{
         int m = in.nextInt();
         int count = 0;
         int [][] ray = new int[n + 1][2];
+        short one = 1;
+        System.out.println(1 == one);
         for (int i = 0; i <= n; i++) {
             ray[i][0] = i;
         }
@@ -50,7 +52,6 @@ class Solver{
         }
         System.out.println(count);
     }
-
 }
 class Graph{
     Graph(){}

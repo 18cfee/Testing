@@ -29,16 +29,15 @@ class Solver{
         g = new Graph();
     }
     public void solve() throws IOException{
-        Scanner in = new Scanner(System.in);
-        int n = Integer.parseInt(in.next());
+        int n = Integer.parseInt(in.readLine());
         //in.next();
         Trie test = new Trie();
         for (int i = 0; i < n; i++) {
-            String next = in.nextLine();
-            System.out.println(next);
+            String next = in.readLine();
+            //System.out.println(next);
             String function = next.substring(0,3);
-            System.out.println(function);
-            System.out.println(next);
+            //System.out.println(function);
+            //System.out.println(next);
             if(function.equals("add")){
                 test.add(next.substring(4));
             } else {

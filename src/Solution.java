@@ -29,53 +29,18 @@ class Solver{
         g = new Graph();
     }
     public void solve() throws IOException{
-        int t = Integer.parseInt(in.readLine());
-        //in.next();
-        Trie test = new Trie();
-        for (int i = 0; i < t; i++) {
-            int l = in.nextInt();
-            int[] reachable = new int[101];
-            for (int j = 0; j < l; j++) {
-                int start = in.nextInt();
-                int end = in.nextInt();
-                reachable[start] = end;
+        int n = Integer.parseInt(in.readLine());
+        for (int i = 0; i < n; i++) {
+            String acid = in.readLine();
+            System.out.println(acid.length());
+            if(acid.length() > 6 && acid.substring(0,5).equals("hydro")
+                    && acid.substring(acid.length()-2).equals("ic")){
+                System.out.println("non-metal acid");
+            } else if( acid.length() > 1 && acid.substring(acid.length()-2).equals("ic")){
+                System.out.println("polyatomic acid");
+            } else {
+                System.out.println("not an acid");
             }
-            int s = in.nextInt();
-            for (int j = 0; j < s; j++) {
-                int start = in.nextInt();
-                int end = in.nextInt();
-                reachable[start] = end;
-            }
-            int[] distances = new int[101];
-            ArrayDeque<Integer> q = new ArrayDeque<>();
-            q.addLast(1);
-            int finalDis = -1;
-            loop:
-            while(!q.isEmpty()){
-                int cur = q.removeFirst();
-                int dis = distances[cur];
-                if(cur == 100){
-                    finalDis = dis;
-                    break;
-                }
-                for (int node = cur+1; node <= cur+6; node++) {
-                    if(node == 100) {
-                        finalDis = dis + 1;
-                        break loop;
-                    } else if(distances[node] != 0){
-                        //skip been reached before
-                    } else if(reachable[node] == 0){
-                        if(distances[node] == 0){
-                            q.addLast(node);
-                            distances[node] = dis+1;
-                        }
-                    } else if(distances[reachable[node]] == 0){
-                        q.addLast(reachable[node]);
-                        distances[reachable[node]] = dis+1;
-                    }
-                }
-            }
-            System.out.println(finalDis);
         }
     }
 }
@@ -370,6 +335,13 @@ class Reader {
             if (c == '\n')
                 break;
             buf[cnt++] = (byte) c;
+            if (cnt == buf.length){
+                byte[] temp = buf;
+                buf = new byte[temp.length + 64];
+                for (int i = 0; i < temp.length; i++) {
+                    buf[i] = temp[i];
+                }
+            }
         }
         return new String(buf, 0, cnt).trim(); // get rid of extra line char
     }

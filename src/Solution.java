@@ -36,12 +36,27 @@ class Solver{
             int n = in.nextLintInt();
             int[] nums = new int[4501];
             for (int j = 0; j < n; j++) {
-                nums[in.nextInt()]++;
+                int next = in.nextInt();
+                nums[next]++;
             }
             long total = 0;
+            long[] dp = new long[bound];
             for (int j = 3500; j <= 4500; j++) {
-                int numThere = nums[j];
+
+                int numThere = (int)Math.ceil((double)nums[j]/2);
+                if (numThere > 0) System.out.println(numThere + " " + j);
+                for (int k = 0; k < bound; k++) {
+                    int newPos = numThere^(int)dp[k];
+                    dp[newPos] = numThere*dp[newPos]%m.modulo;
+                }
+                dp[j] += numThere;
             }
+            for (int j = 0; j < bound; j++) {
+                if(isPrime.get(j)){
+                    total = (total + dp[j])%m.modulo;
+                }
+            }
+            System.out.println(total);
         }
     }
 }
@@ -177,6 +192,7 @@ class CarlString{
 class CarlNumbers {
     public int[][] directions = {{0,1},{1,1},{1,0},{1,-1},{0,-1},{-1,-1},{-1,0},{-1,1}};
     public int[][] partKnight = {{-2,1},{-2,-1},{-1,-2},{1,-2}};
+    public int modulo = 1000000007;
     CarlNumbers(){}
     public double distanceBetween(Tuple one, Tuple two){
         return Math.sqrt(Math.pow((one.x - two.x),2) + Math.pow(one.y - two.y, 2));

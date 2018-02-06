@@ -30,18 +30,19 @@ class Solver{
     }
     public void solve() throws IOException{
         int n = Integer.parseInt(in.readLine());
+        int[] ray = r.populateIntArray(in,n);
+        int min = 0;
         for (int i = 0; i < n; i++) {
-            String acid = in.readLine();
-            System.out.println(acid.length());
-            if(acid.length() > 6 && acid.substring(0,5).equals("hydro")
-                    && acid.substring(acid.length()-2).equals("ic")){
-                System.out.println("non-metal acid");
-            } else if( acid.length() > 1 && acid.substring(acid.length()-2).equals("ic")){
-                System.out.println("polyatomic acid");
-            } else {
-                System.out.println("not an acid");
+            if(ray[i] == 1){
+               min++;
+               i++;
             }
         }
+        int max = 0;
+        for (int i = 0; i < n; i++) {
+            if(ray[i] == 1)max++;
+        }
+        System.out.println(min + " " + max);
     }
 }
 class Trie{

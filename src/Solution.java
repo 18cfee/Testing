@@ -29,17 +29,18 @@ class Solver{
         g = new Graph();
     }
     public void solve() throws IOException{
-        int n = Integer.parseInt(in.readLine());
-        for (int i = 0; i < n; i++) {
-            String acid = in.readLine();
-            System.out.println(acid.length());
-            if(acid.length() > 6 && acid.substring(0,5).equals("hydro")
-                    && acid.substring(acid.length()-2).equals("ic")){
-                System.out.println("non-metal acid");
-            } else if( acid.length() > 1 && acid.substring(acid.length()-2).equals("ic")){
-                System.out.println("polyatomic acid");
-            } else {
-                System.out.println("not an acid");
+        int q = in.nextLintInt();
+        int bound = 9000;
+        BitSet isPrime = m.isPrimeBit(bound);
+        for (int i = 0; i < q; i++) {
+            int n = in.nextLintInt();
+            int[] nums = new int[4501];
+            for (int j = 0; j < n; j++) {
+                nums[in.nextInt()]++;
+            }
+            long total = 0;
+            for (int j = 3500; j <= 4500; j++) {
+                int numThere = nums[j];
             }
         }
     }
@@ -199,6 +200,26 @@ class CarlNumbers {
         in.reverse();
         x = Integer.parseInt(in.toString());
         return x;
+    }
+    public BitSet isPrimeBit(int upperBound){
+        BitSet primes = new BitSet(upperBound + 1);
+        HashSet<Integer> primeNums = new HashSet<>();
+        primes.set(1);
+        for (int i = 2; i < upperBound; i++) {
+            boolean isPrime = true;
+            for(Integer num: primeNums){
+                if(i%num == 0){
+                    isPrime = false;
+                    break;
+                }
+            }
+            if(isPrime){
+                primeNums.add(i);
+                primes.set(i);
+            }
+        }
+        primeNums.add(1);
+        return primes;
     }
 }
 class Ray {
@@ -389,7 +410,9 @@ class Reader {
             return -ret;
         return ret;
     }
-
+    public int nextLintInt() throws IOException{
+        return Integer.parseInt(readLine());
+    }
     public long nextLong() throws IOException
     {
         long ret = 0;

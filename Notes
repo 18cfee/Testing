@@ -13,6 +13,8 @@ IO bottlenock prevents n>1M for most problems
 
 Array.fill(array, -1);
 int: 2,147,483,647, 2^32
+Long.MAX_VALUE =  9223372036854775807
+Long.MIN_VALUE = -9223372036854775808
 2.14 * 10^9
 
 

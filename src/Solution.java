@@ -42,6 +42,7 @@ class Solver{
             long total = 0;
             long[] dp = new long[bound];
             for (int j = 3500; j <= 4500; j++) {
+                long[] newDP = new long[bound];
                 int numThere = (int)Math.ceil((double)nums[j]/2);
                 //if (numThere > 0) System.out.println(numThere + " " + j);
                 for (int k = 1; k < bound; k++) {
@@ -50,7 +51,8 @@ class Solver{
 //                        System.out.println("true at " + newPos);
 //                        System.out.println(numThere);
 //                        System.out.println(dp[newPos]);
-                        dp[newPos]  = numThere*dp[k]%m.modulo;
+                        newDP[newPos] = (numThere*dp[k])%m.modulo;
+                        if(newDP[newPos] < 0) newDP[456456] = 0;
                     } /*else {
                         dp[newPos] = numThere;
                     }*/
@@ -59,7 +61,15 @@ class Solver{
 //                        System.out.println(numThere*dp[newPos]%m.modulo);
 //                    }
                 }
-                dp[j] += numThere;
+                newDP[j] += numThere;
+                int posNum = nums[j]/2;
+                for (int k = 0; k < bound; k++) {
+                    newDP[k] += (dp[k]*posNum)%m.modulo;
+                    if(newDP[k] < 0) newDP[456456] = 0;
+                }
+                for (int k = 0; k < dp.length; k++) {
+                    dp[k] = (dp[k] + newDP[k])%m.modulo;
+                }
             }
             for (int j = 2; j < bound; j++) {
                 //sdfs

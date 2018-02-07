@@ -42,12 +42,17 @@ class Solver{
             long total = 0;
             long[] dp = new long[bound];
             for (int j = 3500; j <= 4500; j++) {
-
                 int numThere = (int)Math.ceil((double)nums[j]/2);
                 if (numThere > 0) System.out.println(numThere + " " + j);
                 for (int k = 0; k < bound; k++) {
-                    int newPos = numThere^(int)dp[k];
-                    dp[newPos] = numThere*dp[newPos]%m.modulo;
+                    int newPos = j^k;
+                    if(r.indexInArray(dp,newPos) && numThere*dp[newPos] != 0){
+                        dp[newPos] = numThere*dp[newPos]%m.modulo;
+                    }
+//                    if(numThere != 0){
+//                        System.out.println(newPos);
+//                        System.out.println(numThere*dp[newPos]%m.modulo);
+//                    }
                 }
                 dp[j] += numThere;
             }
@@ -244,6 +249,9 @@ class Ray {
         return (0 <= index && index < a.length);
     }
     public boolean indexInArray(boolean [] a, int index){
+        return (0 <= index && index < a.length);
+    }
+    public boolean indexInArray(long [] a, int index){
         return (0 <= index && index < a.length);
     }
     public boolean indexInArray(boolean [][] a, int x, int y){

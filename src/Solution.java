@@ -29,11 +29,11 @@ class Solver{
         g = new Graph();
     }
     public void solve() throws IOException{
-        int q = in.nextLintInt();
+        int q = in.nextInt();
         int bound = 9000;
         BitSet isPrime = m.isPrimeBit(bound);
         for (int i = 0; i < q; i++) {
-            int n = in.nextLintInt();
+            int n = in.nextInt();
             int[] nums = new int[4501];
             for (int j = 0; j < n; j++) {
                 int next = in.nextInt();
@@ -43,12 +43,17 @@ class Solver{
             long[] dp = new long[bound];
             for (int j = 3500; j <= 4500; j++) {
                 int numThere = (int)Math.ceil((double)nums[j]/2);
-                if (numThere > 0) System.out.println(numThere + " " + j);
-                for (int k = 0; k < bound; k++) {
+                //if (numThere > 0) System.out.println(numThere + " " + j);
+                for (int k = 1; k < bound; k++) {
                     int newPos = j^k;
-                    if(r.indexInArray(dp,newPos) && numThere*dp[newPos] != 0){
-                        dp[newPos] = numThere*dp[newPos]%m.modulo;
-                    }
+                    if(r.indexInArray(dp,newPos) && numThere*dp[k] != 0){
+//                        System.out.println("true at " + newPos);
+//                        System.out.println(numThere);
+//                        System.out.println(dp[newPos]);
+                        dp[newPos] = numThere*dp[k]%m.modulo;
+                    } /*else {
+                        dp[newPos] = numThere;
+                    }*/
 //                    if(numThere != 0){
 //                        System.out.println(newPos);
 //                        System.out.println(numThere*dp[newPos]%m.modulo);
@@ -56,8 +61,10 @@ class Solver{
                 }
                 dp[j] += numThere;
             }
-            for (int j = 0; j < bound; j++) {
+            for (int j = 2; j < bound; j++) {
+                //sdfs
                 if(isPrime.get(j)){
+                    //if(dp[j] != 0) System.out.println(j + " " + dp[j]);
                     total = (total + dp[j])%m.modulo;
                 }
             }
@@ -434,8 +441,9 @@ class Reader {
             return -ret;
         return ret;
     }
-    public int nextLintInt() throws IOException{
-        return Integer.parseInt(readLine());
+    public int nextLineInt() throws IOException{
+        String debug = readLine();
+        return Integer.parseInt(debug);
     }
     public long nextLong() throws IOException
     {

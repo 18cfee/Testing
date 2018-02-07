@@ -50,7 +50,7 @@ class Solver{
 //                        System.out.println("true at " + newPos);
 //                        System.out.println(numThere);
 //                        System.out.println(dp[newPos]);
-                        dp[newPos] = numThere*dp[k]%m.modulo;
+                        dp[newPos]  = numThere*dp[k]%m.modulo;
                     } /*else {
                         dp[newPos] = numThere;
                     }*/
@@ -246,7 +246,6 @@ class CarlNumbers {
                 primes.set(i);
             }
         }
-        primeNums.add(1);
         return primes;
     }
 }

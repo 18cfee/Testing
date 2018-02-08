@@ -47,8 +47,8 @@ class Solver{
             if(!current.hasNext()){
                 current.growLeft();
             } else if(!current.hasPrev()){
-                if(current.shouldRelocate()){
-                    current = current.getNextLow();
+                if(current.nextIsLower()){
+                    current = current.getNextMin();
                 } else {
                     current.growRight();
                 }
@@ -62,8 +62,7 @@ class Solver{
                 current.growLeft();
             }
         }
-        int min = Integer.MAX_VALUE;
-        System.out.println(min);
+        System.out.println(current.minVal + n);
     }
 }
 class Node{
@@ -87,6 +86,33 @@ class Node{
         }
         return current;
     }
+    void growRight(){
+        rightMost++;
+        int val = students[rightMost].minVal;
+        students[rightMost] = this;
+        int dif = (h[rightMost] - h[rightMost-1]);
+        minVal = Math.min(minVal + dif, minVal + dif + val);
+        minVal = Math.min(minVal, val + Math.abs(h[rightMost] - h[leftMost])); // do not keep middle stuff
+    }
+    void growLeft(){
+        if(students[leftMost - 1].leftMost < leftMost - 1){
+            // combine
+            leftMost--;
+            int val = students[leftMost].minVal;
+            int dif = (h[leftMost] - h[leftMost+1]);
+            minVal = Math.min(val,minVal+val);// keep new left either way
+            leftMost = students[leftMost].leftMost;
+            students[leftMost] = this;
+        } else {
+            // do not combine
+            leftMost--;
+            int val = students[leftMost].minVal;
+            students[leftMost] = this;
+            int dif = (h[leftMost] - h[leftMost+1]);
+            minVal = Math.min(minVal + dif, minVal + dif + val);
+            minVal = Math.min(minVal, val); // do not keep middle stuff
+        }
+    }
     boolean nextIsLower(){
         return h[rightMost + 1] < h[rightMost];
     }
@@ -107,6 +133,9 @@ class Node{
     }
     int getPrevHeight(){
         return h[leftMost - 1];
+    }
+    boolean nextIsLowest(){
+        return (h[rightMost + 1] < h[leftMost - 1]);
     }
 }
 class Trie{

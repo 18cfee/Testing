@@ -31,12 +31,25 @@ class Solver{
     public void solve() throws IOException{
         int t = Integer.parseInt(in.readLine());
         for (int j = 0; j < t; j++) {
-            String one = in.readLine();
-            HashSet<Character> chars = new HashSet<>();
-            for (int i = 0; i < one.length(); i++) {
-                chars.add(one.charAt(i));
+            long num = in.nextLong();
+            String a = Long.toBinaryString(num);
+            int needed = 32 - a.length();
+            for (int i = 0; i < needed; i++) {
+                a = "0" + a;
             }
-            System.out.println(chars.size());
+            char[] b = a.toCharArray();
+            for (int i = 0; i < 32; i++) {
+                if(a.charAt(i) == '1') b[i] = '0';
+                else b[i] = '1';
+            }
+            long cur = 1;
+            long total = 0;
+            for (int i = 31; i >= 0; i--) {
+                if(b[i] == '1') total += cur;
+                cur *=2;
+            }
+            //System.out.println(b);
+            System.out.println(total);
         }
     }
 }

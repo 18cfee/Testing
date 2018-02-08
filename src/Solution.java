@@ -33,11 +33,23 @@ class Solver{
         for (int i = 0; i < t; i++) {
             int l = in.nextInt();
             int tot = 0;
+            int max = 0;
             for (int j = 0; j < l; j++) {
-                tot = tot^in.nextInt();
+                int next = in.nextInt();
+                tot = tot^next;
+                max = Math.max(next,max);
             }
-            if(tot == 0) System.out.println("Second");
-            else System.out.println("First");
+            if(max > 1) {
+                if(tot == 0){
+                    System.out.println("Second");
+                }   else System.out.println("First");
+            } else {
+                if(l%2 == 0){
+                    System.out.println("First");
+                } else {
+                    System.out.println("Second");
+                }
+            }
         }
     }
 }

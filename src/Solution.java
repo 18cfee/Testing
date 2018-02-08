@@ -29,16 +29,16 @@ class Solver{
         g = new Graph();
     }
     public void solve() throws IOException{
-        long n = in.nextLong();
-        String a = Long.toBinaryString(n);
-        int tot = 0;
-        //System.out.println(n);
-        //System.out.println(a);
-        for (int i = 0; i < a.length(); i++) {
-            if(a.charAt(i) == '0') tot++;
+        int t = in.nextInt();
+        for (int i = 0; i < t; i++) {
+            int l = in.nextInt();
+            int tot = 0;
+            for (int j = 0; j < l; j++) {
+                tot = tot^in.nextInt();
+            }
+            if(tot == 0) System.out.println("Second");
+            else System.out.println("First");
         }
-        if(a.length() == 1 && a.charAt(0) =='0') System.out.println(1);
-        else System.out.println((long)Math.pow(2,tot));
     }
 }
 class Trie{

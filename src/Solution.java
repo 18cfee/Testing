@@ -29,17 +29,26 @@ class Solver{
         g = new Graph();
     }
     public void solve() throws IOException{
-        String one = in.readLine();
-        int[] a = new int[26];
-        for (int i = 0; i < one.length(); i++) {
-            a[one.charAt(i) - 'a']++;
+        int t = Integer.parseInt(in.readLine());
+        for (int j = 0; j < t; j++) {
+            String one = in.readLine();
+            String two = in.readLine();
+            int[] a = new int[26];
+            for (int i = 0; i < one.length(); i++) {
+                a[one.charAt(i) - 'a']++;
+            }
+            int[] b = new int[26];
+            for (int i = 0; i < two.length(); i++) {
+                b[two.charAt(i) - 'a']++;
+            }
+            int totalOdd = 0;
+            boolean sub = false;
+            for (int i = 0; i < 26; i++) {
+                if(a[i] > 0 && b[i] > 0) sub = true;
+            }
+            if(sub) System.out.println("YES");
+            else System.out.println("NO");
         }
-        int totalOdd = 0;
-        for (int i = 0; i < 26; i++) {
-            if(a[i]%2 == 1) totalOdd++;
-        }
-        if(totalOdd < 2) System.out.println("YES");
-        else System.out.println("NO");
     }
 }
 class Trie{

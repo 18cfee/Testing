@@ -44,6 +44,7 @@ class Solver{
         }
         Node current = mason;
         while(current.hasNext() || current.hasPrev()){
+            //System.out.println(current.leftMost + " " + current.myHeight + " " + current.rightMost + " " + current.minVal);
             if(!current.hasNext()){
                 current.growLeft();
             } else if(!current.hasPrev()){
@@ -92,7 +93,11 @@ class Node{
         rightMost++;
         int val = students[rightMost].minVal;
         students[rightMost] = this;
-        int dif = (h[rightMost] - h[rightMost-1]);
+        int dif = 2*(h[rightMost] - myHeight);
+        if(leftMost == 0){
+            dif /= 2;
+        }
+        myHeight = h[rightMost];
         minVal = Math.min(minVal + dif, minVal + dif + val);
         minVal = Math.min(minVal, val + Math.abs(h[rightMost] - h[leftMost])); // do not keep middle stuff
     }
@@ -101,7 +106,13 @@ class Node{
             // combine
             leftMost--;
             int val = students[leftMost].minVal;
-            int dif = (h[leftMost] - h[leftMost+1]);
+            int dif;
+            if(rightMost == students.length -1){
+                dif = (h[leftMost] - myHeight);
+            } else {
+                dif = 2*(h[leftMost] - myHeight);
+            }
+            myHeight = h[leftMost];
             minVal = Math.min(val,minVal+val + dif);// keep new left either way
             leftMost = students[leftMost].leftMost;
             students[leftMost] = this;
@@ -110,9 +121,16 @@ class Node{
             leftMost--;
             int val = students[leftMost].minVal;
             students[leftMost] = this;
-            int dif = (h[leftMost] - h[leftMost+1]);
+            int dif;
+            if(rightMost == students.length -1){
+                dif = (h[leftMost] - myHeight);
+            } else {
+                dif = 2*(h[leftMost] - myHeight);
+            }
+            myHeight = h[leftMost];
             minVal = Math.min(minVal + dif, minVal + dif + val);
             minVal = Math.min(minVal, val); // do not keep middle stuff
+
         }
     }
     boolean nextIsLower(){

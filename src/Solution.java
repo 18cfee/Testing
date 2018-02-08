@@ -29,27 +29,21 @@ class Solver{
         g = new Graph();
     }
     public void solve() throws IOException{
-        int t = Integer.parseInt(in.readLine());
-        for (int i = 0; i < t; i++) {
-            int ans = -1;
-            String next = in.readLine();
-            if(next.length() > 1){
-                for (int j = 0; j < next.length()/2; j++) {
-                    char one = next.charAt(j);
-                    char two = next.charAt(next.length() - 1 - j);
-                    if(one != two){
-                        char nextOne = next.charAt(j + 1);
-                        char nextTwo = next.charAt(next.length() - 2 - j);
-                        char nNextOne = next.charAt(j + 2);
-                        char nNextTwo = next.charAt(next.length() - 3 - j);
-                        if(nextOne == two && (next.length() < 4 || nNextOne == nextTwo)) ans = j;
-                        if(nextTwo == one && (next.length() < 4 || nNextTwo == nextOne)) ans = next.length() - 1 - j;
-                        break;
-                    }
-                }
-            }
-            System.out.println(ans);
+        String one = in.readLine();
+        String two = in.readLine();
+        int[] a = new int[26];
+        int[] b = new int[26];
+        for (int i = 0; i < one.length(); i++) {
+            a[one.charAt(i) - 'a']++;
         }
+        for (int i = 0; i < two.length(); i++) {
+            b[two.charAt(i) - 'a']++;
+        }
+        int total = 0;
+        for (int i = 0; i < 26; i++) {
+            total += Math.abs(a[i] - b[i]);
+        }
+        System.out.println(total);
     }
 }
 class Trie{

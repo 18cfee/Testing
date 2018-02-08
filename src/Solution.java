@@ -36,10 +36,10 @@ class Solver{
             h[i] = in.nextInt();
         }
         Node[] students = new Node[n];
-        Node mason = new Node(0,0,0, students, h);
+        Node mason = new Node(0,0,0,h[0], students, h);
         students[0] = mason;
         for (int i = 1; i < n; i++) {
-            Node cur = new Node(i,i,in.nextInt(),students,h);
+            Node cur = new Node(i,i,in.nextInt(),h[i],students,h);
             students[i] = cur;
         }
         Node current = mason;
@@ -69,14 +69,16 @@ class Node{
     public int leftMost;
     public int rightMost;
     public int minVal;
+    public int myHeight;
     private Node[] students;
     private int[] h;
-    Node(int leftMost, int rightMost, int minVal, Node[] students, int[] h){
+    Node(int leftMost, int rightMost, int minVal, int myHeight, Node[] students, int[] h){
         this.leftMost = leftMost;
         this.rightMost = rightMost;
         this.minVal = minVal;
         this.h = h;
         this.students = students;
+        this.myHeight = myHeight;
     }
     Node getNextMin(){
         Node current = this;
@@ -100,7 +102,7 @@ class Node{
             leftMost--;
             int val = students[leftMost].minVal;
             int dif = (h[leftMost] - h[leftMost+1]);
-            minVal = Math.min(val,minVal+val);// keep new left either way
+            minVal = Math.min(val,minVal+val + dif);// keep new left either way
             leftMost = students[leftMost].leftMost;
             students[leftMost] = this;
         } else {

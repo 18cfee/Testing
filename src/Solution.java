@@ -29,28 +29,16 @@ class Solver{
         g = new Graph();
     }
     public void solve() throws IOException{
-        int t = Integer.parseInt(in.readLine());
-        for (int j = 0; j < t; j++) {
-            long num = in.nextLong();
-            String a = Long.toBinaryString(num);
-            int needed = 32 - a.length();
-            for (int i = 0; i < needed; i++) {
-                a = "0" + a;
-            }
-            char[] b = a.toCharArray();
-            for (int i = 0; i < 32; i++) {
-                if(a.charAt(i) == '1') b[i] = '0';
-                else b[i] = '1';
-            }
-            long cur = 1;
-            long total = 0;
-            for (int i = 31; i >= 0; i--) {
-                if(b[i] == '1') total += cur;
-                cur *=2;
-            }
-            //System.out.println(b);
-            System.out.println(total);
+        long n = in.nextLong();
+        String a = Long.toBinaryString(n);
+        int tot = 0;
+        //System.out.println(n);
+        //System.out.println(a);
+        for (int i = 0; i < a.length(); i++) {
+            if(a.charAt(i) == '0') tot++;
         }
+        if(a.length() == 1 && a.charAt(0) =='0') System.out.println(1);
+        else System.out.println((long)Math.pow(2,tot));
     }
 }
 class Trie{

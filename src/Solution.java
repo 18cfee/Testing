@@ -30,20 +30,16 @@ class Solver{
     }
     public void solve() throws IOException{
         String one = in.readLine();
-        String two = in.readLine();
         int[] a = new int[26];
-        int[] b = new int[26];
         for (int i = 0; i < one.length(); i++) {
             a[one.charAt(i) - 'a']++;
         }
-        for (int i = 0; i < two.length(); i++) {
-            b[two.charAt(i) - 'a']++;
-        }
-        int total = 0;
+        int totalOdd = 0;
         for (int i = 0; i < 26; i++) {
-            total += Math.abs(a[i] - b[i]);
+            if(a[i]%2 == 1) totalOdd++;
         }
-        System.out.println(total);
+        if(totalOdd < 2) System.out.println("YES");
+        else System.out.println("NO");
     }
 }
 class Trie{

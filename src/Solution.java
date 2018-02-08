@@ -44,7 +44,7 @@ class Solver{
         }
         Node current = mason;
         while(current.hasNext() || current.hasPrev()){
-            //System.out.println(current.leftMost + " " + current.myHeight + " " + current.rightMost + " " + current.minVal);
+            System.out.println(current.leftMost + " " + current.myHeight + " " + current.rightMost + " " + current.minVal);
             if(!current.hasNext()){
                 current.growLeft();
             } else if(!current.hasPrev()){
@@ -96,10 +96,13 @@ class Node{
         int dif = 2*(h[rightMost] - myHeight);
         if(leftMost == 0){
             dif /= 2;
+            minVal = h[rightMost] - h[0] + Math.min(0, minVal) + val;
+            myHeight = h[rightMost];
+        } else {
+            myHeight = h[rightMost];
+            minVal = Math.min(minVal + dif, minVal + dif + val);
+            minVal = Math.min(minVal, val + Math.abs(h[rightMost] - h[leftMost])); // do not keep middle stuff
         }
-        myHeight = h[rightMost];
-        minVal = Math.min(minVal + dif, minVal + dif + val);
-        minVal = Math.min(minVal, val + Math.abs(h[rightMost] - h[leftMost])); // do not keep middle stuff
     }
     void growLeft(){
         if(students[leftMost - 1].leftMost < leftMost - 1){

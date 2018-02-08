@@ -63,6 +63,7 @@ class Solver{
                 current.growLeft();
             }
         }
+        System.out.println(current.leftMost + " " + current.myHeight + " " + current.rightMost + " " + current.minVal);
         System.out.println(current.minVal + n);
     }
 }
@@ -94,7 +95,7 @@ class Node{
         int val = students[rightMost].minVal;
         students[rightMost] = this;
         int dif = 2*(h[rightMost] - myHeight);
-        if(leftMost == 0){
+        if(leftMost == 0 && myHeight == h[0]){
             dif /= 2;
             minVal = h[rightMost] - h[0] + Math.min(0, minVal) + val;
             myHeight = h[rightMost];

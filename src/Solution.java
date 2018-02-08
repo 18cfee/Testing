@@ -34,22 +34,16 @@ class Solver{
             int l = in.nextInt();
             int tot = 0;
             int max = 0;
-            for (int j = 0; j < l; j++) {
+            in.nextInt();
+            for (int j = 1; j < l; j++) {
                 int next = in.nextInt();
-                tot = tot^next;
-                max = Math.max(next,max);
-            }
-            if(max > 1) {
-                if(tot == 0){
-                    System.out.println("Second");
-                }   else System.out.println("First");
-            } else {
-                if(l%2 == 0){
-                    System.out.println("First");
-                } else {
-                    System.out.println("Second");
+                if(next%2 == 1){
+                    tot = tot^j;
                 }
             }
+            if(tot == 0){
+                System.out.println("Second");
+            }   else System.out.println("First");
         }
     }
 }

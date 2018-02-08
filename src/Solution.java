@@ -31,193 +31,25 @@ class Solver{
     public void solve() throws IOException{
         int t = Integer.parseInt(in.readLine());
         for (int i = 0; i < t; i++) {
-            char[][] board = r.populate2DCharArray(in,8);
-            int totCheck = 0;
-            for (int j = 0; j < 8; j++) {
-                if(discoveredChecked(board,j)){
-                    totCheck = 4;
-                    break;
+            int ans = -1;
+            String next = in.readLine();
+            if(next.length() > 1){
+                for (int j = 0; j < next.length()/2; j++) {
+                    char one = next.charAt(j);
+                    char two = next.charAt(next.length() - 1 - j);
+                    if(one != two){
+                        char nextOne = next.charAt(j + 1);
+                        char nextTwo = next.charAt(next.length() - 2 - j);
+                        char nNextOne = next.charAt(j + 2);
+                        char nNextTwo = next.charAt(next.length() - 3 - j);
+                        if(nextOne == two && (next.length() < 4 || nNextOne == nextTwo)) ans = j;
+                        if(nextTwo == one && (next.length() < 4 || nNextTwo == nextOne)) ans = next.length() - 1 - j;
+                        break;
+                    }
                 }
-                totCheck += canCheck(board,j);
             }
-            System.out.println(totCheck);
+            System.out.println(ans);
         }
-    }
-    boolean discoveredChecked(char[][] board, int pawnLoc){
-        if(board[1][pawnLoc] != 'P' || board[0][pawnLoc] != '#') return false;
-        char nextLeft = toLeft(board,pawnLoc);
-        char nextRight = toRight(board,pawnLoc);
-        if(nextLeft == 'k' && (nextRight == 'Q' || nextRight == 'R')) return true;
-        if(nextRight == 'k' && (nextLeft == 'Q' || nextLeft == 'R')) return true;
-        char southWest = toSouthWest(board,pawnLoc);
-        char northEast = toNorthEast(board,pawnLoc);
-        if(southWest == 'k' && (northEast == 'Q' || northEast == 'B')) return true;
-        if(northEast == 'k' && (southWest == 'Q' || southWest == 'B')) return true;
-        char northWest = toNorthWest(board,pawnLoc);
-        char southEast = toSouthEast(board,pawnLoc);
-        if(northWest == 'k' && (southEast == 'Q' || southEast == 'B')) return true;
-        if(southEast == 'k' && (northWest == 'Q' || northWest == 'B')) return true;
-        return false;
-    }
-    char toLeft(char[][] board, int pawnLoc){
-        char toLeft = '#';
-        int x = 1;
-        int y = pawnLoc -1;
-        while(r.indexInArray(board,x,y)){
-            if(board[x][y] != '#'){
-                toLeft = board[x][y];
-                break;
-            }
-            y--;
-        }
-        return toLeft;
-    }
-    char toRight(char[][] board, int pawnLoc){
-        char toLeft = '#';
-        int x = 1;
-        int y = pawnLoc +1;
-        while(r.indexInArray(board,x,y)){
-            if(board[x][y] != '#'){
-                toLeft = board[x][y];
-                break;
-            }
-            y++;
-        }
-        return toLeft;
-    }
-    char toSouthWest(char[][] board, int pawnLoc){
-        char toLeft = '#';
-        int x = 2;
-        int y = pawnLoc -1;
-        while(r.indexInArray(board,x,y)){
-            if(board[x][y] != '#'){
-                toLeft = board[x][y];
-                break;
-            }
-            y--;
-            x++;
-        }
-        return toLeft;
-    }
-    char toNorthWest(char[][] board, int pawnLoc){
-        char toLeft = '#';
-        int x = 0;
-        int y = pawnLoc -1;
-        while(r.indexInArray(board,x,y)){
-            if(board[x][y] != '#'){
-                toLeft = board[x][y];
-                break;
-            }
-            y--;
-            x--;
-        }
-        return toLeft;
-    }
-    char toSouthEast(char[][] board, int pawnLoc){
-        char toLeft = '#';
-        int x = 2;
-        int y = pawnLoc +1;
-        while(r.indexInArray(board,x,y)){
-            if(board[x][y] != '#'){
-                toLeft = board[x][y];
-                break;
-            }
-            y++;
-            x++;
-        }
-        return toLeft;
-    }
-    char toNorthEast(char[][] board, int pawnLoc){
-        char toLeft = '#';
-        int x = 0;
-        int y = pawnLoc +1;
-        while(r.indexInArray(board,x,y)){
-            if(board[x][y] != '#'){
-                toLeft = board[x][y];
-                break;
-            }
-            y++;
-            x--;
-        }
-        return toLeft;
-    }
-    int canCheck(char[][] board, int pawnLoc){
-        int tot = 0;
-        if(board[1][pawnLoc] != 'P' || board[0][pawnLoc] != '#') return 0;
-        if(queenCheck(board,pawnLoc)){
-            tot++;
-        }
-        if(knightCheck(board,pawnLoc)){
-            tot++;
-        }
-        if(rookCheck(board,pawnLoc)){
-            tot++;
-        }
-        if(bishCheck(board,pawnLoc)){
-            tot++;
-        }
-        return tot;
-    }
-    boolean knightCheck(char[][] board,int pawnLoc){
-        for (int i = 0; i < 4; i++) {
-            int[] pos = m.partKnight[i];
-            int x1 = pos[0];
-            int y1 = pos[1] + pawnLoc;
-            if(r.indexInArray(board,x1,y1) && board[x1][y1] == 'k'){
-                return true;
-            }
-            int x2 = - pos[0];
-            int y2 = - pos[1] + pawnLoc;
-            if(r.indexInArray(board,x2,y2) && board[x2][y2] == 'k') return true;
-        }
-        return false;
-    }
-    boolean rookCheck(char[][] board,int pawnLoc){
-        int x = 2;
-        int y = pawnLoc;
-        //System.out.println(pawnLoc + " panw loc");
-        while(r.indexInArray(board,x,y)){
-            //System.out.println("checking " + x + " y" + y + " = " + board[x][y]);
-            if(board[x][y] == 'k') return true;
-            else if(board[x][y] != '#') break;
-            x++;
-        }
-        x = 0;
-        y = pawnLoc+1;
-        while(r.indexInArray(board,x,y)){
-            if(board[x][y] == 'k') return true;
-            else if(board[x][y] != '#') break;
-            y++;
-        }
-        y = pawnLoc-1;
-        while(r.indexInArray(board,x,y)){
-            if(board[x][y] == 'k') return true;
-            else if(board[x][y] != '#') break;
-            y--;
-        }
-        return false;
-    }
-    boolean bishCheck(char[][] board,int pawnLoc){
-        int x = 1;
-        int y = pawnLoc+1;
-        while(r.indexInArray(board,x,y)){
-            if(board[x][y] == 'k') return true;
-            else if(board[x][y] != '#') break;
-            y++;
-            x++;
-        }
-        x = 1;
-        y = pawnLoc-1;
-        while(r.indexInArray(board,x,y)){
-            if(board[x][y] == 'k') return true;
-            else if(board[x][y] != '#') break;
-            y--;
-            x++;
-        }
-        return false;
-    }
-    boolean queenCheck(char[][] board,int pawnLoc){
-        return rookCheck(board,pawnLoc) || bishCheck(board,pawnLoc);
     }
 }
 class Trie{

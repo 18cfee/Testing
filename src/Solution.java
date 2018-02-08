@@ -29,22 +29,84 @@ class Solver{
         g = new Graph();
     }
     public void solve() throws IOException{
-        int t = in.nextInt();
-        for (int i = 0; i < t; i++) {
-            int l = in.nextInt();
-            int tot = 0;
-            int max = 0;
-            in.nextInt();
-            for (int j = 1; j < l; j++) {
-                int next = in.nextInt();
-                if(next%2 == 1){
-                    tot = tot^j;
-                }
-            }
-            if(tot == 0){
-                System.out.println("Second");
-            }   else System.out.println("First");
+        int n = in.nextInt();
+        int[] h = new int[n];
+        h[0] = in.nextInt(); // Mason
+        for (int i = 1; i < n; i++) {
+            h[i] = in.nextInt();
         }
+        Node[] students = new Node[n];
+        Node mason = new Node(0,0,0, students, h);
+        students[0] = mason;
+        for (int i = 1; i < n; i++) {
+            Node cur = new Node(i,i,in.nextInt(),students,h);
+            students[i] = cur;
+        }
+        Node current = mason;
+        while(current.hasNext() || current.hasPrev()){
+            if(!current.hasNext()){
+                current.growLeft();
+            } else if(!current.hasPrev()){
+                if(current.shouldRelocate()){
+                    current = current.getNextLow();
+                } else {
+                    current.growRight();
+                }
+            } else if(current.nextIsLowest()){
+                if(current.nextIsLower()){
+                    current = current.getNextMin();
+                } else {
+                    current.growRight();
+                }
+            } else {
+                current.growLeft();
+            }
+        }
+        int min = Integer.MAX_VALUE;
+        System.out.println(min);
+    }
+}
+class Node{
+    public int leftMost;
+    public int rightMost;
+    public int minVal;
+    private Node[] students;
+    private int[] h;
+    Node(int leftMost, int rightMost, int minVal, Node[] students, int[] h){
+        this.leftMost = leftMost;
+        this.rightMost = rightMost;
+        this.minVal = minVal;
+        this.h = h;
+        this.students = students;
+    }
+    Node getNextMin(){
+        Node current = this;
+        while(current.hasNext()){
+            if(!current.nextIsLower())  break;
+            current = current.getNext();
+        }
+        return current;
+    }
+    boolean nextIsLower(){
+        return h[rightMost + 1] < h[rightMost];
+    }
+    Node getNext(){
+        return students[rightMost + 1];
+    }
+    Node getPrev(){
+        return students[leftMost - 1];
+    }
+    boolean hasNext(){
+        return (rightMost < students.length - 1);
+    }
+    boolean hasPrev(){
+        return (leftMost > 0);
+    }
+    int getNextHeight(){
+        return h[rightMost + 1];
+    }
+    int getPrevHeight(){
+        return h[leftMost - 1];
     }
 }
 class Trie{

@@ -124,7 +124,11 @@ class Node{
             dif /= 2;
             oldMinVal = minVal;
             //minVal = dif + Math.min(0, minVal) + val;
-            minVal = dif + minVal + val;
+            if(h[rightMost] != myHeight){
+                minVal = dif + minVal + val;
+            } else {
+                minVal += Math.min(val,0);
+            }
             oldHeight = myHeight;
             myHeight = h[rightMost];
         } else {

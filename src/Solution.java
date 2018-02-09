@@ -44,7 +44,7 @@ class Solver{
         }
         Node current = mason;
         while(current.hasNext() || current.hasPrev()){
-            System.out.println(current.leftMost + " " + current.myHeight + " " + current.rightMost + " " + current.minVal);
+            System.out.println(current.leftMost + " " + current.lH + " " + current.rightMost + " " + current.rH + " " + current.minVal);
             if(!current.hasNext()){
                 current.growLeft();
             } else if(!current.hasPrev()){
@@ -63,7 +63,7 @@ class Solver{
                 current.growLeft();
             }
         }
-        System.out.println(current.leftMost + " " + current.myHeight + " " + current.rightMost + " " + current.minVal);
+        System.out.println(current.leftMost + " " + current.lH + " " + current.rightMost + " " + current.rH + " " + current.minVal);
         System.out.println(current.minVal + n);
     }
 }
@@ -71,7 +71,9 @@ class Node{
     public int leftMost;
     public int rightMost;
     public long minVal;
-    public long myHeight;
+    //public long myHeight;
+    public long rH;
+    public long lH;
     private Node[] students;
     private long[] h;
     Node(int leftMost, int rightMost, int minVal, long myHeight, Node[] students, long[] h){
@@ -80,7 +82,9 @@ class Node{
         this.minVal = minVal;
         this.h = h;
         this.students = students;
-        this.myHeight = myHeight;
+        //this.myHeight = myHeight;
+        this.rH = myHeight;
+        this.lH = myHeight;
     }
     Node getNextMin(){
         Node current = this;
@@ -94,15 +98,25 @@ class Node{
         rightMost++;
         long val = students[rightMost].minVal;
         students[rightMost] = this;
-        long dif = 2*(h[rightMost] - myHeight);
+        long dif = (h[rightMost] - rH);
         if(leftMost == 0){
-            dif /= 2;
+            //dif /= 2;
             minVal = dif + Math.min(0, minVal) + val;
-            myHeight = h[rightMost];
+            //myHeight = h[rightMost];
+            rH = h[rightMost];
         } else {
-            myHeight = h[rightMost];
-            minVal = Math.min(minVal + dif, minVal + dif + val);
-            minVal = Math.min(minVal, val + Math.abs(h[rightMost] - h[leftMost])); // do not keep middle stuff
+//            minVal = Math.min(minVal + dif, minVal + dif + val);
+//            minVal = Math.min(minVal, val + Math.abs(h[rightMost] - h[leftMost])); // do not keep middle stuff
+            if(dif + val < 0){
+                minVal+=dif + val;
+                rH= h[rightMost];
+            }
+            if(minVal > val + Math.abs(h[leftMost] - rH)){
+                // new right should be singled out
+                minVal = val + Math.abs(h[leftMost] - rH);
+                rH = h[rightMost];
+                lH = rH;
+            }
         }
     }
     void growLeft(){
@@ -111,29 +125,40 @@ class Node{
             leftMost--;
             long val = students[leftMost].minVal;
             long dif;
-            if(rightMost == students.length -1){
-                dif = (h[leftMost] - myHeight);
-            } else {
-                dif = 2*(h[leftMost] - myHeight);
+//            if(rightMost == students.length -1){
+            dif = (h[leftMost] - lH);
+//            } else {
+//                dif = 2*(h[leftMost] - myHeight);
+//            }
+            //minVal = Math.min(val,minVal+val + dif);// keep new left either way
+            if(minVal + dif < 0){
+                minVal = val + minVal + dif;
+            } else{
+                minVal = val;
+                rH = students[leftMost].rH;
             }
-            myHeight = h[leftMost];
-            minVal = Math.min(val,minVal+val + dif);// keep new left either way
             leftMost = students[leftMost].leftMost;
+            // keep new left either way
+            lH = students[leftMost].lH;
             students[leftMost] = this;
         } else {
             // do not combine
             leftMost--;
             long val = students[leftMost].minVal;
             students[leftMost] = this;
-            long dif;
-            if(rightMost == students.length -1){
-                dif = (h[leftMost] - myHeight);
-            } else {
-                dif = 2*(h[leftMost] - myHeight);
+            long dif = (h[leftMost] - lH);
+            if(dif + val < 0){
+                minVal+=dif + val;
+                lH= h[leftMost];
             }
-            myHeight = h[leftMost];
-            minVal = Math.min(minVal + dif, minVal + dif + val);
-            minVal = Math.min(minVal, val); // do not keep middle stuff
+            if(minVal > val){
+                // new left should be singled out
+                minVal = val;
+                lH = h[leftMost];
+                rH = lH;
+            }
+            //minVal = Math.min(minVal + dif, minVal + dif + val);
+            //minVal = Math.min(minVal, val); // do not keep middle stuff
 
         }
     }

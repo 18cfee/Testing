@@ -44,7 +44,7 @@ class Solver{
         }
         Node current = mason;
         while(current.hasNext() || current.hasPrev()){
-            System.out.println(current.leftMost + " " + current.myHeight + " " + current.rightMost + " " + current.minVal);
+            //System.out.println(current.leftMost + " " + current.myHeight + " " + current.rightMost + " " + current.minVal);
             if(!current.hasNext()){
                 current.growLeft();
             } else if(!current.hasPrev()){
@@ -63,14 +63,14 @@ class Solver{
                 current.growLeft();
             }
         }
-        System.out.println(current.leftMost + " " + current.myHeight + " " + current.rightMost + " " + current.minVal);
+        //System.out.println(current.leftMost + " " + current.myHeight + " " + current.rightMost + " " + current.minVal);
         System.out.println(current.minVal + n);
     }
 }
 class Node{
     public int leftMost;
     public int rightMost;
-    public int minVal;
+    public long minVal;
     public int myHeight;
     private Node[] students;
     private int[] h;
@@ -92,7 +92,7 @@ class Node{
     }
     void growRight(){
         rightMost++;
-        int val = students[rightMost].minVal;
+        long val = students[rightMost].minVal;
         students[rightMost] = this;
         int dif = 2*(h[rightMost] - myHeight);
         if(leftMost == 0 && myHeight == h[0]){
@@ -109,7 +109,7 @@ class Node{
         if(students[leftMost - 1].leftMost < leftMost - 1){
             // combine
             leftMost--;
-            int val = students[leftMost].minVal;
+            long val = students[leftMost].minVal;
             int dif;
             if(rightMost == students.length -1){
                 dif = (h[leftMost] - myHeight);
@@ -123,7 +123,7 @@ class Node{
         } else {
             // do not combine
             leftMost--;
-            int val = students[leftMost].minVal;
+            long val = students[leftMost].minVal;
             students[leftMost] = this;
             int dif;
             if(rightMost == students.length -1){

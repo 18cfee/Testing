@@ -160,7 +160,12 @@ class Node{
                 dif = 2*(h[leftMost] - myHeight);
             }
             myHeight = h[leftMost];
-            minVal = Math.min(val,minVal+val + dif);// keep new left either way
+            if(students[leftMost].leftMost == 0){
+                minVal = Math.min(val,minVal+val + dif);// keep new left if it is greater than mason
+            } else {
+                // just left, just right, or both
+                minVal = Math.min(val,Math.min( minVal + dif, val + minVal + dif));
+            }
             leftMost = students[leftMost].leftMost;
             students[leftMost] = this;
         } else {

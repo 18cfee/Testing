@@ -30,10 +30,10 @@ class Solver{
     }
     public void solve() throws IOException{
         int n = in.nextInt();
-        int[] h = new int[n];
+        long[] h = new long[n];
         h[0] = in.nextInt(); // Mason
         for (int i = 1; i < n; i++) {
-            h[i] = in.nextInt();
+            h[i] = in.nextLong();
         }
         Node[] students = new Node[n];
         Node mason = new Node(0,0,0,h[0], students, h);
@@ -44,7 +44,7 @@ class Solver{
         }
         Node current = mason;
         while(current.hasNext() || current.hasPrev()){
-            System.out.println(current.leftMost + " " + current.myHeight + " " + current.rightMost + " " + current.minVal);
+            //System.out.println(current.leftMost + " " + current.myHeight + " " + current.rightMost + " " + current.minVal);
             if(!current.hasNext()){
                 current.growLeft();
             } else if(!current.hasPrev()){
@@ -63,7 +63,7 @@ class Solver{
                 current.growLeft();
             }
         }
-        System.out.println(current.leftMost + " " + current.myHeight + " " + current.rightMost + " " + current.minVal);
+        //System.out.println(current.leftMost + " " + current.myHeight + " " + current.rightMost + " " + current.minVal);
         System.out.println(current.minVal + n);
     }
 }
@@ -71,10 +71,10 @@ class Node{
     public int leftMost;
     public int rightMost;
     public long minVal;
-    public int myHeight;
+    public long myHeight;
     private Node[] students;
-    private int[] h;
-    Node(int leftMost, int rightMost, int minVal, int myHeight, Node[] students, int[] h){
+    private long[] h;
+    Node(int leftMost, int rightMost, int minVal, long myHeight, Node[] students, long[] h){
         this.leftMost = leftMost;
         this.rightMost = rightMost;
         this.minVal = minVal;
@@ -94,7 +94,7 @@ class Node{
         rightMost++;
         long val = students[rightMost].minVal;
         students[rightMost] = this;
-        int dif = 2*(h[rightMost] - myHeight);
+        long dif = 2*(h[rightMost] - myHeight);
         if(leftMost == 0){
             dif /= 2;
             minVal = dif + Math.min(0, minVal) + val;
@@ -110,7 +110,7 @@ class Node{
             // combine
             leftMost--;
             long val = students[leftMost].minVal;
-            int dif;
+            long dif;
             if(rightMost == students.length -1){
                 dif = (h[leftMost] - myHeight);
             } else {
@@ -125,7 +125,7 @@ class Node{
             leftMost--;
             long val = students[leftMost].minVal;
             students[leftMost] = this;
-            int dif;
+            long dif;
             if(rightMost == students.length -1){
                 dif = (h[leftMost] - myHeight);
             } else {
@@ -152,10 +152,10 @@ class Node{
     boolean hasPrev(){
         return (leftMost > 0);
     }
-    int getNextHeight(){
+    long getNextHeight(){
         return h[rightMost + 1];
     }
-    int getPrevHeight(){
+    long getPrevHeight(){
         return h[leftMost - 1];
     }
     boolean nextIsLowest(){

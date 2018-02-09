@@ -29,7 +29,7 @@ class Solver{
         g = new Graph();
     }
     public void solve() throws IOException{
-        for (int t = 0; t < 10; t++) {
+        for (int t = 0; t < 1; t++) {
             int n = in.nextInt();
             long[] h = new long[n];
             h[0] = in.nextInt(); // Mason
@@ -201,7 +201,7 @@ class Node{
         return h[leftMost - 1];
     }
     boolean nextIsLowest(){
-        return (h[rightMost + 1] < h[leftMost - 1]);
+        return (h[rightMost + 1] <= h[leftMost - 1]);
     }
 }
 class Trie{

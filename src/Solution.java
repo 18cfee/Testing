@@ -29,42 +29,44 @@ class Solver{
         g = new Graph();
     }
     public void solve() throws IOException{
-        int n = in.nextInt();
-        long[] h = new long[n];
-        h[0] = in.nextInt(); // Mason
-        for (int i = 1; i < n; i++) {
-            h[i] = in.nextLong();
-        }
-        Node[] students = new Node[n];
-        Node mason = new Node(0,0,0,h[0], students, h);
-        students[0] = mason;
-        for (int i = 1; i < n; i++) {
-            Node cur = new Node(i,i,in.nextInt(),h[i],students,h);
-            students[i] = cur;
-        }
-        Node current = mason;
-        while(current.hasNext() || current.hasPrev()){
-            //System.out.println(current.leftMost + " " + current.myHeight + " " + current.rightMost + " " + current.minVal);
-            if(!current.hasNext()){
-                current.growLeft();
-            } else if(!current.hasPrev()){
-                if(current.nextIsLower()){
-                    current = current.getNextMin();
-                } else {
-                    current.growRight();
-                }
-            } else if(current.nextIsLowest()){
-                if(current.nextIsLower()){
-                    current = current.getNextMin();
-                } else {
-                    current.growRight();
-                }
-            } else {
-                current.growLeft();
+        for (int t = 0; t < 10; t++) {
+            int n = in.nextInt();
+            long[] h = new long[n];
+            h[0] = in.nextInt(); // Mason
+            for (int i = 1; i < n; i++) {
+                h[i] = in.nextLong();
             }
+            Node[] students = new Node[n];
+            Node mason = new Node(0,0,0,h[0], students, h);
+            students[0] = mason;
+            for (int i = 1; i < n; i++) {
+                Node cur = new Node(i,i,in.nextInt(),h[i],students,h);
+                students[i] = cur;
+            }
+            Node current = mason;
+            while(current.hasNext() || current.hasPrev()){
+                //System.out.println(current.leftMost + " " + current.myHeight + " " + current.rightMost + " " + current.minVal);
+                if(!current.hasNext()){
+                    current.growLeft();
+                } else if(!current.hasPrev()){
+                    if(current.nextIsLower()){
+                        current = current.getNextMin();
+                    } else {
+                        current.growRight();
+                    }
+                } else if(current.nextIsLowest()){
+                    if(current.nextIsLower()){
+                        current = current.getNextMin();
+                    } else {
+                        current.growRight();
+                    }
+                } else {
+                    current.growLeft();
+                }
+            }
+            //System.out.println(current.leftMost + " " + current.myHeight + " " + current.rightMost + " " + current.minVal);
+            System.out.println(current.minVal + n);
         }
-        //System.out.println(current.leftMost + " " + current.myHeight + " " + current.rightMost + " " + current.minVal);
-        System.out.println(current.minVal + n);
     }
 }
 class Node{
@@ -133,7 +135,7 @@ class Node{
             myHeight = h[rightMost];
         } else {
             oldHeight = myHeight;
-            myHeight = h[rightMost];
+
             //minVal = Math.min(minVal + dif, minVal + dif + val);
             oldMinVal = minVal;
             if(h[rightMost] != myHeight){
@@ -143,6 +145,7 @@ class Node{
             }
             //minVal = Math.min(minVal, val + Math.abs(h[rightMost] - h[leftMost])); // do not keep middle stuff
             minVal = Math.min(minVal, val); // do not keep middle stuff
+            myHeight = h[rightMost];
         }
     }
     void growLeft(){

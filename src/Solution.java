@@ -44,7 +44,7 @@ class Solver{
         }
         Node current = mason;
         while(current.hasNext() || current.hasPrev()){
-            System.out.println(current.leftMost + " " + current.myHeight + " " + current.rightMost + " " + current.minVal);
+            //System.out.println(current.leftMost + " " + current.myHeight + " " + current.rightMost + " " + current.minVal);
             if(!current.hasNext()){
                 current.growLeft();
             } else if(!current.hasPrev()){
@@ -63,7 +63,7 @@ class Solver{
                 current.growLeft();
             }
         }
-        System.out.println(current.leftMost + " " + current.myHeight + " " + current.rightMost + " " + current.minVal);
+        //System.out.println(current.leftMost + " " + current.myHeight + " " + current.rightMost + " " + current.minVal);
         System.out.println(current.minVal + n);
     }
 }
@@ -74,6 +74,8 @@ class Node{
     public long myHeight;
     private Node[] students;
     private long[] h;
+    private static int lastDownersIndex = -5;
+    private static long[] highestAfter = null;
     Node(int leftMost, int rightMost, int minVal, long myHeight, Node[] students, long[] h){
         this.leftMost = leftMost;
         this.rightMost = rightMost;
@@ -81,6 +83,27 @@ class Node{
         this.h = h;
         this.students = students;
         this.myHeight = myHeight;
+        if(lastDownersIndex == -5){
+            lastDownersIndex = students.length -1;
+            while(true){
+                if(h[lastDownersIndex] > h[lastDownersIndex - 1]) break;
+                if(lastDownersIndex > 1)lastDownersIndex--;
+                else break;
+            }
+            //System.out.println("last index " + lastDownersIndex);
+        }
+        if(highestAfter == null){
+            highestAfter = new long[students.length];
+            int index = students.length -1;
+            highestAfter[index] = h[index];
+            for (int i = index-1; i >= 0; i--) {
+                if(h[i] > highestAfter[i+1]){
+                    highestAfter[i] = h[i];
+                } else {
+                    highestAfter[i] = highestAfter[i+1];
+                }
+            }
+        }
     }
     Node getNextMin(){
         Node current = this;
@@ -101,8 +124,10 @@ class Node{
             myHeight = h[rightMost];
         } else {
             myHeight = h[rightMost];
-            minVal = Math.min(minVal + dif, minVal + dif + val);
+            //minVal = Math.min(minVal + dif, minVal + dif + val);
+            minVal = minVal + dif + val;
             minVal = Math.min(minVal, val + Math.abs(h[rightMost] - h[leftMost])); // do not keep middle stuff
+            minVal = Math.min(minVal, val); // do not keep middle stuff
         }
     }
     void growLeft(){
@@ -111,7 +136,7 @@ class Node{
             leftMost--;
             long val = students[leftMost].minVal;
             long dif;
-            if(rightMost == students.length -1){
+            if(rightMost >= lastDownersIndex || myHeight >= highestAfter[rightMost]){
                 dif = (h[leftMost] - myHeight);
             } else {
                 dif = 2*(h[leftMost] - myHeight);
@@ -126,7 +151,7 @@ class Node{
             long val = students[leftMost].minVal;
             students[leftMost] = this;
             long dif;
-            if(rightMost == students.length -1){
+            if(rightMost >= lastDownersIndex){
                 dif = (h[leftMost] - myHeight);
             } else {
                 dif = 2*(h[leftMost] - myHeight);
@@ -134,7 +159,6 @@ class Node{
             myHeight = h[leftMost];
             minVal = Math.min(minVal + dif, minVal + dif + val);
             minVal = Math.min(minVal, val); // do not keep middle stuff
-
         }
     }
     boolean nextIsLower(){

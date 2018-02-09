@@ -28,165 +28,82 @@ class Solver{
         r = new Ray();
         g = new Graph();
     }
+    private long[][] box;
+    int k;
     public void solve() throws IOException{
-        int n = in.nextInt();
-        long[] h = new long[n];
-        h[0] = in.nextInt(); // Mason
-        for (int i = 1; i < n; i++) {
-            h[i] = in.nextLong();
+        int x = in.nextInt();
+        int y = in.nextInt();
+        k = in.nextInt();
+        box = new long[x][y];
+        for (int i = 0; i < x; i++) {
+            long[] cur = new long[y];
+            for (int j = 0; j < y; j++) {
+                cur[j]= in.nextInt();
+            }
+            box[i] = cur;
         }
-        Node[] students = new Node[n];
-        Node mason = new Node(0,0,0,h[0], students, h);
-        students[0] = mason;
-        for (int i = 1; i < n; i++) {
-            Node cur = new Node(i,i,in.nextInt(),h[i],students,h);
-            students[i] = cur;
-        }
-        Node current = mason;
-        while(current.hasNext() || current.hasPrev()){
-            System.out.println(current.leftMost + " " + current.lH + " " + current.rightMost + " " + current.rH + " " + current.minVal);
-            if(!current.hasNext()){
-                current.growLeft();
-            } else if(!current.hasPrev()){
-                if(current.nextIsLower()){
-                    current = current.getNextMin();
-                } else {
-                    current.growRight();
-                }
-            } else if(current.nextIsLowest()){
-                if(current.nextIsLower()){
-                    current = current.getNextMin();
-                } else {
-                    current.growRight();
-                }
-            } else {
-                current.growLeft();
+        long max = Long.MIN_VALUE;
+        for (int i = 1; i <= x; i++) {
+            for (int j = 1; j <= y; j++) {
+                max = Math.max(max,calculatedMaxRect(i,x,j,y));
             }
         }
-        System.out.println(current.leftMost + " " + current.lH + " " + current.rightMost + " " + current.rH + " " + current.minVal);
-        System.out.println(current.minVal + n);
+        System.out.println(max);
+    }
+    long calculatedMaxRect(int xDim, int maxX, int yDim, int maxY){
+        long max = Long.MIN_VALUE;
+        for (int i = 0; i + xDim <= maxX; i++) {
+            for (int j = 0; j + yDim <= maxY; j++) {
+                max = Math.max(max,calcMaxBox(i,j,i+xDim,j+yDim));
+            }
+        }
+        return max;
+    }
+    long calcMaxBox(int x1, int y1, int x2, int y2){
+        long sum = 0;
+        for (int i = x1; i < x2; i++) {
+            for (int j = y1; j < y2; j++) {
+                sum+=box[i][j];
+            }
+        }
+        return sum - minimumSubtraction(x1,y1,x2,y2);
+    }
+    long minimumSubtraction(int x1, int y1, int x2, int y2){
+        long min = Long.MAX_VALUE;
+        // rows
+        for (int i = 1; i <= k; i++) {
+            for (int s = y1; s < y2; s++) {
+                for (int j = x1; j + i <= x2; j++) {
+                    min = Math.min(min, sumRow(j, j + i,s));
+                }
+            }
+        }
+        // columns
+        for (int i = 1; i <= k; i++) {
+            for (int s = x1; s < x2; s++) {
+                for (int j = y1; j + i <= y2; j++) {
+                    min = Math.min(min,sumColumn(j,j+i,s));
+                }
+            }
+        }
+        return min;
+    }
+    long sumRow(int x1, int x2, int y){
+        long sum = 0;
+        for (int i = x1; i < x2; i++) {
+            sum += box[i][y];
+        }
+        return sum;
+    }
+    long sumColumn(int y1, int y2, int x){
+        long sum = 0;
+        for (int i = y1; i < y2; i++) {
+            sum += box[x][i];
+        }
+        return sum;
     }
 }
-class Node{
-    public int leftMost;
-    public int rightMost;
-    public long minVal;
-    //public long myHeight;
-    public long rH;
-    public long lH;
-    private Node[] students;
-    private long[] h;
-    Node(int leftMost, int rightMost, int minVal, long myHeight, Node[] students, long[] h){
-        this.leftMost = leftMost;
-        this.rightMost = rightMost;
-        this.minVal = minVal;
-        this.h = h;
-        this.students = students;
-        //this.myHeight = myHeight;
-        this.rH = myHeight;
-        this.lH = myHeight;
-    }
-    Node getNextMin(){
-        Node current = this;
-        while(current.hasNext()){
-            if(!current.nextIsLower())  break;
-            current = current.getNext();
-        }
-        return current;
-    }
-    void growRight(){
-        rightMost++;
-        long val = students[rightMost].minVal;
-        students[rightMost] = this;
-        long dif = (h[rightMost] - rH);
-        if(leftMost == 0){
-            //dif /= 2;
-            minVal = dif + Math.min(0, minVal) + val;
-            //myHeight = h[rightMost];
-            rH = h[rightMost];
-        } else {
-//            minVal = Math.min(minVal + dif, minVal + dif + val);
-//            minVal = Math.min(minVal, val + Math.abs(h[rightMost] - h[leftMost])); // do not keep middle stuff
-            if(dif + val < 0){
-                minVal+=dif + val;
-                rH= h[rightMost];
-            }
-            if(minVal > val + Math.abs(h[leftMost] - rH)){
-                // new right should be singled out
-                minVal = val + Math.abs(h[leftMost] - rH);
-                rH = h[rightMost];
-                lH = rH;
-            }
-        }
-    }
-    void growLeft(){
-        if(students[leftMost - 1].leftMost < leftMost - 1){
-            // combine
-            leftMost--;
-            long val = students[leftMost].minVal;
-            long dif;
-//            if(rightMost == students.length -1){
-            dif = (h[leftMost] - lH);
-//            } else {
-//                dif = 2*(h[leftMost] - myHeight);
-//            }
-            //minVal = Math.min(val,minVal+val + dif);// keep new left either way
-            if(minVal + dif < 0){
-                minVal = val + minVal + dif;
-            } else{
-                minVal = val;
-                rH = students[leftMost].rH;
-            }
-            leftMost = students[leftMost].leftMost;
-            // keep new left either way
-            lH = students[leftMost].lH;
-            students[leftMost] = this;
-        } else {
-            // do not combine
-            leftMost--;
-            long val = students[leftMost].minVal;
-            students[leftMost] = this;
-            long dif = (h[leftMost] - lH);
-            if(dif + val < 0){
-                minVal+=dif + val;
-                lH= h[leftMost];
-            }
-            if(minVal > val){
-                // new left should be singled out
-                minVal = val;
-                lH = h[leftMost];
-                rH = lH;
-            }
-            //minVal = Math.min(minVal + dif, minVal + dif + val);
-            //minVal = Math.min(minVal, val); // do not keep middle stuff
 
-        }
-    }
-    boolean nextIsLower(){
-        return h[rightMost + 1] < h[rightMost];
-    }
-    Node getNext(){
-        return students[rightMost + 1];
-    }
-    Node getPrev(){
-        return students[leftMost - 1];
-    }
-    boolean hasNext(){
-        return (rightMost < students.length - 1);
-    }
-    boolean hasPrev(){
-        return (leftMost > 0);
-    }
-    long getNextHeight(){
-        return h[rightMost + 1];
-    }
-    long getPrevHeight(){
-        return h[leftMost - 1];
-    }
-    boolean nextIsLowest(){
-        return (h[rightMost + 1] < h[leftMost - 1]);
-    }
-}
 class Trie{
     public int numInserted = 0;
     Trie[] children;

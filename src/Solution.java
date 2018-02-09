@@ -76,7 +76,9 @@ class Node{
     private long[] h;
     private static int lastDownersIndex = -5;
     private static long[] highestAfter = null;
-    Node(int leftMost, int rightMost, int minVal, long myHeight, Node[] students, long[] h){
+    private long oldHeight;
+    private long oldMinVal;
+    Node(int leftMost, int rightMost, long minVal, long myHeight, Node[] students, long[] h){
         this.leftMost = leftMost;
         this.rightMost = rightMost;
         this.minVal = minVal;
@@ -120,11 +122,16 @@ class Node{
         long dif = 2*(h[rightMost] - myHeight);
         if(leftMost == 0){
             dif /= 2;
-            minVal = dif + Math.min(0, minVal) + val;
+            oldMinVal = minVal;
+            //minVal = dif + Math.min(0, minVal) + val;
+            minVal = dif + minVal + val;
+            oldHeight = myHeight;
             myHeight = h[rightMost];
         } else {
+            oldHeight = myHeight;
             myHeight = h[rightMost];
             //minVal = Math.min(minVal + dif, minVal + dif + val);
+            oldMinVal = minVal;
             minVal = minVal + dif + val;
             minVal = Math.min(minVal, val + Math.abs(h[rightMost] - h[leftMost])); // do not keep middle stuff
             minVal = Math.min(minVal, val); // do not keep middle stuff
@@ -136,7 +143,7 @@ class Node{
             leftMost--;
             long val = students[leftMost].minVal;
             long dif;
-            if(rightMost >= lastDownersIndex || myHeight >= highestAfter[rightMost]){
+            if(rightMost >= lastDownersIndex || myHeight >= highestAfter[leftMost - 1]){
                 dif = (h[leftMost] - myHeight);
             } else {
                 dif = 2*(h[leftMost] - myHeight);

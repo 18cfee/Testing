@@ -44,7 +44,7 @@ class Solver{
         }
         Node current = mason;
         while(current.hasNext() || current.hasPrev()){
-            //System.out.println(current.leftMost + " " + current.myHeight + " " + current.rightMost + " " + current.minVal);
+            System.out.println(current.leftMost + " " + current.myHeight + " " + current.rightMost + " " + current.minVal);
             if(!current.hasNext()){
                 current.growLeft();
             } else if(!current.hasPrev()){
@@ -63,7 +63,7 @@ class Solver{
                 current.growLeft();
             }
         }
-        //System.out.println(current.leftMost + " " + current.myHeight + " " + current.rightMost + " " + current.minVal);
+        System.out.println(current.leftMost + " " + current.myHeight + " " + current.rightMost + " " + current.minVal);
         System.out.println(current.minVal + n);
     }
 }

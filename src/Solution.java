@@ -44,7 +44,7 @@ class Solver{
         }
         Node current = mason;
         while(current.hasNext() || current.hasPrev()){
-            //System.out.println(current.leftMost + " " + current.myHeight + " " + current.rightMost + " " + current.minVal);
+            System.out.println(current.leftMost + " " + current.myHeight + " " + current.rightMost + " " + current.minVal);
             if(!current.hasNext()){
                 current.growLeft();
             } else if(!current.hasPrev()){
@@ -63,7 +63,7 @@ class Solver{
                 current.growLeft();
             }
         }
-        //System.out.println(current.leftMost + " " + current.myHeight + " " + current.rightMost + " " + current.minVal);
+        System.out.println(current.leftMost + " " + current.myHeight + " " + current.rightMost + " " + current.minVal);
         System.out.println(current.minVal + n);
     }
 }
@@ -137,7 +137,7 @@ class Node{
             //minVal = Math.min(minVal + dif, minVal + dif + val);
             oldMinVal = minVal;
             minVal = minVal + dif + val;
-            minVal = Math.min(minVal, val + Math.abs(h[rightMost] - h[leftMost])); // do not keep middle stuff
+            //minVal = Math.min(minVal, val + Math.abs(h[rightMost] - h[leftMost])); // do not keep middle stuff
             minVal = Math.min(minVal, val); // do not keep middle stuff
         }
     }
@@ -147,7 +147,7 @@ class Node{
             leftMost--;
             long val = students[leftMost].minVal;
             long dif;
-            if(rightMost >= lastDownersIndex || myHeight >= highestAfter[leftMost - 1]){
+            if(rightMost >= lastDownersIndex ){ //|| myHeight >= highestAfter[leftMost - 1]
                 dif = (h[leftMost] - myHeight);
             } else {
                 dif = 2*(h[leftMost] - myHeight);

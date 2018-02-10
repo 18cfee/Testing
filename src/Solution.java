@@ -42,13 +42,41 @@ class Solver{
             }
             box[i] = cur;
         }
-        long max = Long.MIN_VALUE;
-        for (int i = 1; i <= x; i++) {
-            for (int j = 1; j <= y; j++) {
-                max = Math.max(max,calculatedMaxRect(i,x,j,y));
+        precalcRows = new long[x][y][k + 1];
+        for (int i = 0; i < x; i++) {
+            for (int j = 0; j < y; j++) {
+                for (int l = 0; l < k +1; l++) {
+                    precalcRows[i][j][l] = Long.MIN_VALUE;
+                }
             }
         }
-        System.out.println(max);
+        precalcCols = new long[x][y][k + 1];
+        for (int i = 0; i < x; i++) {
+            for (int j = 0; j < y; j++) {
+                for (int l = 0; l < k +1; l++) {
+                    precalcCols[i][j][l] = Long.MIN_VALUE;
+                }
+            }
+        }
+        if(false){
+            long sum = 0;
+            long min = Long.MAX_VALUE;
+            for (int i = 0; i < x; i++) {
+                for (int j = 0; j < y; j++) {
+                    sum+=box[i][j];
+                    min = Math.min(box[i][j],min);
+                }
+            }
+            System.out.println(sum - min);
+        } else{
+            long max = Long.MIN_VALUE;
+            for (int i = 1; i <= x; i++) {
+                for (int j = 1; j <= y; j++) {
+                    max = Math.max(max,calculatedMaxRect(i,x,j,y));
+                }
+            }
+            System.out.println(max);
+        }
     }
     long calculatedMaxRect(int xDim, int maxX, int yDim, int maxY){
         long max = Long.MIN_VALUE;
@@ -68,13 +96,19 @@ class Solver{
         }
         return sum - minimumSubtraction(x1,y1,x2,y2);
     }
+    static long[][][] precalcRows;
+    static long[][][] precalcCols;
     long minimumSubtraction(int x1, int y1, int x2, int y2){
         long min = Long.MAX_VALUE;
         // rows
         for (int i = 1; i <= k; i++) {
             for (int s = y1; s < y2; s++) {
                 for (int j = x1; j + i <= x2; j++) {
-                    min = Math.min(min, sumRow(j, j + i,s));
+                    long val = precalcRows[j][s][i];
+                    if(val == Long.MIN_VALUE){
+                        val = precalcRows[j][s][i] = sumRow(j, j + i,s);
+                    }
+                    min = Math.min(min, val);
                 }
             }
         }
@@ -82,7 +116,11 @@ class Solver{
         for (int i = 1; i <= k; i++) {
             for (int s = x1; s < x2; s++) {
                 for (int j = y1; j + i <= y2; j++) {
-                    min = Math.min(min,sumColumn(j,j+i,s));
+                    long val = precalcCols[s][j][i];
+                    if(val == Long.MIN_VALUE){
+                        val = precalcCols[s][j][i] = sumColumn(j, j + i,s);
+                    }
+                    min = Math.min(min, val);
                 }
             }
         }

@@ -58,7 +58,8 @@ class Solver{
                 }
             }
         }
-        if(false){
+        boolean shouldTry = true;
+        if(true){
             long sum = 0;
             long min = Long.MAX_VALUE;
             for (int i = 0; i < x; i++) {
@@ -67,8 +68,16 @@ class Solver{
                     min = Math.min(box[i][j],min);
                 }
             }
-            System.out.println(sum - min);
-        } else{
+            if(min > 0){
+                System.out.println(sum - min);
+                shouldTry = false;
+            }
+//            if(shouldTry){
+//                shouldTry = false;
+//                System.out.println(sum - min);
+//            }
+        }
+        if(shouldTry){
             long max = Long.MIN_VALUE;
             for (int i = 1; i <= x; i++) {
                 for (int j = 1; j <= y; j++) {

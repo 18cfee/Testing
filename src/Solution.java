@@ -1,4 +1,5 @@
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class Solution {
@@ -31,76 +32,107 @@ class Solver{
     private long[][] box;
     int k;
     public void solve() throws IOException{
-        int x = in.nextInt();
-        int y = in.nextInt();
-        k = in.nextInt();
-        box = new long[x][y];
-        for (int i = 0; i < x; i++) {
-            long[] cur = new long[y];
-            for (int j = 0; j < y; j++) {
-                cur[j]= in.nextInt();
+        int t = Integer.parseInt(in.readLine());
+        for (int i = 0; i < t; i++) {
+            int n = Integer.parseInt(in.readLine());
+            String[] words = new String[n];
+            words = in.readLine().split(" ");
+            ArrayList<String> temp = new ArrayList<>(Arrays.asList(words));
+            Collections.sort(temp,new byLength());
+            String frase = in.readLine();
+            words = temp.toArray(words);
+            words = cutDown(words);
+
+            curUsed = new ArrayList<>(100);
+            tried = new boolean[2001];
+            e = false;
+            calc(words,frase, 0);
+            for (int c = 0; c < curUsed.size(); c++) {
+                System.out.print(curUsed.get(c) + " ");
             }
-            box[i] = cur;
+            System.out.println();
         }
-        long max = Long.MIN_VALUE;
-        for (int i = 1; i <= x; i++) {
-            for (int j = 1; j <= y; j++) {
-                max = Math.max(max,calculatedMaxRect(i,x,j,y));
-            }
-        }
-        System.out.println(max);
     }
-    long calculatedMaxRect(int xDim, int maxX, int yDim, int maxY){
-        long max = Long.MIN_VALUE;
-        for (int i = 0; i + xDim <= maxX; i++) {
-            for (int j = 0; j + yDim <= maxY; j++) {
-                max = Math.max(max,calcMaxBox(i,j,i+xDim,j+yDim));
+    String[] cutDown(String[] words){
+        ArrayList<String> keep = new ArrayList<>(words.length);
+        for (int i = 0; i < words.length; i++) {
+            curUsed = new ArrayList<>();
+            tried = new boolean[2001];
+            e = false;
+            String word = words[i];
+            String[] following = new String[words.length - i - 1];
+            int num = 0;
+            for (int j = i+1; j < words.length; j++) {
+                following[num] = words[j];
+                num++;
+            }
+            if(!composable(following, word, 0)){
+                keep.add(word);
             }
         }
-        return max;
-    }
-    long calcMaxBox(int x1, int y1, int x2, int y2){
-        long sum = 0;
-        for (int i = x1; i < x2; i++) {
-            for (int j = y1; j < y2; j++) {
-                sum+=box[i][j];
-            }
+        String[] options = new String[keep.size()];
+        for (int i = 0; i < keep.size(); i++) {
+            options[i]= keep.get(i);
         }
-        return sum - minimumSubtraction(x1,y1,x2,y2);
+        return options;
     }
-    long minimumSubtraction(int x1, int y1, int x2, int y2){
-        long min = Long.MAX_VALUE;
-        // rows
-        for (int i = 1; i <= k; i++) {
-            for (int s = y1; s < y2; s++) {
-                for (int j = x1; j + i <= x2; j++) {
-                    min = Math.min(min, sumRow(j, j + i,s));
+    boolean e = false;
+    ArrayList<String> curUsed;
+    boolean[] tried;
+    boolean composable(String [] words, String frase, int index){
+        if(frase.length() == index){
+            e = true;
+            return true;
+        }
+        for (int i = 0; i < words.length; i++) {
+            String word = words[i];
+            int lenW = word.length();
+            if(index + lenW <= frase.length()){
+                String next = frase.substring(index,index + lenW);
+                if(next.equals(word)){
+                    if(!tried[index + lenW]){
+                        curUsed.add(next);
+                        calc(words,frase,index + lenW);
+                        tried[index + lenW] = true;
+                        if(e == true)return true;
+                        curUsed.remove(curUsed.size() -1 );
+                    }
                 }
             }
         }
-        // columns
-        for (int i = 1; i <= k; i++) {
-            for (int s = x1; s < x2; s++) {
-                for (int j = y1; j + i <= y2; j++) {
-                    min = Math.min(min,sumColumn(j,j+i,s));
+        return false;
+    }
+    void calc(String [] words, String frase, int index){
+        if(frase.length() == index){
+            e = true;
+            return;
+        }
+        for (int i = 0; i < words.length; i++) {
+            String word = words[i];
+            int lenW = word.length();
+            if(index + lenW <= frase.length()){
+                String next = frase.substring(index,index + lenW);
+                if(next.equals(word)){
+                    if(!tried[index + lenW]) {
+                        curUsed.add(next);
+                        calc(words, frase, index + lenW);
+                        if (e == true) return;
+                        curUsed.remove(curUsed.size() - 1);
+                        tried[index + lenW] = true;
+                    }
                 }
             }
         }
-        return min;
-    }
-    long sumRow(int x1, int x2, int y){
-        long sum = 0;
-        for (int i = x1; i < x2; i++) {
-            sum += box[i][y];
+        int breakpoint = 0;
+        if(curUsed.size() == 0){
+            curUsed.add("WRONG PASSWORD");
         }
-        return sum;
     }
-    long sumColumn(int y1, int y2, int x){
-        long sum = 0;
-        for (int i = y1; i < y2; i++) {
-            sum += box[x][i];
-        }
-        return sum;
+}
+class byLength implements Comparator<String>{
+    @Override
+    public int compare(String a, String b){
+        return b.length() - a.length();
     }
 }
 

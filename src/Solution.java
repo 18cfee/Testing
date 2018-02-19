@@ -34,99 +34,48 @@ class Solver{
     public void solve() throws IOException{
         int t = Integer.parseInt(in.readLine());
         for (int i = 0; i < t; i++) {
-            int n = Integer.parseInt(in.readLine());
-            String[] words = new String[n];
-            words = in.readLine().split(" ");
-            ArrayList<String> temp = new ArrayList<>(Arrays.asList(words));
-            Collections.sort(temp,new byLength());
-            String frase = in.readLine();
-            words = temp.toArray(words);
-            words = cutDown(words);
-
-            curUsed = new ArrayList<>(100);
-            tried = new boolean[2001];
-            e = false;
-            calc(words,frase, 0);
-            for (int c = 0; c < curUsed.size(); c++) {
-                System.out.print(curUsed.get(c) + " ");
+            String[] vals = in.readLine().split(" ");
+            int x = Integer.parseInt(vals[0]);
+            int y = Integer.parseInt(vals[1]);
+            char[][] ray = new char[x][y];
+            for (int j = 0; j < x; j++) {
+                ray[j]  = in.readLine().toCharArray();
             }
-            System.out.println();
-        }
-    }
-    String[] cutDown(String[] words){
-        ArrayList<String> keep = new ArrayList<>(words.length);
-        for (int i = 0; i < words.length; i++) {
-            curUsed = new ArrayList<>();
-            tried = new boolean[2001];
-            e = false;
-            String word = words[i];
-            String[] following = new String[words.length - i - 1];
-            int num = 0;
-            for (int j = i+1; j < words.length; j++) {
-                following[num] = words[j];
-                num++;
+            vals = in.readLine().split(" ");
+            int x2 = Integer.parseInt(vals[0]);
+            int y2 = Integer.parseInt(vals[1]);
+            char[][] ray2 = new char[x2][y2];
+            for (int j = 0; j < x2; j++) {
+                ray2[j] = in.readLine().toCharArray();
             }
-            if(!composable(following, word, 0)){
-                keep.add(word);
-            }
-        }
-        String[] options = new String[keep.size()];
-        for (int i = 0; i < keep.size(); i++) {
-            options[i]= keep.get(i);
-        }
-        return options;
-    }
-    boolean e = false;
-    ArrayList<String> curUsed;
-    boolean[] tried;
-    boolean composable(String [] words, String frase, int index){
-        if(frase.length() == index){
-            e = true;
-            return true;
-        }
-        for (int i = 0; i < words.length; i++) {
-            String word = words[i];
-            int lenW = word.length();
-            if(index + lenW <= frase.length()){
-                String next = frase.substring(index,index + lenW);
-                if(next.equals(word)){
-                    if(!tried[index + lenW]){
-                        curUsed.add(next);
-                        calc(words,frase,index + lenW);
-                        tried[index + lenW] = true;
-                        if(e == true)return true;
-                        curUsed.remove(curUsed.size() -1 );
+            boolean ans = false;
+            loop:
+            for (int j = 0; j + x2 <= x; j++) {
+                for (int l = 0; l + y2 <= y; l++) {
+                    if(match(ray,ray2,j,l)){
+                        ans = true;
+                        break loop;
                     }
                 }
             }
+            if(ans){
+                System.out.println("YES");
+            } else {
+                System.out.println("NO");
+            }
         }
-        return false;
     }
-    void calc(String [] words, String frase, int index){
-        if(frase.length() == index){
-            e = true;
-            return;
-        }
-        for (int i = 0; i < words.length; i++) {
-            String word = words[i];
-            int lenW = word.length();
-            if(index + lenW <= frase.length()){
-                String next = frase.substring(index,index + lenW);
-                if(next.equals(word)){
-                    if(!tried[index + lenW]) {
-                        curUsed.add(next);
-                        calc(words, frase, index + lenW);
-                        if (e == true) return;
-                        curUsed.remove(curUsed.size() - 1);
-                        tried[index + lenW] = true;
-                    }
+    boolean match(char[][] ray, char[][] ray2, int x, int y){
+        for (int i = 0; i < ray2.length; i++) {
+            char[] cur2 = ray2[i];
+            char[] cur = ray[i + x];
+            for (int j = 0; j < cur2.length; j++) {
+                if(cur2[j] != cur[j + y]){
+                    return false;
                 }
             }
         }
-        int breakpoint = 0;
-        if(curUsed.size() == 0){
-            curUsed.add("WRONG PASSWORD");
-        }
+        return true;
     }
 }
 class byLength implements Comparator<String>{

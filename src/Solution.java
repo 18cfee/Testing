@@ -35,47 +35,27 @@ class Solver{
         int t = Integer.parseInt(in.readLine());
         for (int i = 0; i < t; i++) {
             String[] vals = in.readLine().split(" ");
-            int x = Integer.parseInt(vals[0]);
-            int y = Integer.parseInt(vals[1]);
-            char[][] ray = new char[x][y];
-            for (int j = 0; j < x; j++) {
-                ray[j]  = in.readLine().toCharArray();
-            }
-            vals = in.readLine().split(" ");
-            int x2 = Integer.parseInt(vals[0]);
-            int y2 = Integer.parseInt(vals[1]);
-            char[][] ray2 = new char[x2][y2];
-            for (int j = 0; j < x2; j++) {
-                ray2[j] = in.readLine().toCharArray();
-            }
-            boolean ans = false;
-            loop:
-            for (int j = 0; j + x2 <= x; j++) {
-                for (int l = 0; l + y2 <= y; l++) {
-                    if(match(ray,ray2,j,l)){
-                        ans = true;
-                        break loop;
+            int n = Integer.parseInt(vals[0]);
+            int k = Integer.parseInt(vals[1]);
+            if(k == 0){
+                for (int j = 1; j <= n; j++) {
+                    System.out.print(j + " ");
+                }
+                System.out.println();
+            } else if (n%(k*2) == 0){//(n%2 == 0 && n > k){
+                for (int j = 1; j <= n; j+=(k*2)) {
+                    for (int l = j; l < j + k; l++) {
+                        System.out.print((l + k) + " ");
+                    }
+                    for (int l = j + k; l < j + k*2; l++) {
+                        System.out.print((l - k) + " ");
                     }
                 }
-            }
-            if(ans){
-                System.out.println("YES");
+                System.out.println();
             } else {
-                System.out.println("NO");
+                System.out.println(-1);
             }
         }
-    }
-    boolean match(char[][] ray, char[][] ray2, int x, int y){
-        for (int i = 0; i < ray2.length; i++) {
-            char[] cur2 = ray2[i];
-            char[] cur = ray[i + x];
-            for (int j = 0; j < cur2.length; j++) {
-                if(cur2[j] != cur[j + y]){
-                    return false;
-                }
-            }
-        }
-        return true;
     }
 }
 class byLength implements Comparator<String>{

@@ -1,5 +1,6 @@
 import java.io.*;
 import java.lang.reflect.Array;
+import java.sql.Struct;
 import java.util.*;
 
 public class Solution {
@@ -32,30 +33,70 @@ class Solver{
     private long[][] box;
     int k;
     public void solve() throws IOException{
-        int t = Integer.parseInt(in.readLine());
-        for (int i = 0; i < t; i++) {
-            String[] vals = in.readLine().split(" ");
-            int n = Integer.parseInt(vals[0]);
-            int k = Integer.parseInt(vals[1]);
-            if(k == 0){
-                for (int j = 1; j <= n; j++) {
-                    System.out.print(j + " ");
+        String[] pars = in.readLine().split(" ");
+        int row = Integer.parseInt(pars[0]);
+        int c = Integer.parseInt(pars[1]);
+        int n = Integer.parseInt(pars[2]);
+        String[] pic = new String[row];
+        for (int i = 0; i < row; i++) {
+            pic[i] = in.readLine();
+        }
+        if(n == 0 || n == 1){
+            r.printArray(pic);
+        } else if(n%2 == 0){
+            for (int i = 0; i < row; i++) {
+                for (int j = 0; j < c; j++) {
+                    System.out.print("O");
                 }
                 System.out.println();
-            } else if (n%(k*2) == 0){//(n%2 == 0 && n > k){
-                for (int j = 1; j <= n; j+=(k*2)) {
-                    for (int l = j; l < j + k; l++) {
-                        System.out.print((l + k) + " ");
-                    }
-                    for (int l = j + k; l < j + k*2; l++) {
-                        System.out.print((l - k) + " ");
+            }
+        } else {
+            String[] newPic = new String[row];
+            for (int i = 0; i < row; i++) {
+                String cur = "";
+                for (int j = 0; j < c; j++) {
+                    if(shouldSet(i,j,pic)){
+                        cur+=".";
+                    }else{
+                        cur += "O";
                     }
                 }
-                System.out.println();
-            } else {
-                System.out.println(-1);
+                newPic[i] = cur;
+            }
+            if(n%4 == 1){
+                newPic = convert(newPic);
+            }
+            r.printArray(newPic);
+        }
+    }
+    String[] convert(String[] pic){
+        String[] newPic = new String[pic.length];
+        for (int i = 0; i < pic.length; i++) {
+            String oldCur = pic[i];
+            String cur = "";
+            for (int j = 0; j < oldCur.length(); j++) {
+                if(shouldSet(i,j,pic)){
+                    cur+=".";
+                }else{
+                    cur += "O";
+                }
+            }
+            newPic[i] = cur;
+        }
+        return newPic;
+    }
+    boolean shouldSet(int x, int y, String[] pic){
+        for (int i = 0; i < 8; i+=2) {
+            int newX = x + m.directions[i][0];
+            int newY = y + m.directions[i][1];
+            if(r.indexInArray(pic,newX,newY) && pic[newX].charAt(newY) == 'O'){
+                return true;
             }
         }
+        if(pic[x].charAt(y) == 'O'){
+            return true;
+        }
+        return false;
     }
 }
 class byLength implements Comparator<String>{
@@ -233,7 +274,16 @@ class Ray {
     public boolean indexInArray(boolean [][] a, int x, int y){
         if(0 <= x && x < a.length){
             boolean[] temp = a[x];
-            if (0 <= y && y < a.length){
+            if (0 <= y && y < temp.length){
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean indexInArray(String[] a, int x, int y){
+        if(0 <= x && x < a.length){
+            String temp = a[x];
+            if (0 <= y && y < temp.length()){
                 return true;
             }
         }
@@ -242,13 +292,19 @@ class Ray {
     public boolean indexInArray(char [][] a, int x, int y){
         if(0 <= x && x < a.length){
             char[] temp = a[x];
-            if (0 <= y && y < a.length){
+            if (0 <= y && y < temp.length){
                 return true;
             }
         }
         return false;
     }
     public void printArray(char[][] ray){
+        int height = ray.length;
+        for (int i = 0; i < height; i++) {
+            System.out.println(ray[i]);
+        }
+    }
+    public void printArray(String[] ray){
         int height = ray.length;
         for (int i = 0; i < height; i++) {
             System.out.println(ray[i]);

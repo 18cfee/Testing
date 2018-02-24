@@ -38,129 +38,33 @@ class Solver{
         String[] pars = in.readLine().split(" ");
         int row = Integer.parseInt(pars[0]);
         int c = Integer.parseInt(pars[1]);
-        String[] comp = new String[row];
-        for (int i = 0; i < row; i++) {
-            comp[i] = in.readLine();
-        }
-        int max = 0;
+        int[][] ray = r.populateIntArray(in,row,c);
+        long area = 0;
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < c; j++) {
-                max = Math.max(max,compute(i,j,comp));
+                area += area(ray,i,j);
             }
         }
-        //test
-        System.out.println(max);
+        area += row*c*2;
+        System.out.println(area);
     }
-    int compute(int i, int j, String[] comp){
-        BitSet[] noGood = new BitSet[comp.length];
-        for (int l = 0; l < comp.length; l++) {
-            noGood[l] = new BitSet(comp[0].length());
-        }
-        int d = 0;
-        int max = 0;
-        while(thisCrossExsists(d,i,j,comp)){
-            int size = 1+d*4;
-            //System.out.println(i + " " + j);
-            //System.out.println("size " + size);
-            expand(noGood,i,j,d);
-            int maxSize = maxCross(i,j,comp,noGood);
-            //System.out.println("max size: " + maxSize);
-            max = Math.max(max,maxSize*size);
-            d++;
-        }
-        return max;
-    }
-    int maxCross(int x, int y, String[] comp, BitSet[] noGood){
-        int max = 0;
-        // first partial row
-        for (int i = y + 1; i < comp[0].length(); i++) {
-            max = Math.max(max,calcLargest(x,i,comp,noGood));
-        }
-        for (int i = x; i < comp.length; i++) {
-            for (int j = 0; j < comp[0].length(); j++) {
-                max = Math.max(max,calcLargest(i,j,comp,noGood));
-            }
-        }
-        return max;
-    }
-    int calcLargest(int x, int y, String[] comp, BitSet[] noGood){
-        if(noGood[x].get(y) || comp[x].charAt(y) != 'G'){
-            return 0;
-        }
-        int d = 0;
-        int sum = 1;
-        while (thisCrossExsists(d,x,y,comp,noGood)){
-            sum = 1+d*4;
-            d++;
-        }
-        //System.out.println("sum for " + x + " " + y + " is " + sum);
-        return sum;
-    }
-    boolean thisCrossExsists(int d, int x, int y, String[] comp, BitSet[] noGood){
-        if(!r.indexInArray(comp,x+d,y) || !(comp[x+d].charAt(y) == 'G') || noGood[x+d].get(y)){
-            return false;
-        }
-        if(!r.indexInArray(comp,x-d,y) || !(comp[x-d].charAt(y) == 'G') || noGood[x-d].get(y)){
-            return false;
-        }
-        if(!r.indexInArray(comp,x,y+d) || !(comp[x].charAt(y+d) == 'G') || noGood[x].get(y+d)){
-            return false;
-        }
-        if(!r.indexInArray(comp,x,y-d) || !(comp[x].charAt(y-d) == 'G') || noGood[x].get(y - d)){
-            return false;
-        }
-        return true;
-    }
-    void expand(BitSet[] set, int x, int y, int d){
-        set[x + d].set(y);
-        set[x - d].set(y);
-        set[x].set(y-d);
-        set[x].set(y+d);
-    }
-    boolean thisCrossExsists(int d, int x, int y, String[] comp){
-        if(!r.indexInArray(comp,x+d,y) || !(comp[x+d].charAt(y) == 'G')){
-            return false;
-        }
-        if(!r.indexInArray(comp,x-d,y) || !(comp[x-d].charAt(y) == 'G')){
-            return false;
-        }
-        if(!r.indexInArray(comp,x,y+d) || !(comp[x].charAt(y+d) == 'G')){
-            return false;
-        }
-        if(!r.indexInArray(comp,x,y-d) || !(comp[x].charAt(y-d) == 'G')){
-            return false;
-        }
-        return true;
-    }
-
-    String[] convert(String[] pic){
-        String[] newPic = new String[pic.length];
-        for (int i = 0; i < pic.length; i++) {
-            String oldCur = pic[i];
-            String cur = "";
-            for (int j = 0; j < oldCur.length(); j++) {
-                if(shouldSet(i,j,pic)){
-                    cur+=".";
-                }else{
-                    cur += "O";
-                }
-            }
-            newPic[i] = cur;
-        }
-        return newPic;
-    }
-    boolean shouldSet(int x, int y, String[] pic){
+    int area(int[][]ray, int x, int y){
+        int sum = 0;
+        int curVal = ray[x][y];
         for (int i = 0; i < 8; i+=2) {
-            int newX = x + m.directions[i][0];
-            int newY = y + m.directions[i][1];
-            if(r.indexInArray(pic,newX,newY) && pic[newX].charAt(newY) == 'O'){
-                return true;
+            int[] dir = m.directions[i];
+            int nX = x + dir[0];
+            int nY = y + dir[1];
+            if(r.indexInArray(ray,nX,nY)){
+                int dif = ray[nX][nY] - curVal;
+                if(dif > 0){
+                    sum += dif;
+                }
+            } else {
+                sum += curVal;
             }
         }
-        if(pic[x].charAt(y) == 'O'){
-            return true;
-        }
-        return false;
+        return sum;
     }
 }
 class byLength implements Comparator<String>{
@@ -362,6 +266,15 @@ class Ray {
         }
         return false;
     }
+    public boolean indexInArray(int [][] a, int x, int y){
+        if(0 <= x && x < a.length){
+            int[] temp = a[x];
+            if (0 <= y && y < temp.length){
+                return true;
+            }
+        }
+        return false;
+    }
     public void printArray(char[][] ray){
         int height = ray.length;
         for (int i = 0; i < height; i++) {
@@ -392,6 +305,13 @@ class Ray {
         int[] array = new int[size];
         for (int i = 0; i < size; i++) {
             array[i] = in.nextInt();
+        }
+        return array;
+    }
+    public int[][] populateIntArray(Reader in, int x, int y) throws IOException{
+        int[][] array = new int[x][];
+        for (int i = 0; i < x; i++) {
+            array[i] = populateIntArray(in,y);
         }
         return array;
     }

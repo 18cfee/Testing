@@ -1,3 +1,5 @@
+import javafx.util.converter.BigDecimalStringConverter;
+
 import java.io.*;
 import java.lang.reflect.Array;
 import java.sql.Struct;
@@ -36,39 +38,100 @@ class Solver{
         String[] pars = in.readLine().split(" ");
         int row = Integer.parseInt(pars[0]);
         int c = Integer.parseInt(pars[1]);
-        int n = Integer.parseInt(pars[2]);
-        String[] pic = new String[row];
+        String[] comp = new String[row];
         for (int i = 0; i < row; i++) {
-            pic[i] = in.readLine();
+            comp[i] = in.readLine();
         }
-        if(n == 0 || n == 1){
-            r.printArray(pic);
-        } else if(n%2 == 0){
-            for (int i = 0; i < row; i++) {
-                for (int j = 0; j < c; j++) {
-                    System.out.print("O");
-                }
-                System.out.println();
+        int max = 0;
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < c; j++) {
+                max = Math.max(max,compute(i,j,comp));
             }
-        } else {
-            String[] newPic = new String[row];
-            for (int i = 0; i < row; i++) {
-                String cur = "";
-                for (int j = 0; j < c; j++) {
-                    if(shouldSet(i,j,pic)){
-                        cur+=".";
-                    }else{
-                        cur += "O";
-                    }
-                }
-                newPic[i] = cur;
-            }
-            if(n%4 == 1){
-                newPic = convert(newPic);
-            }
-            r.printArray(newPic);
         }
+        System.out.println(max);
     }
+    int compute(int i, int j, String[] comp){
+        BitSet[] noGood = new BitSet[comp.length];
+        for (int l = 0; l < comp.length; l++) {
+            noGood[l] = new BitSet(comp[0].length());
+        }
+        int d = 0;
+        int max = 0;
+        while(thisCrossExsists(d,i,j,comp)){
+            int size = 1+d*4;
+            //System.out.println(i + " " + j);
+            //System.out.println("size " + size);
+            expand(noGood,i,j,d);
+            int maxSize = maxCross(i,j,comp,noGood);
+            //System.out.println("max size: " + maxSize);
+            max = Math.max(max,maxSize*size);
+            d++;
+        }
+        return max;
+    }
+    int maxCross(int x, int y, String[] comp, BitSet[] noGood){
+        int max = 0;
+        // first partial row
+        for (int i = y + 1; i < comp[0].length(); i++) {
+            max = Math.max(max,calcLargest(x,i,comp,noGood));
+        }
+        for (int i = x; i < comp.length; i++) {
+            for (int j = 0; j < comp[0].length(); j++) {
+                max = Math.max(max,calcLargest(i,j,comp,noGood));
+            }
+        }
+        return max;
+    }
+    int calcLargest(int x, int y, String[] comp, BitSet[] noGood){
+        if(noGood[x].get(y) || comp[x].charAt(y) != 'G'){
+            return 0;
+        }
+        int d = 0;
+        int sum = 1;
+        while (thisCrossExsists(d,x,y,comp,noGood)){
+            sum = 1+d*4;
+            d++;
+        }
+        //System.out.println("sum for " + x + " " + y + " is " + sum);
+        return sum;
+    }
+    boolean thisCrossExsists(int d, int x, int y, String[] comp, BitSet[] noGood){
+        if(!r.indexInArray(comp,x+d,y) || !(comp[x+d].charAt(y) == 'G') || noGood[x+d].get(y)){
+            return false;
+        }
+        if(!r.indexInArray(comp,x-d,y) || !(comp[x-d].charAt(y) == 'G') || noGood[x-d].get(y)){
+            return false;
+        }
+        if(!r.indexInArray(comp,x,y+d) || !(comp[x].charAt(y+d) == 'G') || noGood[x].get(y+d)){
+            return false;
+        }
+        if(!r.indexInArray(comp,x,y-d) || !(comp[x].charAt(y-d) == 'G') || noGood[x].get(y - d)){
+            return false;
+        }
+        return true;
+    }
+    void expand(BitSet[] set, int x, int y, int d){
+        set[x + d].set(y);
+        set[x - d].set(y);
+        set[x].set(y-d);
+        set[x].set(y+d);
+    }
+    boolean thisCrossExsists(int d, int x, int y, String[] comp){
+        if(!r.indexInArray(comp,x+d,y) || !(comp[x+d].charAt(y) == 'G')){
+            return false;
+        }
+        if(!r.indexInArray(comp,x-d,y) || !(comp[x-d].charAt(y) == 'G')){
+            return false;
+        }
+        if(!r.indexInArray(comp,x,y+d) || !(comp[x].charAt(y+d) == 'G')){
+            return false;
+        }
+        if(!r.indexInArray(comp,x,y-d) || !(comp[x].charAt(y-d) == 'G')){
+            return false;
+        }
+        return true;
+    }
+
     String[] convert(String[] pic){
         String[] newPic = new String[pic.length];
         for (int i = 0; i < pic.length; i++) {

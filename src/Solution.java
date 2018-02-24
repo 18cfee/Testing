@@ -48,6 +48,7 @@ class Solver{
                 max = Math.max(max,compute(i,j,comp));
             }
         }
+        //test
         System.out.println(max);
     }
     int compute(int i, int j, String[] comp){

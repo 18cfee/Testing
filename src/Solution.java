@@ -35,20 +35,32 @@ class Solver{
     private long[][] box;
     int k;
     public void solve() throws IOException{
-        int t = in.nextInt();
+        int t = 1;
         for (int i = 0; i < t; i++) {
             int sum = 0;
             int n = in.nextInt();
             int [] ray = r.populateIntArray(in,n);
-            for (int j = 0; j < n; j++) {
-                int cur = ray[j];
-                for (int l = j + 1; l < n; l++) {
-                    if(ray[l] < cur) sum++;
+            if(r.sorted(ray))return;
+            if(canSwap(ray)) return;
+            if(canReverse(ray)) return;
+            System.out.println("no");
+        }
+    }
+    boolean canSwap(int[] ray){
+        int indexOne = -1;
+        int indexTwo = -1;
+        
+        int max = ray[0];
+        for (int i = 1; i < ray.length; i++) {
+            if(max > ray[i]) {
+                if(sortedSoFar) {
+                    sortedSoFar = false;
+                } else {
+
                 }
+            } else {
+                max = ray[i];
             }
-            String ans = "YES";
-            if(sum%2 == 1)ans = "NO";
-            System.out.println(ans);
         }
     }
 }
@@ -218,6 +230,14 @@ class CarlNumbers {
 }
 class Ray {
     Ray(){}
+    public boolean sorted(int[] a){
+        int cur = a[0];
+        for (int i = 1; i < a.length; i++) {
+            if(a[i] < cur) return false;
+            cur = a[i];
+        }
+        return true;
+    }
     public boolean indexInArray(int [] a, int index){
         return (0 <= index && index < a.length);
     }

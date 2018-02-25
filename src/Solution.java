@@ -35,36 +35,21 @@ class Solver{
     private long[][] box;
     int k;
     public void solve() throws IOException{
-        String[] pars = in.readLine().split(" ");
-        int row = Integer.parseInt(pars[0]);
-        int c = Integer.parseInt(pars[1]);
-        int[][] ray = r.populateIntArray(in,row,c);
-        long area = 0;
-        for (int i = 0; i < row; i++) {
-            for (int j = 0; j < c; j++) {
-                area += area(ray,i,j);
-            }
-        }
-        area += row*c*2;
-        System.out.println(area);
-    }
-    int area(int[][]ray, int x, int y){
-        int sum = 0;
-        int curVal = ray[x][y];
-        for (int i = 0; i < 8; i+=2) {
-            int[] dir = m.directions[i];
-            int nX = x + dir[0];
-            int nY = y + dir[1];
-            if(r.indexInArray(ray,nX,nY)){
-                int dif = ray[nX][nY] - curVal;
-                if(dif > 0){
-                    sum += dif;
+        int t = in.nextInt();
+        for (int i = 0; i < t; i++) {
+            int sum = 0;
+            int n = in.nextInt();
+            int [] ray = r.populateIntArray(in,n);
+            for (int j = 0; j < n; j++) {
+                int cur = ray[j];
+                for (int l = j + 1; l < n; l++) {
+                    if(ray[l] < cur) sum++;
                 }
-            } else {
-                sum += curVal;
             }
+            String ans = "YES";
+            if(sum%2 == 1)ans = "NO";
+            System.out.println(ans);
         }
-        return sum;
     }
 }
 class byLength implements Comparator<String>{

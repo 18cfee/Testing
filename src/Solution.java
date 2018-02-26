@@ -35,82 +35,53 @@ class Solver{
     private long[][] box;
     int k;
     public void solve() throws IOException{
-        int t = 1;
+        int t = Integer.parseInt(in.readLine());
         for (int i = 0; i < t; i++) {
-            int sum = 0;
-            int n = in.nextInt();
-            int [] ray = r.populateIntArray(in,n);
-            if(r.sorted(ray))return;
-            if(canSwap(ray.clone())) return;
-            if(canReverse(ray)) return;
-            System.out.println("no");
+            String cur = in.readLine();
+            System.out.println(anCount(cur));
         }
     }
-    boolean canReverse(int[] ray){
-        int indexOne = -1;
-        int indexTwo = -1;
-
-        int max = ray[0];
-        for (int i = 1; i < ray.length; i++) {
-            if(max > ray[i]) {
-                indexOne = i;
-                break;
-            } else {
-                max = ray[i];
+    int anCount(String cur){
+        int sum = 0;
+        for (int i = 1; i < cur.length(); i++) {
+            ArrayList<Integer[]> prev = new ArrayList<>(100);
+            for (int j = i; j <= cur.length(); j++) {
+                String c = cur.substring(j-i,j);
+                Integer[] rep = getRep(c);
+                sum += match(prev,rep);
+                prev.add(rep);
             }
         }
-        int min = ray[ray.length -1];
-        for (int i = ray.length - 1; i >= 0; i--) {
-            if(min < ray[i]) {
-                indexTwo = i;
-                break;
-            } else {
-                min = ray[i];
-            }
-        }
-        if(indexOne == -1 || indexTwo == -1) return false;
-        r.reverse(ray, --indexOne, ++indexTwo);
-        if(r.sorted(ray)){
-            System.out.println("yes");
-            System.out.println("reverse " + (indexOne+1) + " " + (indexTwo+1));
-            return true;
-        } else {
-            return false;
-        }
+        return sum;
     }
-    boolean canSwap(int[] ray){
-        int indexOne = -1;
-        int indexTwo = -1;
-        
-        int max = ray[0];
-        for (int i = 1; i < ray.length; i++) {
-            if(max > ray[i]) {
-                indexOne = i - 1;
-                break;
-            } else {
-                max = ray[i];
+    int match(ArrayList<Integer[]> list, Integer[] curRep){
+        int count = 0;
+        for (int i = 0; i < list.size(); i++) {
+            Integer[] cur = list.get(i);
+            if(eq(cur,curRep)){
+                count++;
             }
         }
-        int min = ray[ray.length -1];
-        for (int i = ray.length - 1; i >= 0; i--) {
-            if(min < ray[i]) {
-                indexTwo = i + 1;
-                break;
-            } else {
-                min = ray[i];
+        return count;
+    }
+    boolean eq(Integer[] a, Integer[] b){
+        for (int i = 0; i < a.length; i++) {
+            if(a[i] != b[i]){
+                return false;
             }
         }
-        if(indexOne == -1 || indexTwo == -1) return false;
-        int temp = ray[indexOne];
-        ray[indexOne] = ray[indexTwo];
-        ray[indexTwo] = temp;
-        if(r.sorted(ray)){
-            System.out.println("yes");
-            System.out.println("swap " + (indexOne + 1) + " " + (indexTwo+1));
-            return true;
-        } else {
-            return false;
+        return true;
+    }
+    Integer[] getRep(String c){
+        Integer[] ray = new Integer[26];
+        for (int i = 0; i < 26; i++) {
+            ray[i] = new Integer(0);
         }
+        for (int i = 0; i < c.length(); i++) {
+            int cur = c.charAt(i) - 'a';
+            ray[cur]++;
+        }
+        return ray;
     }
 }
 class byLength implements Comparator<String>{

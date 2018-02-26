@@ -41,9 +41,41 @@ class Solver{
             int n = in.nextInt();
             int [] ray = r.populateIntArray(in,n);
             if(r.sorted(ray))return;
-            if(canSwap(ray)) return;
+            if(canSwap(ray.clone())) return;
             if(canReverse(ray)) return;
             System.out.println("no");
+        }
+    }
+    boolean canReverse(int[] ray){
+        int indexOne = -1;
+        int indexTwo = -1;
+
+        int max = ray[0];
+        for (int i = 1; i < ray.length; i++) {
+            if(max > ray[i]) {
+                indexOne = i;
+                break;
+            } else {
+                max = ray[i];
+            }
+        }
+        int min = ray[ray.length -1];
+        for (int i = ray.length - 1; i >= 0; i--) {
+            if(min < ray[i]) {
+                indexTwo = i;
+                break;
+            } else {
+                min = ray[i];
+            }
+        }
+        if(indexOne == -1 || indexTwo == -1) return false;
+        r.reverse(ray, --indexOne, ++indexTwo);
+        if(r.sorted(ray)){
+            System.out.println("yes");
+            System.out.println("reverse " + (indexOne+1) + " " + (indexTwo+1));
+            return true;
+        } else {
+            return false;
         }
     }
     boolean canSwap(int[] ray){
@@ -53,14 +85,31 @@ class Solver{
         int max = ray[0];
         for (int i = 1; i < ray.length; i++) {
             if(max > ray[i]) {
-                if(sortedSoFar) {
-                    sortedSoFar = false;
-                } else {
-
-                }
+                indexOne = i - 1;
+                break;
             } else {
                 max = ray[i];
             }
+        }
+        int min = ray[ray.length -1];
+        for (int i = ray.length - 1; i >= 0; i--) {
+            if(min < ray[i]) {
+                indexTwo = i + 1;
+                break;
+            } else {
+                min = ray[i];
+            }
+        }
+        if(indexOne == -1 || indexTwo == -1) return false;
+        int temp = ray[indexOne];
+        ray[indexOne] = ray[indexTwo];
+        ray[indexTwo] = temp;
+        if(r.sorted(ray)){
+            System.out.println("yes");
+            System.out.println("swap " + (indexOne + 1) + " " + (indexTwo+1));
+            return true;
+        } else {
+            return false;
         }
     }
 }
@@ -230,6 +279,16 @@ class CarlNumbers {
 }
 class Ray {
     Ray(){}
+    public void reverse(int[] a, int indexOne, int indexTwo){
+        for (int i = 0; i <= (indexTwo - indexOne)/2 ; i++) {
+            swap(a,i + indexOne,indexTwo - i);
+        }
+    }
+    public void swap(int[] a, int indexOne, int indexTwo){
+        int temp = a[indexOne];
+        a[indexOne] = a[indexTwo];
+        a[indexTwo] = temp;
+    }
     public boolean sorted(int[] a){
         int cur = a[0];
         for (int i = 1; i < a.length; i++) {

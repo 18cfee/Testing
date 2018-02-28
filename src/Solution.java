@@ -1,8 +1,4 @@
-import javafx.util.converter.BigDecimalStringConverter;
-
 import java.io.*;
-import java.lang.reflect.Array;
-import java.sql.Struct;
 import java.util.*;
 
 public class Solution {
@@ -18,7 +14,7 @@ public class Solution {
         Reader in = new Reader(fileName);
         Solver sol = new Solver(in);
         int t = 1;
-        //t = Integer.parseInt(in.readLine());
+        t = Integer.parseInt(in.readLine());
         for (int i = 0; i < t; i++) {
             sol.solve();
         }
@@ -34,25 +30,37 @@ class Solver{
         d = new DataStructures();
         sLi = new CarlString();
         m = new CarlNumbers();
-        r = new Ray();
+        r = new Ray(in);
         g = new Graph();
     }
     private long[][] box;
     int k;
+    //long[] prev = new long[1001];
     public void solve() throws IOException{
-        String one = in.readLine();
-        String two = in.readLine();
-        int[][] ray = new int[one.length()+1][two.length()+1];
-        for (int i = 1; i <= one.length(); i++) {
-            for (int j = 1; j <= two.length(); j++) {
-                if(one.charAt(i-1) == two.charAt(j-1)){
-                    ray[i][j] = ray[i -1][j -1] +  1;
-                } else {
-                    ray[i][j] = Math.max(ray[i-1][j],ray[i][j - 1]);
-                }
+        String[] input = in.readLine().split(" ");
+        long n = Long.parseLong(input[0]);
+        int s = Integer.parseInt(input[1]);
+        HashSet<Long> set  = new HashSet<>();
+        for (int i = 0; i < s; i++) {
+            set.add(in.nextLong());
+        }
+        long splits = splits(n,set,0);
+        System.out.println(splits);
+    }
+    long splits(long n, long[] set, int index){
+        long maxSplits = 0;
+//        if(prev[index] != 0){
+//            return prev[index];
+//        }
+        for (int i = index; i < set.length; i++) {
+            long cur = set[i];
+            if(n%cur == 0 && cur != n){
+                long numGroups = n/cur;
+                maxSplits = Math.max(maxSplits,1+numGroups*splits(cur,set,i + 1));
             }
         }
-        System.out.println(ray[one.length()][two.length()]);
+        //prev[index] = maxSplits;
+        return maxSplits;
     }
 }
 class byLength implements Comparator<String>{
@@ -249,14 +257,35 @@ class CarlNumbers {
     }
 }
 class Ray {
-    Ray(){}
+    private Reader in;
+    Ray(Reader in){
+        this.in = in;
+    }
+    public void reverse(int[] a){
+        int lastIndex = a.length - 1;
+        reverse(a,0,lastIndex);
+    }
+    public void reverse(long[] a){
+        int lastIndex = a.length - 1;
+        reverse(a,0,lastIndex);
+    }
     public void reverse(int[] a, int indexOne, int indexTwo){
+        for (int i = 0; i <= (indexTwo - indexOne)/2 ; i++) {
+            swap(a,i + indexOne,indexTwo - i);
+        }
+    }
+    public void reverse(long[] a, int indexOne, int indexTwo){
         for (int i = 0; i <= (indexTwo - indexOne)/2 ; i++) {
             swap(a,i + indexOne,indexTwo - i);
         }
     }
     public void swap(int[] a, int indexOne, int indexTwo){
         int temp = a[indexOne];
+        a[indexOne] = a[indexTwo];
+        a[indexTwo] = temp;
+    }
+    public void swap(long[] a, int indexOne, int indexTwo){
+        long temp = a[indexOne];
         a[indexOne] = a[indexTwo];
         a[indexTwo] = temp;
     }
@@ -338,6 +367,13 @@ class Ray {
     }
     public int[] populateIntArray(Reader in, int size) throws IOException{
         int[] array = new int[size];
+        for (int i = 0; i < size; i++) {
+            array[i] = in.nextInt();
+        }
+        return array;
+    }
+    public long[] populateLongArray(int size) throws IOException{
+        long[] array = new long[size];
         for (int i = 0; i < size; i++) {
             array[i] = in.nextInt();
         }

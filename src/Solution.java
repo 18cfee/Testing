@@ -35,7 +35,7 @@ class Solver{
     }
     private long[][] box;
     int k;
-    //long[] prev = new long[1001];
+    HashSet<HashSet<Long>> prev = new HashSet<>();
     public void solve() throws IOException{
         String[] input = in.readLine().split(" ");
         long n = Long.parseLong(input[0]);
@@ -44,20 +44,24 @@ class Solver{
         for (int i = 0; i < s; i++) {
             set.add(in.nextLong());
         }
-        long splits = splits(n,set,0);
+        long splits = splits(n,set);
         System.out.println(splits);
     }
-    long splits(long n, long[] set, int index){
+    long splits(long n, HashSet<Long> set){
+        HashSet<Long> removal = new HashSet<>(set.size());
+        for(Long num : set){
+            if(n%num != 0 || num == n) removal.add(num);
+        }
+        set.removeAll(removal);
         long maxSplits = 0;
 //        if(prev[index] != 0){
 //            return prev[index];
 //        }
-        for (int i = index; i < set.length; i++) {
-            long cur = set[i];
-            if(n%cur == 0 && cur != n){
-                long numGroups = n/cur;
-                maxSplits = Math.max(maxSplits,1+numGroups*splits(cur,set,i + 1));
-            }
+        for(Long cur : set){
+            long numGroups = n/cur;
+            HashSet<Long> clone = (HashSet<Long>) set.clone();
+            clone.remove(cur);
+            maxSplits = Math.max(maxSplits,1+numGroups*splits(cur,clone));
         }
         //prev[index] = maxSplits;
         return maxSplits;

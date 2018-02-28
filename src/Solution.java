@@ -35,7 +35,7 @@ class Solver{
     }
     private long[][] box;
     int k;
-    HashSet<HashSet<Long>> prev = new HashSet<>();
+    HashMap<HashSet<Long>,Long> prev = new HashMap<>();
     public void solve() throws IOException{
         String[] input = in.readLine().split(" ");
         long n = Long.parseLong(input[0]);
@@ -44,10 +44,12 @@ class Solver{
         for (int i = 0; i < s; i++) {
             set.add(in.nextLong());
         }
-        long splits = splits(n,set);
+        long splits = splits(new HashParam(n,set));
         System.out.println(splits);
     }
-    long splits(long n, HashSet<Long> set){
+    long splits(HashParam param){
+        HashSet<Long> set = param.set;
+        long n = param.n;
         HashSet<Long> removal = new HashSet<>(set.size());
         for(Long num : set){
             if(n%num != 0 || num == n) removal.add(num);
@@ -61,10 +63,22 @@ class Solver{
             long numGroups = n/cur;
             HashSet<Long> clone = (HashSet<Long>) set.clone();
             clone.remove(cur);
-            maxSplits = Math.max(maxSplits,1+numGroups*splits(cur,clone));
+            maxSplits = Math.max(maxSplits,1+numGroups*splits(new HashParam(cur,clone)));
         }
         //prev[index] = maxSplits;
         return maxSplits;
+    }
+}
+class HashParam {
+    public long n;
+    public HashSet<Long> set;
+    public HashParam(long n, HashSet<Long> set){
+        this.n = n;
+        this.set = set;
+    }
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }
 class byLength implements Comparator<String>{

@@ -17,7 +17,12 @@ public class Solution {
         String fileName = "sol.in";
         Reader in = new Reader(fileName);
         Solver sol = new Solver(in);
-        sol.solve();
+        int t = 1;
+        //t = Integer.parseInt(in.readLine());
+        for (int i = 0; i < t; i++) {
+            sol.solve();
+        }
+
         in.close();
     }
 }
@@ -35,53 +40,19 @@ class Solver{
     private long[][] box;
     int k;
     public void solve() throws IOException{
-        int t = Integer.parseInt(in.readLine());
-        for (int i = 0; i < t; i++) {
-            String cur = in.readLine();
-            System.out.println(anCount(cur));
-        }
-    }
-    int anCount(String cur){
-        int sum = 0;
-        for (int i = 1; i < cur.length(); i++) {
-            ArrayList<Integer[]> prev = new ArrayList<>(100);
-            for (int j = i; j <= cur.length(); j++) {
-                String c = cur.substring(j-i,j);
-                Integer[] rep = getRep(c);
-                sum += match(prev,rep);
-                prev.add(rep);
+        String one = in.readLine();
+        String two = in.readLine();
+        int[][] ray = new int[one.length()+1][two.length()+1];
+        for (int i = 1; i <= one.length(); i++) {
+            for (int j = 1; j <= two.length(); j++) {
+                if(one.charAt(i-1) == two.charAt(j-1)){
+                    ray[i][j] = ray[i -1][j -1] +  1;
+                } else {
+                    ray[i][j] = Math.max(ray[i-1][j],ray[i][j - 1]);
+                }
             }
         }
-        return sum;
-    }
-    int match(ArrayList<Integer[]> list, Integer[] curRep){
-        int count = 0;
-        for (int i = 0; i < list.size(); i++) {
-            Integer[] cur = list.get(i);
-            if(eq(cur,curRep)){
-                count++;
-            }
-        }
-        return count;
-    }
-    boolean eq(Integer[] a, Integer[] b){
-        for (int i = 0; i < a.length; i++) {
-            if((int)a[i] != b[i]){
-                return false;
-            }
-        }
-        return true;
-    }
-    Integer[] getRep(String c){
-        Integer[] ray = new Integer[26];
-        for (int i = 0; i < 26; i++) {
-            ray[i] = new Integer(0);
-        }
-        for (int i = 0; i < c.length(); i++) {
-            int cur = c.charAt(i) - 'a';
-            ray[cur]++;
-        }
-        return ray;
+        System.out.println(ray[one.length()][two.length()]);
     }
 }
 class byLength implements Comparator<String>{
@@ -167,6 +138,35 @@ class DataStructures{
 }
 class CarlString{
     CarlString(){}
+    int match(ArrayList<Integer[]> list, Integer[] curRep){
+        int count = 0;
+        for (int i = 0; i < list.size(); i++) {
+            Integer[] cur = list.get(i);
+            if(eq(cur,curRep)){
+                count++;
+            }
+        }
+        return count;
+    }
+    boolean eq(Integer[] a, Integer[] b){
+        for (int i = 0; i < a.length; i++) {
+            if((int)a[i] != b[i]){
+                return false;
+            }
+        }
+        return true;
+    }
+    Integer[] getRep(String c){
+        Integer[] ray = new Integer[26];
+        for (int i = 0; i < 26; i++) {
+            ray[i] = new Integer(0);
+        }
+        for (int i = 0; i < c.length(); i++) {
+            int cur = c.charAt(i) - 'a';
+            ray[cur]++;
+        }
+        return ray;
+    }
     public char[] findUniqueChars(String s){
         HashSet<Character> set = new HashSet<Character>(26);
         for (int i = 0; i < s.length(); i++) {

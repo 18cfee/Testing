@@ -35,8 +35,9 @@ class Solver{
     }
     private long[][] box;
     int k;
-    HashMap<HashParam,Long> prev = new HashMap<>();
+    HashMap<Long,Long> prev;
     public void solve() throws IOException{
+        prev = new HashMap<>();
         String[] input = in.readLine().split(" ");
         long n = Long.parseLong(input[0]);
         int s = Integer.parseInt(input[1]);
@@ -48,27 +49,23 @@ class Solver{
         System.out.println(splits);
     }
     long splits(HashParam param){
-        if(prev.containsKey(param)){
-            return prev.get(param);
-        }
         HashSet<Long> set = param.set;
         long n = param.n;
-        HashSet<Long> removal = new HashSet<>(set.size());
-        for(Long num : set){
-            if(n%num != 0 || num == n) removal.add(num);
-        }
-        set.removeAll(removal);
         long maxSplits = 0;
+        if(prev.containsKey(n)){
+            return prev.get(n);
+        }
 //        if(prev[index] != 0){
 //            return prev[index];
 //        }
         for(Long cur : set){
-            long numGroups = n/cur;
-            HashSet<Long> clone = (HashSet<Long>) set.clone();
-            maxSplits = Math.max(maxSplits,1+numGroups*splits(new HashParam(cur,clone)));
+            if(n%cur == 0 && n != cur){
+                long numGroups = n/cur;
+                maxSplits = Math.max(maxSplits,1+numGroups*splits(new HashParam(cur,set)));
+            }
         }
         //prev[index] = maxSplits;
-        prev.put(param,maxSplits);
+        prev.put(n,maxSplits);
         return maxSplits;
     }
 }

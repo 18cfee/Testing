@@ -1,4 +1,5 @@
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class Solution {
@@ -37,31 +38,15 @@ class Solver{
     int k;
     HashMap<Long,Long> prev;
     public void solve() throws IOException{
-        String[] nums = in.readLine().split(" ");
-        int n = Integer.parseInt(nums[0]);
-        int m = Integer.parseInt(nums[1]);
-        int[][] parent = new int[n + 1][3];
-        for (int i = 1; i <= n; i++) {
-            parent[i][0] = i;
+        int n = in.nextInt();
+        int k = in.nextInt();
+        int[] nums = r.populateIntArray(in,n);
+        Arrays.sort(nums);
+        int minDif = Integer.MAX_VALUE;
+        for (int i = 0; i <= n - k; i++) {
+            minDif = Math.min(minDif,nums[i + k - 1] - nums[i]);
         }
-        ArrayList<Triplet> edges = new ArrayList<>(m);
-        for (int i = 0; i < m; i++) {
-            int a = in.nextInt();
-            int b = in.nextInt();
-            int r = in.nextInt();
-            Triplet edge = new Triplet(a,b,r);
-            edges.add(edge);
-        }
-        edges.sort(new Triplet(0,0,0));
-        for (int i = 0; i < m; i++) {
-            Triplet e = edges.get(i);
-            int parent1 = g.parent(e.x,parent);
-            int parent2 = g.parent(e.y,parent);
-            g.updateParent(parent1,parent2,e.w,parent);
-        }
-        int s = in.nextInt();
-        int parentS = g.parent(s,parent);
-        System.out.println(parent[parentS][2]);
+        System.out.println(minDif);
     }
 }
 

@@ -37,56 +37,52 @@ class Solver{
     int k;
     HashMap<Long,Long> prev;
     public void solve() throws IOException{
-        prev = new HashMap<>();
-        String[] input = in.readLine().split(" ");
-        long n = Long.parseLong(input[0]);
-        int s = Integer.parseInt(input[1]);
-        HashSet<Long> set  = new HashSet<>();
-        for (int i = 0; i < s; i++) {
-            set.add(in.nextLong());
-        }
-        long splits = splits(new HashParam(n,set));
-        System.out.println(splits);
-    }
-    long splits(HashParam param){
-        HashSet<Long> set = param.set;
-        long n = param.n;
-        long maxSplits = 0;
-        if(prev.containsKey(n)){
-            return prev.get(n);
-        }
-//        if(prev[index] != 0){
-//            return prev[index];
-//        }
-        for(Long cur : set){
-            if(n%cur == 0 && n != cur){
-                long numGroups = n/cur;
-                maxSplits = Math.max(maxSplits,1+numGroups*splits(new HashParam(cur,set)));
+        String[] num = in.readLine().split(" ");
+        int len = Integer.parseInt(num[0]);
+        int moves = Integer.parseInt(num[1]);
+        char[] pal = in.readLine().toCharArray();
+        int[] discount = new int[len/2];
+        for (int i = 0; i < len/2; i++) {
+            char one = pal[i];
+            char two = pal[len - 1 - i];
+            if(one == two){
+                continue;
+            } else {
+                if(moves == 0){
+                    System.out.println(-1);
+                    return;
+                }
+                moves--;
+                discount[i] = 1;
+                if(one > two){
+                    pal[len - 1 - i] = one;
+                } else{
+                    pal[i] = two;
+                }
             }
         }
-        //prev[index] = maxSplits;
-        //prev.put(n,maxSplits);
-        return maxSplits;
+        for (int i = 0; i < len/2; i++) {
+            if(pal[i] == '9'){
+                continue;
+            } else {
+                if(moves >= 2){
+                    pal[i] = '9';
+                    pal[len - 1 - i] = '9';
+                    moves -= (2 - discount[i]);
+                } else if(moves == 1 && discount[i] == 1){
+                    pal[i] = '9';
+                    pal[len - 1 - i] = '9';
+                    moves = 0;
+                }
+            }
+        }
+        if(moves > 0 && len%2 == 1){
+            pal[len/2] = '9';
+        }
+        System.out.println(pal);;
     }
 }
-class HashParam {
-    public long n;
-    public HashSet<Long> set;
-    public HashParam(long n, HashSet<Long> set){
-        this.n = n;
-        this.set = set;
-    }
-    @Override
-    public int hashCode() {
-        return (int)n + set.hashCode();
-    }
-}
-class byLength implements Comparator<String>{
-    @Override
-    public int compare(String a, String b){
-        return b.length() - a.length();
-    }
-}
+
 
 class Trie{
     public int numInserted = 0;
@@ -645,5 +641,23 @@ class Triplet implements Comparator<Triplet>{
         }else{
             return sol;
         }
+    }
+}
+class HashParam {
+    public long n;
+    public HashSet<Long> set;
+    public HashParam(long n, HashSet<Long> set){
+        this.n = n;
+        this.set = set;
+    }
+    @Override
+    public int hashCode() {
+        return (int)n + set.hashCode();
+    }
+}
+class byLength implements Comparator<String>{
+    @Override
+    public int compare(String a, String b){
+        return b.length() - a.length();
     }
 }

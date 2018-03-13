@@ -14,7 +14,7 @@ public class Solution {
         Reader in = new Reader(fileName);
         Solver sol = new Solver(in);
         int t = 1;
-        t = Integer.parseInt(in.readLine());
+        //t = Integer.parseInt(in.readLine());
         for (int i = 0; i < t; i++) {
             sol.solve();
         }
@@ -65,7 +65,7 @@ class Solver{
             }
         }
         //prev[index] = maxSplits;
-        prev.put(n,maxSplits);
+        //prev.put(n,maxSplits);
         return maxSplits;
     }
 }

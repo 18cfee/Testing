@@ -15,7 +15,7 @@ public class Solution {
         Reader in = new Reader(fileName);
         Solver sol = new Solver(in);
         int t = 1;
-        //t = Integer.parseInt(in.readLine());
+        t = Integer.parseInt(in.readLine());
         for (int i = 0; i < t; i++) {
             sol.solve();
         }
@@ -24,13 +24,13 @@ public class Solution {
     }
 }
 class Solver{
-    Reader in; DataStructures d; CarlString sLi; CarlNumbers m; Ray r; Graph g;
+    Reader in; DataStructures d; CarlString sLi; CarlNumbers ma; Ray r; Graph g;
 
     Solver(Reader in){
         this.in = in;
         d = new DataStructures();
         sLi = new CarlString();
-        m = new CarlNumbers();
+        ma = new CarlNumbers();
         r = new Ray(in);
         g = new Graph();
     }
@@ -38,15 +38,33 @@ class Solver{
     int k;
     HashMap<Long,Long> prev;
     public void solve() throws IOException{
-        int n = in.nextInt();
-        int k = in.nextInt();
-        int[] nums = r.populateIntArray(in,n);
-        Arrays.sort(nums);
-        int minDif = Integer.MAX_VALUE;
-        for (int i = 0; i <= n - k; i++) {
-            minDif = Math.min(minDif,nums[i + k - 1] - nums[i]);
+        int n = in.nextInt() - 1;
+        int m = in.nextInt() - 1;
+        Integer[] rn = r.toIntegerRay(r.populateIntArray(in,n));
+        Integer[] rm = r.toIntegerRay(r.populateIntArray(in,m));
+        long nC = 1;
+        long mC = 1;
+        int inN = 0;
+        int inM = 0;
+        long tot = 0;
+        Arrays.sort(rn,Comparator.reverseOrder());
+        Arrays.sort(rm,Comparator.reverseOrder());
+        while(inM < m && inN < n){
+            if(rn[inN] > rm[inM]){
+                tot = (tot + mC*rn[inN++])%ma.mod;
+                nC++;
+            } else {
+                tot = (tot + nC*rm[inM++])%ma.mod;
+                mC++;
+            }
         }
-        System.out.println(minDif);
+        while(inM < m){
+            tot = (tot + nC*rm[inM++])%ma.mod;
+        }
+        while(inN < n){
+            tot = (tot + mC*rn[inN++])%ma.mod;
+        }
+        System.out.println(tot);
     }
 }
 
@@ -230,6 +248,7 @@ class CarlString{
     }
 }
 class CarlNumbers {
+    public long mod = 1000000007;
     public int[][] directions = {{0,1},{1,1},{1,0},{1,-1},{0,-1},{-1,-1},{-1,0},{-1,1}};
     public int[][] partKnight = {{-2,1},{-2,-1},{-1,-2},{1,-2}};
     CarlNumbers(){}
@@ -372,6 +391,13 @@ class Ray {
             array[i] = in.nextInt();
         }
         return array;
+    }
+    public Integer[] toIntegerRay(int[] ray){
+        Integer[] ray2 = new Integer[ray.length];
+        for (int i = 0; i < ray.length; i++) {
+            ray2[i] = ray[i];
+        }
+        return ray2;
     }
     public long[] populateLongArray(int size) throws IOException{
         long[] array = new long[size];

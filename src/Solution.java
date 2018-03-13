@@ -46,15 +46,27 @@ class Solver{
             dis[i] = -1;
             dik[i] = new ArrayList<>();
         }
+        int[][] map = new int[n+1][n+1];
         for (int i = 0; i < m; i++) {
             String[] edge = in.readLine().split(" ");
             int a = Integer.parseInt(edge[0]);
             int b = Integer.parseInt(edge[1]);
             int len = Integer.parseInt(edge[2]);
-            Integer[] e1 = {b,len};
-            dik[a].add(e1);
-            Integer[] e2 = {a,len};
-            dik[b].add(e2);
+            if(map[a][b] != 0){
+                len = Math.min(len,map[a][b]);
+            }
+            map[a][b] = len;
+            map[b][a] = len;
+        }
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= n; j++) {
+                int len = map[i][j];
+                if(len == 0) continue;
+                Integer[] e1 = {i,len};
+                dik[j].add(e1);
+                Integer[] e2 = {j,len};
+                dik[i].add(e2);
+            }
         }
         int s = Integer.parseInt(in.readLine());
         BitSet visited = new BitSet(n + 1);

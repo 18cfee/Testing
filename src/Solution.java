@@ -40,9 +40,28 @@ class Solver{
         String[] nums = in.readLine().split(" ");
         int n = Integer.parseInt(nums[0]);
         int m = Integer.parseInt(nums[1]);
-        for (int i = 0; i < m; i++) {
-            
+        int[][] parent = new int[n + 1][3];
+        for (int i = 1; i <= n; i++) {
+            parent[i][0] = i;
         }
+        ArrayList<Triplet> edges = new ArrayList<>(m);
+        for (int i = 0; i < m; i++) {
+            int a = in.nextInt();
+            int b = in.nextInt();
+            int r = in.nextInt();
+            Triplet edge = new Triplet(a,b,r);
+            edges.add(edge);
+        }
+        edges.sort(new Triplet(0,0,0));
+        for (int i = 0; i < m; i++) {
+            Triplet e = edges.get(i);
+            int parent1 = g.parent(e.x,parent);
+            int parent2 = g.parent(e.y,parent);
+            g.updateParent(parent1,parent2,e.w,parent);
+        }
+        int s = in.nextInt();
+        int parentS = g.parent(s,parent);
+        System.out.println(parent[parentS][2]);
     }
 }
 
@@ -78,7 +97,27 @@ class Trie{
 class Graph{
     Graph(){}
     // effecient set update
+    void updateParent(int a, int b, int eW, int[][] ray){
+        if(a == b) return;
+        int aS = ray[a][1];
+        int bS = ray[b][1];
+        int aW = ray[a][2];
+        int bW = ray[b][2];
+        eW += (aW + bW);
+        if (aS == bS){
+            ray[a][1]++;
+            ray[a][2] = eW;
+            ray[b][0] = a;
+        } else if (aS > bS){
+            ray[b][0] = a;
+            ray[a][2] = eW;
+        } else {
+            ray[a][0] = b;
+            ray[b][2] = eW;
+        }
+    }
     void updateParent(int a, int b, int[][] ray){
+        if(a == b) return;
         int aS = ray[a][1];
         int bS = ray[b][1];
         if (aS == bS){

@@ -14,7 +14,7 @@ public class Solution {
         Reader in = new Reader(fileName);
         Solver sol = new Solver(in);
         int t = 1;
-        //t = Integer.parseInt(in.readLine());
+        t = Integer.parseInt(in.readLine());
         for (int i = 0; i < t; i++) {
             sol.solve();
         }
@@ -37,49 +37,58 @@ class Solver{
     int k;
     HashMap<Long,Long> prev;
     public void solve() throws IOException{
-        String[] num = in.readLine().split(" ");
-        int len = Integer.parseInt(num[0]);
-        int moves = Integer.parseInt(num[1]);
-        char[] pal = in.readLine().toCharArray();
-        int[] discount = new int[len/2];
-        for (int i = 0; i < len/2; i++) {
-            char one = pal[i];
-            char two = pal[len - 1 - i];
-            if(one == two){
+        String[] nums = in.readLine().split(" ");
+        int n = Integer.parseInt(nums[0]);
+        int m = Integer.parseInt(nums[1]);
+        ArrayList<Integer[]>[] dik = new ArrayList[n+1];
+        int[] dis = new int[n + 1];
+        for (int i = 0; i <= n; i++) {
+            dis[i] = -1;
+            dik[i] = new ArrayList<>();
+        }
+        for (int i = 0; i < m; i++) {
+            String[] edge = in.readLine().split(" ");
+            int a = Integer.parseInt(edge[0]);
+            int b = Integer.parseInt(edge[1]);
+            int len = Integer.parseInt(edge[2]);
+            Integer[] e1 = {b,len};
+            dik[a].add(e1);
+            Integer[] e2 = {a,len};
+            dik[b].add(e2);
+        }
+        int s = Integer.parseInt(in.readLine());
+        BitSet visited = new BitSet(n + 1);
+        TupleC first = new TupleC();
+        first.x = s;
+        first.y = 0;
+        PriorityQueue<TupleC> toCheck = new PriorityQueue<>();
+        toCheck.add(first);
+        while(!toCheck.isEmpty()){
+            TupleC cur = toCheck.poll();
+            int curDis = cur.y;
+            int curNode = cur.x;
+            if(visited.get(curNode)){
                 continue;
-            } else {
-                if(moves == 0){
-                    System.out.println(-1);
-                    return;
-                }
-                moves--;
-                discount[i] = 1;
-                if(one > two){
-                    pal[len - 1 - i] = one;
-                } else{
-                    pal[i] = two;
+            }
+            visited.set(curNode);
+            ArrayList<Integer[]> neighbors = dik[curNode];
+            for (Integer[] nei: neighbors) {
+                int curId = nei[0];
+                if(!visited.get(nei[0]) && (dis[curId] == -1 || dis[curId] > nei[1] + curDis)){
+                    TupleC tup  = new TupleC();
+                    tup.x = nei[0];
+                    tup.y = nei[1] + curDis;
+                    toCheck.add(tup);
+                    dis[curId] = nei[1] + curDis;
                 }
             }
         }
-        for (int i = 0; i < len/2; i++) {
-            if(pal[i] == '9'){
-                continue;
-            } else {
-                if(moves >= 2){
-                    pal[i] = '9';
-                    pal[len - 1 - i] = '9';
-                    moves -= (2 - discount[i]);
-                } else if(moves == 1 && discount[i] == 1){
-                    pal[i] = '9';
-                    pal[len - 1 - i] = '9';
-                    moves = 0;
-                }
+        for (int i = 1; i <= n; i++) {
+            if(i != s) {
+                System.out.print(dis[i] + " ");
             }
         }
-        if(moves > 0 && len%2 == 1){
-            pal[len/2] = '9';
-        }
-        System.out.println(pal);;
+        System.out.println();
     }
 }
 
@@ -454,6 +463,15 @@ class Tuple implements Comparator<Tuple>{
     @Override
     public int compare(Tuple a, Tuple b){
         return a.y - b.y;
+    }
+}
+
+class TupleC implements Comparable{
+    public int x = 0;
+    public int y = 0;
+    public int compareTo(Object tup2){
+        TupleC tup = (TupleC) tup2;
+        return this.y - tup.y;
     }
 }
 class Reader {

@@ -15,7 +15,7 @@ public class Solution {
         Reader in = new Reader(fileName);
         Solver sol = new Solver(in);
         int t = 1;
-        t = Integer.parseInt(in.readLine());
+        //t = Integer.parseInt(in.readLine());
         for (int i = 0; i < t; i++) {
             sol.solve();
         }
@@ -38,33 +38,14 @@ class Solver{
     int k;
     HashMap<Long,Long> prev;
     public void solve() throws IOException{
-        int n = in.nextInt() - 1;
-        int m = in.nextInt() - 1;
-        Integer[] rn = r.toIntegerRay(r.populateIntArray(in,n));
-        Integer[] rm = r.toIntegerRay(r.populateIntArray(in,m));
-        long nC = 1;
-        long mC = 1;
-        int inN = 0;
-        int inM = 0;
-        long tot = 0;
-        Arrays.sort(rn,Comparator.reverseOrder());
-        Arrays.sort(rm,Comparator.reverseOrder());
-        while(inM < m && inN < n){
-            if(rn[inN] > rm[inM]){
-                tot = (tot + mC*rn[inN++])%ma.mod;
-                nC++;
-            } else {
-                tot = (tot + nC*rm[inM++])%ma.mod;
-                mC++;
-            }
+        int n = in.nextInt();
+        int[] ray = r.populateIntArray(in,n);
+        r.reverse(ray);
+        long curE = (long)Math.ceil((float)ray[0]/2);
+        for (int i = 1; i < n; i++) {
+            curE = (long)Math.ceil(((float)ray[i] + curE)/2);
         }
-        while(inM < m){
-            tot = (tot + nC*rm[inM++])%ma.mod;
-        }
-        while(inN < n){
-            tot = (tot + mC*rn[inN++])%ma.mod;
-        }
-        System.out.println(tot);
+        System.out.println(curE);
     }
 }
 

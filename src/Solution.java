@@ -14,7 +14,7 @@ public class Solution {
         Reader in = new Reader(fileName);
         Solver sol = new Solver(in);
         int t = 1;
-        t = Integer.parseInt(in.readLine());
+        //t = Integer.parseInt(in.readLine());
         for (int i = 0; i < t; i++) {
             sol.solve();
         }
@@ -40,67 +40,9 @@ class Solver{
         String[] nums = in.readLine().split(" ");
         int n = Integer.parseInt(nums[0]);
         int m = Integer.parseInt(nums[1]);
-        ArrayList<Integer[]>[] dik = new ArrayList[n+1];
-        int[] dis = new int[n + 1];
-        for (int i = 0; i <= n; i++) {
-            dis[i] = -1;
-            dik[i] = new ArrayList<>();
-        }
-        int[][] map = new int[n+1][n+1];
         for (int i = 0; i < m; i++) {
-            String[] edge = in.readLine().split(" ");
-            int a = Integer.parseInt(edge[0]);
-            int b = Integer.parseInt(edge[1]);
-            int len = Integer.parseInt(edge[2]);
-            if(map[a][b] != 0){
-                len = Math.min(len,map[a][b]);
-            }
-            map[a][b] = len;
-            map[b][a] = len;
+            
         }
-        for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= n; j++) {
-                int len = map[i][j];
-                if(len == 0) continue;
-                Integer[] e1 = {i,len};
-                dik[j].add(e1);
-                Integer[] e2 = {j,len};
-                dik[i].add(e2);
-            }
-        }
-        int s = Integer.parseInt(in.readLine());
-        BitSet visited = new BitSet(n + 1);
-        TupleC first = new TupleC();
-        first.x = s;
-        first.y = 0;
-        PriorityQueue<TupleC> toCheck = new PriorityQueue<>();
-        toCheck.add(first);
-        while(!toCheck.isEmpty()){
-            TupleC cur = toCheck.poll();
-            int curDis = cur.y;
-            int curNode = cur.x;
-            if(visited.get(curNode)){
-                continue;
-            }
-            visited.set(curNode);
-            ArrayList<Integer[]> neighbors = dik[curNode];
-            for (Integer[] nei: neighbors) {
-                int curId = nei[0];
-                if(!visited.get(nei[0]) && (dis[curId] == -1 || dis[curId] > nei[1] + curDis)){
-                    TupleC tup  = new TupleC();
-                    tup.x = nei[0];
-                    tup.y = nei[1] + curDis;
-                    toCheck.add(tup);
-                    dis[curId] = nei[1] + curDis;
-                }
-            }
-        }
-        for (int i = 1; i <= n; i++) {
-            if(i != s) {
-                System.out.print(dis[i] + " ");
-            }
-        }
-        System.out.println();
     }
 }
 

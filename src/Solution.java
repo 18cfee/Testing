@@ -40,12 +40,52 @@ class Solver{
     public void solve() throws IOException{
         int n = in.nextInt();
         int[] ray = r.populateIntArray(in,n);
-        r.reverse(ray);
-        long curE = (long)Math.ceil((float)ray[0]/2);
-        for (int i = 1; i < n; i++) {
-            curE = (long)Math.ceil(((float)ray[i] + curE)/2);
+        Arrays.sort(ray);
+        int p = in.nextInt();
+        int q = in.nextInt();
+        int index = 0;
+        int max;
+        int indexMax = p;
+        while(ray[index] < p){
+            index++;
         }
-        System.out.println(curE);
+        // first number
+        if(index == 0){
+            max = ray[index] - p;
+        } else {
+            max = Math.min(ray[index] - p, p - ray[index - 1]);
+        }
+        //medians
+        for (int i = 0; i < n - 1; i++) {
+            int first = ray[i];
+            int last = ray[i+1];
+            int dist = (last - first)/2;
+            int nIndex = first + dist;
+            if(dist > max && p <= nIndex && nIndex <= q){
+                max = dist;
+                indexMax = nIndex;
+            }
+        }
+
+        // last number
+        index = n - 1;
+        while(ray[index] > q){
+            index--;
+        }
+        if(index == n - 1){
+            int curDis = q - ray[index];
+            if(curDis > max){
+                max = curDis;
+                indexMax = q;
+            }
+        } else {
+            int curDis = Math.min(q - ray[index], ray[index + 1] - q);
+            if(curDis > max){
+                max = curDis;
+                indexMax = q;
+            }
+        }
+        System.out.println(indexMax);
     }
 }
 

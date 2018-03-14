@@ -40,52 +40,69 @@ class Solver{
     public void solve() throws IOException{
         int n = in.nextInt();
         int[] ray = r.populateIntArray(in,n);
-        Arrays.sort(ray);
-        int p = in.nextInt();
-        int q = in.nextInt();
-        int index = 0;
-        int max;
-        int indexMax = p;
-        while(ray[index] < p){
-            index++;
+        int index = 1;
+        StringBuffer go = new StringBuffer(20);
+        rec(ray,index,go.append(Integer.toString(ray[0])),ray[0]);
+    }
+    public boolean rec(int[] ray,int index, StringBuffer soFar, int val){
+        val %= 101;
+        if(val == 0 && index > 1) {
+            StringBuffer temp = new StringBuffer(ray.length*4);
+            temp.append(soFar);
+            for (int i = index; i < ray.length; i++) {
+                temp.append("*" + ray[i]);
+            }
+            System.out.println(temp);
+            //System.out.println(ray[ray.length - 1]);
+            return true;
         }
-        // first number
-        if(index == 0){
-            max = ray[index] - p;
+        if(index == ray.length) return false;
+        int next = ray[index];
+        if(next%101 == 0){
+            StringBuffer temp = new StringBuffer(ray.length*4);
+            for (int i = 0; i < index - 1; i++) {
+                temp.append(ray[i]);
+                temp.append('*');
+            }
+            temp.append(ray[ray.length - 1]);
+            System.out.println(temp);
+            return true;
+        }
+        int optionOne = (next+val)%101;
+        int optionTwo = (val - next)%101;
+        StringBuffer buf = new StringBuffer();
+        if(true){
+            buf.append(soFar);
+            if(rec(ray,index + 1,buf.append('+').append(next)
+                    , val + next)){
+                return true;
+            }
+            buf = new StringBuffer();
+            buf.append(soFar);
+            if(rec(ray,index + 1,buf.append('-').append(next)
+                    , val - next)){
+                return true;
+            }
         } else {
-            max = Math.min(ray[index] - p, p - ray[index - 1]);
-        }
-        //medians
-        for (int i = 0; i < n - 1; i++) {
-            int first = ray[i];
-            int last = ray[i+1];
-            int dist = (last - first)/2;
-            int nIndex = first + dist;
-            if(dist > max && p <= nIndex && nIndex <= q){
-                max = dist;
-                indexMax = nIndex;
+            buf.append(soFar);
+            if(rec(ray,index + 1,buf.append('-').append(next)
+                    , val - next)){
+                return true;
+            }
+            buf = new StringBuffer();
+            buf.append(soFar);
+            if(rec(ray,index + 1,buf.append('+').append(next)
+                    , val + next)){
+                return true;
             }
         }
-
-        // last number
-        index = n - 1;
-        while(ray[index] > q){
-            index--;
+        buf = new StringBuffer();
+        buf.append(soFar);
+        if(rec(ray,index + 1,buf.append('*').append(next)
+                , val * next)){
+            return true;
         }
-        if(index == n - 1){
-            int curDis = q - ray[index];
-            if(curDis > max){
-                max = curDis;
-                indexMax = q;
-            }
-        } else {
-            int curDis = Math.min(q - ray[index], ray[index + 1] - q);
-            if(curDis > max){
-                max = curDis;
-                indexMax = q;
-            }
-        }
-        System.out.println(indexMax);
+        return false;
     }
 }
 

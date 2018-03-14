@@ -41,68 +41,57 @@ class Solver{
         int n = in.nextInt();
         int[] ray = r.populateIntArray(in,n);
         int index = 1;
-        StringBuffer go = new StringBuffer(20);
-        rec(ray,index,go.append(Integer.toString(ray[0])),ray[0]);
-    }
-    public boolean rec(int[] ray,int index, StringBuffer soFar, int val){
-        val %= 101;
-        if(val == 0 && index > 1) {
-            StringBuffer temp = new StringBuffer(ray.length*4);
-            temp.append(soFar);
-            for (int i = index; i < ray.length; i++) {
-                temp.append("*" + ray[i]);
-            }
-            System.out.println(temp);
-            //System.out.println(ray[ray.length - 1]);
-            return true;
+        String[] olds = new String[101];
+        for (int y = 0; y < 101; y++) {
+            olds[y] = "";
         }
-        if(index == ray.length) return false;
-        int next = ray[index];
-        if(next%101 == 0){
-            StringBuffer temp = new StringBuffer(ray.length*4);
-            for (int i = 0; i < index - 1; i++) {
-                temp.append(ray[i]);
-                temp.append('*');
+        int first = ray[0]%101;
+        if(first == 0){
+            StringBuilder buf = new StringBuilder(ray.length*10);
+            for (int i = 0; i < ray.length - 1; i++) {
+                buf.append(ray[i]);
+                buf.append('*');
             }
-            temp.append(ray[ray.length - 1]);
-            System.out.println(temp);
-            return true;
+            buf.append(ray[ray.length - 1]);
+            System.out.println(buf);
+            return;
         }
-        int optionOne = (next+val)%101;
-        int optionTwo = (val - next)%101;
-        StringBuffer buf = new StringBuffer();
-        if(true){
-            buf.append(soFar);
-            if(rec(ray,index + 1,buf.append('+').append(next)
-                    , val + next)){
-                return true;
+        olds[first] += (ray[0]);
+        for (int i = 1; i < n; i++) {
+            int next = ray[i];
+            String[] news = new String[101];
+            for (int y = 0; y < 101; y++) {
+                news[y] = "";
             }
-            buf = new StringBuffer();
-            buf.append(soFar);
-            if(rec(ray,index + 1,buf.append('-').append(next)
-                    , val - next)){
-                return true;
+            for (int prevVal = 1; prevVal < olds.length; prevVal++) {
+                if(olds[prevVal].equals("")){
+                    continue;
+                }
+                int next1 = (prevVal + next)%101;
+                if(news[next1].equals("")){
+                    news[next1] = olds[prevVal] + "+" + next;
+                }
+                int next2 = (prevVal - next + 101)%101;
+                if(news[next2].equals("")){
+                    news[next2] = olds[prevVal] + "-" + next;
+                }
+                int next3 = (prevVal*next)%101;
+                if(news[next3].equals("")){
+                    news[next3] = olds[prevVal] + "*" + next;
+                }
             }
-        } else {
-            buf.append(soFar);
-            if(rec(ray,index + 1,buf.append('-').append(next)
-                    , val - next)){
-                return true;
+            if(!news[0].equals("")){
+                StringBuilder fin = new StringBuilder(n*10);
+                fin.append(news[0]);
+                for (int j = i + 1; j < n; j++) {
+                    fin.append('*');
+                    fin.append(ray[j]);
+                }
+                System.out.println(fin);
+                return;
             }
-            buf = new StringBuffer();
-            buf.append(soFar);
-            if(rec(ray,index + 1,buf.append('+').append(next)
-                    , val + next)){
-                return true;
-            }
+            olds = news.clone();
         }
-        buf = new StringBuffer();
-        buf.append(soFar);
-        if(rec(ray,index + 1,buf.append('*').append(next)
-                , val * next)){
-            return true;
-        }
-        return false;
     }
 }
 

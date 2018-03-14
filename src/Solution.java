@@ -41,38 +41,46 @@ class Solver{
         int n = 26;
         int[] inStuff = r.populateIntArray(in,26);
         char first= ' ';
-        char second = ' ';
-        int size = 0;
+        int min = Integer.MAX_VALUE;
+        boolean firstLowest = true;
+        boolean hadsome = false;
+        boolean onlyOne = true;
         for (int i = 0; i < 26; i++) {
-            size+= inStuff[i];
-            if(inStuff[i] > 0){
-                if(first == ' '){
-                    first = (char)('a' + i);
-                    inStuff[i] -= 2;
-                } else if(second == ' '){
-                    second = (char)('a' + i);
-                    inStuff[i]--;
+            if(hadsome && inStuff[i] > 0){
+                onlyOne = false;
+            }
+            if(inStuff[i] > 0 && inStuff[i] < min){
+                hadsome = true;
+                min = inStuff[i];
+                if(first != ' '){
+                    firstLowest = false;
+                }
+                first = (char)('a' + i);
+            }
+        }
+        inStuff[first - 'a']--;
+        StringBuffer buf = new StringBuffer();
+        buf.append(first);
+        if(firstLowest == false || onlyOne){
+            for (int i = 0; i < 26; i++) {
+                char cur = (char)('a' + i);
+                for (int j = 0; j < inStuff[i]; j++) {
+                    buf.append(cur);
+                }
+            }
+        } else {
+            int firstindex = first - 'a';
+            for (int i = firstindex + 1; i < 26; i++) {
+                char cur = (char)('a' + i);
+                for (int j = 0; j < inStuff[i]; j++) {
+                    if(inStuff[firstindex]-- > 0){
+                        buf.append(first);
+                    }
+                    buf.append(cur);
                 }
             }
         }
-        if(size == 1){
-            System.out.println(first);
-            return;
-        }
-        if(second == ' '){
-            second = first;
-            inStuff[first - 'a']--;
-        }
-        StringBuffer buf = new StringBuffer();
-        buf.append(first);
-        buf.append(first);
-        buf.append(second);
-        for (int i = 0; i < 26; i++) {
-            char cur = (char)('a' + i);
-            for (int j = 0; j < inStuff[i]; j++) {
-                buf.append(cur);
-            }
-        }
+
         System.out.println(buf);
     }
 }

@@ -15,7 +15,7 @@ public class Solution {
         Reader in = new Reader(fileName);
         Solver sol = new Solver(in);
         int t = 1;
-        //t = Integer.parseInt(in.readLine());
+        t = Integer.parseInt(in.readLine());
         for (int i = 0; i < t; i++) {
             sol.solve();
         }
@@ -38,50 +38,62 @@ class Solver{
     int k;
     HashMap<Long,Long> prev;
     public void solve() throws IOException{
-        int n = 26;
-        int[] inStuff = r.populateIntArray(in,26);
-        char first= ' ';
-        int min = Integer.MAX_VALUE;
-        boolean firstLowest = true;
-        boolean hadsome = false;
-        boolean onlyOne = true;
-        for (int i = 0; i < 26; i++) {
-            if(hadsome && inStuff[i] > 0){
-                onlyOne = false;
-            }
-            if(inStuff[i] > 0 && inStuff[i] < min){
-                hadsome = true;
-                min = inStuff[i];
-                if(first != ' '){
-                    firstLowest = false;
+        in.readLine();
+        char[] r1 = in.readLine().toCharArray();
+        char[] r2 = in.readLine().toCharArray();
+        int i1 = 0;
+        int i2 = 0;
+        while(i1 < r1.length || i2 < r2.length){
+            if(i2 < i1){
+                // lower
+                if(r2[i2] == '1'){
+                  i2++;
+                } else if(moveUp(i2,r1,r2)){
+                    i1++;
+                    i2++;
+                } else if(moveHorizontal(i2,r2)){
+                    i2+=2;
+                } else {
+                    System.out.println("NO");
+                    return;
                 }
-                first = (char)('a' + i);
-            }
-        }
-        inStuff[first - 'a']--;
-        StringBuffer buf = new StringBuffer();
-        buf.append(first);
-        if(firstLowest == false || onlyOne){
-            for (int i = 0; i < 26; i++) {
-                char cur = (char)('a' + i);
-                for (int j = 0; j < inStuff[i]; j++) {
-                    buf.append(cur);
-                }
-            }
-        } else {
-            int firstindex = first - 'a';
-            for (int i = firstindex + 1; i < 26; i++) {
-                char cur = (char)('a' + i);
-                for (int j = 0; j < inStuff[i]; j++) {
-                    if(inStuff[firstindex]-- > 0){
-                        buf.append(first);
-                    }
-                    buf.append(cur);
+            } else {
+                // tie goes to upper
+                if(r1[i1] == '1'){
+                    i1++;
+                } else if(moveDown(i1,r1,r2)){
+                    i1++;
+                    i2++;
+                } else if(moveHorizontal(i1,r1)){
+                    i1+=2;
+                } else {
+                    System.out.println("NO");
+                    return;
                 }
             }
         }
+        System.out.println("YES");
+    }
+    boolean moveDown(int index, char[] r1, char[] r2){
+        if(r.indexInArray(r2,index)){
+            if(r2[index] == '0' && r1[index] == '0'){
+                return true;
+            }
+        }
+        return false;
+    }
+    boolean moveHorizontal(int index, char[] ray){
+        return (ray[index] == '0' && r.indexInArray(ray,index + 1)
+                && ray[index + 1] == '0');
+    }
 
-        System.out.println(buf);
+    boolean moveUp(int index, char[] r1, char[] r2){
+        if(r.indexInArray(r1,index+1)){
+            if(r1[index + 1] == '0' && r2[index] == '0'){
+                return true;
+            }
+        }
+        return false;
     }
 }
 
@@ -366,6 +378,9 @@ class Ray {
             }
         }
         return false;
+    }
+    public boolean indexInArray(char[] a, int index){
+        return  (index >= 0 && index < a.length);
     }
     public boolean indexInArray(int [][] a, int x, int y){
         if(0 <= x && x < a.length){

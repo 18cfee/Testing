@@ -38,60 +38,42 @@ class Solver{
     int k;
     HashMap<Long,Long> prev;
     public void solve() throws IOException{
-        int n = in.nextInt();
-        int[] ray = r.populateIntArray(in,n);
-        int index = 1;
-        String[] olds = new String[101];
-        for (int y = 0; y < 101; y++) {
-            olds[y] = "";
-        }
-        int first = ray[0]%101;
-        if(first == 0){
-            StringBuilder buf = new StringBuilder(ray.length*10);
-            for (int i = 0; i < ray.length - 1; i++) {
-                buf.append(ray[i]);
-                buf.append('*');
+        int n = 26;
+        int[] inStuff = r.populateIntArray(in,26);
+        char first= ' ';
+        char second = ' ';
+        int size = 0;
+        for (int i = 0; i < 26; i++) {
+            size+= inStuff[i];
+            if(inStuff[i] > 0){
+                if(first == ' '){
+                    first = (char)('a' + i);
+                    inStuff[i] -= 2;
+                } else if(second == ' '){
+                    second = (char)('a' + i);
+                    inStuff[i]--;
+                }
             }
-            buf.append(ray[ray.length - 1]);
-            System.out.println(buf);
+        }
+        if(size == 1){
+            System.out.println(first);
             return;
         }
-        olds[first] += (ray[0]);
-        for (int i = 1; i < n; i++) {
-            int next = ray[i];
-            String[] news = new String[101];
-            for (int y = 0; y < 101; y++) {
-                news[y] = "";
-            }
-            for (int prevVal = 1; prevVal < olds.length; prevVal++) {
-                if(olds[prevVal].equals("")){
-                    continue;
-                }
-                int next1 = (prevVal + next)%101;
-                if(news[next1].equals("")){
-                    news[next1] = olds[prevVal] + "+" + next;
-                }
-                int next2 = (prevVal - next + 101)%101;
-                if(news[next2].equals("")){
-                    news[next2] = olds[prevVal] + "-" + next;
-                }
-                int next3 = (prevVal*next)%101;
-                if(news[next3].equals("")){
-                    news[next3] = olds[prevVal] + "*" + next;
-                }
-            }
-            if(!news[0].equals("")){
-                StringBuilder fin = new StringBuilder(n*10);
-                fin.append(news[0]);
-                for (int j = i + 1; j < n; j++) {
-                    fin.append('*');
-                    fin.append(ray[j]);
-                }
-                System.out.println(fin);
-                return;
-            }
-            olds = news.clone();
+        if(second == ' '){
+            second = first;
+            inStuff[first - 'a']--;
         }
+        StringBuffer buf = new StringBuffer();
+        buf.append(first);
+        buf.append(first);
+        buf.append(second);
+        for (int i = 0; i < 26; i++) {
+            char cur = (char)('a' + i);
+            for (int j = 0; j < inStuff[i]; j++) {
+                buf.append(cur);
+            }
+        }
+        System.out.println(buf);
     }
 }
 

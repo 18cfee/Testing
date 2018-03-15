@@ -88,11 +88,18 @@ class Solver{
             int outside = n - inside;
             int outsideChoose = k - inside;
             tot = (tot + choose(outside, outsideChoose))%ma.mod;
+            for (int j = 0; j < 4; j++) {
+                if(i == j) continue;
+                int curInside = nums[j];
+                int curOutside = outside - inside;
+                int curOutChoose = outsideChoose - curInside;
+                tot = (tot - choose(curOutside,curOutChoose));
+            }
         }
         System.out.println(tot);
     }
     long choose(int outside, int inside){
-        if(outside < 0 || inside < 0) return 0;
+        if(outside < 0 || inside <= 0) return 0;
         long fact = 1;
         for (int i = 1; i <= outside; i++) {
             fact = (fact*i)%ma.mod;

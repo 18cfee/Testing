@@ -15,7 +15,7 @@ public class Solution {
         Reader in = new Reader(fileName);
         Solver sol = new Solver(in);
         int t = 1;
-        t = Integer.parseInt(in.readLine());
+        //t = Integer.parseInt(in.readLine());
         for (int i = 0; i < t; i++) {
             sol.solve();
         }
@@ -38,62 +38,72 @@ class Solver{
     int k;
     HashMap<Long,Long> prev;
     public void solve() throws IOException{
-        in.readLine();
-        char[] r1 = in.readLine().toCharArray();
-        char[] r2 = in.readLine().toCharArray();
-        int i1 = 0;
-        int i2 = 0;
-        while(i1 < r1.length || i2 < r2.length){
-            if(i2 < i1){
-                // lower
-                if(r2[i2] == '1'){
-                  i2++;
-                } else if(moveUp(i2,r1,r2)){
-                    i1++;
-                    i2++;
-                } else if(moveHorizontal(i2,r2)){
-                    i2+=2;
-                } else {
-                    System.out.println("NO");
-                    return;
-                }
-            } else {
-                // tie goes to upper
-                if(r1[i1] == '1'){
-                    i1++;
-                } else if(moveDown(i1,r1,r2)){
-                    i1++;
-                    i2++;
-                } else if(moveHorizontal(i1,r1)){
-                    i1+=2;
-                } else {
-                    System.out.println("NO");
-                    return;
-                }
+        int n = in.nextInt();
+        int k = in.nextInt();
+        int maxX = 0;
+        int minX = Integer.MAX_VALUE;
+        int maxY = 0;
+        int minY = Integer.MAX_VALUE;
+        int countMX = 0;
+        int countMinX = 0;
+        int countMY = 0;
+        int countMinY = 0;
+        for (int i = 0; i < n; i++) {
+            int x = in.nextInt();
+            if(x == minX){
+                countMinX++;
+            } else if(x < minX){
+                countMinX = 1;
+                minX = x;
+            }
+            if(x == maxX){
+                countMX++;
+            } else if(x > maxX){
+                countMX = 1;
+                maxX = x;
+            }
+            int y = in.nextInt();
+            if(y == minY){
+                countMinY++;
+            } else if(y < minY){
+                countMinY = 1;
+                minY = y;
+            }
+            if(y == maxY){
+                countMY++;
+            } else if(y > maxY){
+                countMY = 1;
+                maxY = y;
             }
         }
-        System.out.println("YES");
-    }
-    boolean moveDown(int index, char[] r1, char[] r2){
-        if(r.indexInArray(r2,index)){
-            if(r2[index] == '0' && r1[index] == '0'){
-                return true;
-            }
+        int[] nums = new int[4];
+        nums[0] = countMinX;
+        nums[1] = countMinY;
+        nums[2] = countMX;
+        nums[3] = countMY;
+        Arrays.sort(nums);
+        long tot = 0;
+        for (int i = 0; i < 4; i++) {
+            int inside = nums[i];
+            int outside = n - inside;
+            int outsideChoose = k - inside;
+            tot = (tot + choose(outside, outsideChoose))%ma.mod;
         }
-        return false;
+        System.out.println(tot);
     }
-    boolean moveHorizontal(int index, char[] ray){
-        return (ray[index] == '0' && r.indexInArray(ray,index + 1)
-                && ray[index + 1] == '0');
-    }
-
-    boolean moveUp(int index, char[] r1, char[] r2){
-        if(r.indexInArray(r1,index+1)){
-            if(r1[index + 1] == '0' && r2[index] == '0'){
-                return true;
-            }
+    long choose(int outside, int inside){
+        if(outside < 0 || inside < 0) return 0;
+        long fact = 1;
+        for (int i = 1; i <= outside; i++) {
+            fact = (fact*i)%ma.mod;
         }
-        return false;
+        for (int i = 1; i <= inside; i++) {
+            fact = (fact/i)%ma.mod;
+        }
+        for (int i = 1; i <= (outside - inside); i++) {
+            fact = (fact/i)%ma.mod;
+        }
+        return fact;
     }
 }
 

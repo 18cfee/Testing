@@ -15,7 +15,7 @@ public class Solution {
         Reader in = new Reader(fileName);
         Solver sol = new Solver(in);
         int t = 1;
-        //t = Integer.parseInt(in.readLine());
+        t = Integer.parseInt(in.readLine());
         for (int i = 0; i < t; i++) {
             sol.solve();
         }
@@ -39,71 +39,25 @@ class Solver{
     HashMap<Long,Long> prev;
     public void solve() throws IOException{
         int n = in.nextInt();
-        int k = in.nextInt();
-        int maxX = 0;
-        int minX = Integer.MAX_VALUE;
-        int maxY = 0;
-        int minY = Integer.MAX_VALUE;
-        int countMX = 0;
-        int countMinX = 0;
-        int countMY = 0;
-        int countMinY = 0;
+        HashSet<Integer> set = new HashSet<>(n);
         for (int i = 0; i < n; i++) {
-            int x = in.nextInt();
-            if(x == minX){
-                countMinX++;
-            } else if(x < minX){
-                countMinX = 1;
-                minX = x;
-            }
-            if(x == maxX){
-                countMX++;
-            } else if(x > maxX){
-                countMX = 1;
-                maxX = x;
-            }
-            int y = in.nextInt();
-            if(y == minY){
-                countMinY++;
-            } else if(y < minY){
-                countMinY = 1;
-                minY = y;
-            }
-            if(y == maxY){
-                countMY++;
-            } else if(y > maxY){
-                countMY = 1;
-                maxY = y;
+            set.add(in.nextInt());
+        }
+        int[] nums = new int[set.size()];
+        int i = 0;
+        for (Integer num: set){
+            nums[i++] = num;
+        }
+        int[][] dp = new int[nums.length][nums.length];
+        for (int j = 0; j < nums.length; j++) {
+            dp[0][j] = nums[j];
+        }
+        for (int j = 1; j < nums.length; j++) {
+            for (int l = 1; l <= j; l++) {
+                dp[j][l] = dp[j-1][l-1]^nums[l];
             }
         }
-        int[] nums = new int[4];
-        nums[0] = countMinX;
-        nums[1] = countMinY;
-        nums[2] = countMX;
-        nums[3] = countMY;
-        Arrays.sort(nums);
-        long tot = 0;
-        for (int i = 0; i < 4; i++) {
-            int inside = nums[i];
-            int outside = n - inside;
-            int outsideChoose = k - inside;
-            tot = (tot + choose(outside, outsideChoose))%ma.mod;
-        }
-        System.out.println(tot);
-    }
-    long choose(int outside, int inside){
-        if(outside < 0 || inside < 0) return 0;
-        long fact = 1;
-        for (int i = 1; i <= outside; i++) {
-            fact = (fact*i)%ma.mod;
-        }
-        for (int i = 1; i <= inside; i++) {
-            fact = (fact/i)%ma.mod;
-        }
-        for (int i = 1; i <= (outside - inside); i++) {
-            fact = (fact/i)%ma.mod;
-        }
-        return fact;
+        long sum = 0;
     }
 }
 
@@ -293,6 +247,20 @@ class CarlNumbers {
     CarlNumbers(){}
     public double distanceBetween(Tuple one, Tuple two){
         return Math.sqrt(Math.pow((one.x - two.x),2) + Math.pow(one.y - two.y, 2));
+    }
+    public long choose(int outside, int inside){
+        if(outside < 0 || inside < 0) return 0;
+        long fact = 1;
+        for (int i = 1; i <= outside; i++) {
+            fact = (fact*i)%mod;
+        }
+        for (int i = 1; i <= inside; i++) {
+            fact = (fact/i)%mod;
+        }
+        for (int i = 1; i <= (outside - inside); i++) {
+            fact = (fact/i)%mod;
+        }
+        return fact;
     }
     //3-Way Comparisons
     public int max(int aa, int bb, int cc){

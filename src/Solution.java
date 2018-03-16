@@ -1,5 +1,4 @@
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class Solution {
@@ -15,7 +14,7 @@ public class Solution {
         Reader in = new Reader(fileName);
         Solver sol = new Solver(in);
         int t = 1;
-        t = Integer.parseInt(in.readLine());
+        //t = Integer.parseInt(in.readLine());
         for (int i = 0; i < t; i++) {
             sol.solve();
         }
@@ -39,25 +38,47 @@ class Solver{
     HashMap<Long,Long> prev;
     public void solve() throws IOException{
         int n = in.nextInt();
-        HashSet<Integer> set = new HashSet<>(n);
-        for (int i = 0; i < n; i++) {
-            set.add(in.nextInt());
+        PriorityQueue<Integer> min = new PriorityQueue<>(n);
+        PriorityQueue<Integer> max = new PriorityQueue<>(n,Comparator.reverseOrder());
+        int one = in.nextInt();
+        System.out.printf("%.1f",(double)one);
+        System.out.println();
+        int two = in.nextInt();
+        double median = ma.average(one,two);
+        System.out.printf("%.1f",median);
+        System.out.println();
+        if(two > one){
+            min.add(two);
+            max.add(one);
+        } else {
+            min.add(one);
+            max.add(two);
         }
-        int[] nums = new int[set.size()];
-        int i = 0;
-        for (Integer num: set){
-            nums[i++] = num;
-        }
-        int[][] dp = new int[nums.length][nums.length];
-        for (int j = 0; j < nums.length; j++) {
-            dp[0][j] = nums[j];
-        }
-        for (int j = 1; j < nums.length; j++) {
-            for (int l = 1; l <= j; l++) {
-                dp[j][l] = dp[j-1][l-1]^nums[l];
+        for (int i = 2; i < n; i++) {
+            int cur = in.nextInt();
+            if(cur > median){
+                min.add(cur);
+            } else {
+                max.add(cur);
             }
+            while(min.size() - 1 > max.size()){
+                int rem = min.poll();
+                max.add(rem);
+            }
+            while(max.size() - 1 > min.size()){
+                int rem = max.poll();
+                min.add(rem);
+            }
+            if(max.size() == min.size()){
+                median = ma.average(max.peek(),min.peek());
+            } else if(max.size() > min.size()){
+                median = max.peek();
+            } else {
+                median = min.peek();
+            }
+            System.out.printf("%.1f",median);
+            System.out.println();
         }
-        long sum = 0;
     }
 }
 
@@ -261,6 +282,9 @@ class CarlNumbers {
             fact = (fact/i)%mod;
         }
         return fact;
+    }
+    public double average(int one, int two){
+        return ((double)one + two)/2;
     }
     //3-Way Comparisons
     public int max(int aa, int bb, int cc){
@@ -479,7 +503,6 @@ class Tuple implements Comparator<Tuple>{
         return a.y - b.y;
     }
 }
-
 class TupleC implements Comparable{
     public int x = 0;
     public int y = 0;
@@ -693,3 +716,42 @@ class byLength implements Comparator<String>{
         return b.length() - a.length();
     }
 }
+//enum HeapType {Max,Min};
+//class Heap{
+//    private int[] nums;
+//    private int index = 0;
+//    private HeapType type;
+//    Heap(HeapType type, int size){
+//        this.type = type;
+//        nums = new int[size];
+//    }
+//    public int getSize(){
+//        return index;
+//    }
+//    public void insert(int a){
+//        if(index == nums.length){
+//            grow();
+//        }
+//        int cur = index++;
+//        int parent = parentIndex(cur);
+//        while(cur > 0 && nums[parent] < nums[cur]){
+//            nums[cur] = nums[parent];
+//            cur = parent;
+//            parent = parentIndex(parent);
+//        }
+//        nums[cur] = a;
+//    }
+//    private int parentIndex(int index){
+//        return((index + 1)/2 - 1);
+//    }
+//    private void grow(){
+//        int[] temp = nums;
+//        nums = new int[temp.length*2];
+//        for (int i = 0; i < temp.length; i++) {
+//            nums[i] = temp[i];
+//        }
+//    }
+//    public int pop(){
+//        return nums[0];
+//    }
+//}

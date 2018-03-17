@@ -1,4 +1,6 @@
 import java.io.*;
+import java.lang.reflect.Array;
+import java.math.BigInteger;
 import java.util.*;
 
 public class Solution {
@@ -37,48 +39,64 @@ class Solver{
     int k;
     HashMap<Long,Long> prev;
     public void solve() throws IOException{
-        int n = in.nextInt();
-        PriorityQueue<Integer> min = new PriorityQueue<>(n);
-        PriorityQueue<Integer> max = new PriorityQueue<>(n,Comparator.reverseOrder());
-        int one = in.nextInt();
-        System.out.printf("%.1f",(double)one);
-        System.out.println();
-        int two = in.nextInt();
-        double median = ma.average(one,two);
-        System.out.printf("%.1f",median);
-        System.out.println();
-        if(two > one){
-            min.add(two);
-            max.add(one);
-        } else {
-            min.add(one);
-            max.add(two);
+        int n = Integer.parseInt(in.readLine());
+        long[] set = r.populateLongArray(n);
+        long[] soFar = new long[set.length];
+        printSubSets(set,0, soFar,0);
+        System.out.println(sum);
+    }
+    long sum = 0;
+    void printSubSets(long[] set, int index, long[] soFar, int iSoFar){
+        if(index == set.length){
+            long[] pass = new long[iSoFar];
+            for (int i = 0; i < iSoFar; i++) {
+                pass[i] = soFar[i];
+                //System.out.print(pass[i] + " ");
+            }
+            //System.out.println();
+            long ways = ways(pass);
+            //System.out.println(ways);
+            sum+=ways;
+            return;
         }
-        for (int i = 2; i < n; i++) {
-            int cur = in.nextInt();
-            if(cur > median){
-                min.add(cur);
-            } else {
-                max.add(cur);
-            }
-            while(min.size() - 1 > max.size()){
-                int rem = min.poll();
-                max.add(rem);
-            }
-            while(max.size() - 1 > min.size()){
-                int rem = max.poll();
-                min.add(rem);
-            }
-            if(max.size() == min.size()){
-                median = ma.average(max.peek(),min.peek());
-            } else if(max.size() > min.size()){
-                median = max.peek();
-            } else {
-                median = min.peek();
-            }
-            System.out.printf("%.1f",median);
-            System.out.println();
+        long[] next1 = soFar.clone();
+        next1[iSoFar] = set[index];
+        printSubSets(set,index + 1,soFar,iSoFar);
+        printSubSets(set,index + 1,next1,iSoFar + 1);
+    }
+    int ways(long[] ray){
+        int[][] graph = new int[64][2];
+        for (int i = 0; i < 64; i++) {
+            graph[i][0] = i;
         }
+        for (int i = 0; i < ray.length; i++) {
+            int[] set = convert(ray[i]);
+            if(set.length < 2) continue;
+            int p1 = g.parent(set[0],graph);
+            for (int j = 1; j < set.length; j++) {
+                int p2 = g.parent(set[j],graph);
+                g.updateParent(p1,p2,graph);
+            }
+        }
+        HashSet parents = new HashSet(64);
+        for (int i = 0; i < 64; i++) {
+            parents.add(graph[i][0]);
+        }
+        return parents.size();
+    }
+    int[] convert(long num2){
+        ArrayList<Integer> list = new ArrayList<>(64);
+        BigInteger num = new BigInteger(Long.toUnsignedString(num2));
+        for (int i = 0; i < 64; i++) {
+            BigInteger[] val = num.divideAndRemainder(new BigInteger("2"));
+            if(val[1].equals(new BigInteger("1"))) list.add(i);
+            num = val[0];
+        }
+        int[] set = new int[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            set[i] = list.get(i);
+        }
+        return set;
     }
 }
 
@@ -351,6 +369,9 @@ class Ray {
     public boolean indexInArray(int [] a, int index){
         return (0 <= index && index < a.length);
     }
+    public boolean indexInArray(long [] a, int index){
+        return (0 <= index && index < a.length);
+    }
     public boolean indexInArray(boolean [] a, int index){
         return (0 <= index && index < a.length);
     }
@@ -399,6 +420,13 @@ class Ray {
             System.out.println(ray[i]);
         }
     }
+    public void printArray(long[] ray){
+        int height = ray.length;
+        for (int i = 0; i < height - 1; i++) {
+            System.out.print(ray[i] + " ");
+        }
+        System.out.println(ray[height - 1]);
+    }
     public void printArray(String[] ray){
         int height = ray.length;
         for (int i = 0; i < height; i++) {
@@ -435,10 +463,25 @@ class Ray {
     }
     public long[] populateLongArray(int size) throws IOException{
         long[] array = new long[size];
+        String[] longs = in.readLine().split(" ");
         for (int i = 0; i < size; i++) {
-            array[i] = in.nextInt();
+            array[i] = Long.parseUnsignedLong(longs[i]);
         }
         return array;
+    }
+    public long[] populateUniqueLong(int size) throws IOException{
+        HashSet<Long> set = new HashSet<>(size);
+        String[] longs = in.readLine().split(" ");
+        for (int i = 0; i < size; i++) {
+            long next = Long.parseUnsignedLong(longs[i]);
+            set.add(next);
+        }
+        long[] ray = new long[set.size()];
+        int index = 0;
+        for (Long num: set){
+            ray[index++] = num;
+        }
+        return ray;
     }
     public int[][] populateIntArray(Reader in, int x, int y) throws IOException{
         int[][] array = new int[x][];

@@ -72,8 +72,8 @@ class Solver{
         for (int i = 0; i < ray.length; i++) {
             int[] set = convert(ray[i]);
             if(set.length < 2) continue;
-            int p1 = g.parent(set[0],graph);
             for (int j = 1; j < set.length; j++) {
+                int p1 = g.parent(set[0],graph);
                 int p2 = g.parent(set[j],graph);
                 g.updateParent(p1,p2,graph);
             }
@@ -84,13 +84,28 @@ class Solver{
         }
         return parents.size();
     }
-    int[] convert(long num2){
+//    int[] convert(long num2){
+//        ArrayList<Integer> list = new ArrayList<>(64);
+//        BigInteger num = new BigInteger(Long.toUnsignedString(num2));
+//        for (int i = 0; i < 64; i++) {
+//            BigInteger[] val = num.divideAndRemainder(new BigInteger("2"));
+//            if(val[1].equals(new BigInteger("1"))) list.add(i);
+//            num = val[0];
+//        }
+//        int[] set = new int[list.size()];
+//        for (int i = 0; i < list.size(); i++) {
+//            set[i] = list.get(i);
+//        }
+//        return set;
+//    }
+    int[] convert(long num){
         ArrayList<Integer> list = new ArrayList<>(64);
-        BigInteger num = new BigInteger(Long.toUnsignedString(num2));
         for (int i = 0; i < 64; i++) {
-            BigInteger[] val = num.divideAndRemainder(new BigInteger("2"));
-            if(val[1].equals(new BigInteger("1"))) list.add(i);
-            num = val[0];
+            long mod = num%2;
+            if(mod == 1 || mod == -1){
+                list.add(i);
+            }
+            num = num >>> 1;
         }
         int[] set = new int[list.size()];
         for (int i = 0; i < list.size(); i++) {

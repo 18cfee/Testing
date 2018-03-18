@@ -65,24 +65,42 @@ class Solver{
         printSubSets(set,index + 1,next1,iSoFar + 1);
     }
     int ways(long[] ray){
-        int[][] graph = new int[64][2];
-        for (int i = 0; i < 64; i++) {
-            graph[i][0] = i;
-        }
+        BitSet vis = new BitSet(64);
         for (int i = 0; i < ray.length; i++) {
-            int[] set = convert(ray[i]);
-            if(set.length < 2) continue;
-            for (int j = 1; j < set.length; j++) {
-                int p1 = g.parent(set[0],graph);
-                int p2 = g.parent(set[j],graph);
-                g.updateParent(p1,p2,graph);
+            if(vis.get(i)) continue;
+            long one = ray[i];
+            for (int j = i+1; j < ray.length; j++) {
+                if(vis.get(j)) continue;
+                long two = ray[j];
+                if((two & one) != 0){
+                    vis.set(j);
+                    one = two|one;
+                }
+            }
+            ray[i] = one;
+        }
+        int sum = 64;
+        for (int i = 0; i < ray.length; i++) {
+            if(!vis.get(i)){
+                int sub = setBits(ray[i]);
+                if(sub > 1){
+                    sum++;
+                    sum -= setBits(ray[i]);
+                }
             }
         }
-        HashSet parents = new HashSet(64);
+        return sum;
+    }
+    int setBits(long num){
+        int count = 0;
         for (int i = 0; i < 64; i++) {
-            parents.add(graph[i][0]);
+            long mod = num%2;
+            if(mod == 1 || mod == -1){
+                count++;
+            }
+            num = num >>> 1;
         }
-        return parents.size();
+        return count;
     }
 //    int[] convert(long num2){
 //        ArrayList<Integer> list = new ArrayList<>(64);

@@ -1,29 +1,119 @@
 import java.io.*;
 import java.lang.reflect.Array;
 import java.math.BigInteger;
-import java.util.*;
 
-public class Solution {
-    public static void main(String[] args) throws IOException {
-        // This is just generic stuff I use for hackerrank to make it easy to use IDE (reusing though)
+
+// I am using a file that I use for HackerRank. The code is mine, other than
+
+//public class Solution {
+//    public static void main(String[] args) throws IOException {
+//        // This is just generic stuff I use for hackerrank to make it easy to use IDE (reusing though)
+////        String fileName = "sol.in";
+////        File f = new File(fileName);
+////        Scanner in = new Scanner(System.in);
+////        if (f.exists() && !f.isDirectory()) {
+////            in = new Scanner(f);
+////        }
 //        String fileName = "sol.in";
-//        File f = new File(fileName);
-//        Scanner in = new Scanner(System.in);
-//        if (f.exists() && !f.isDirectory()) {
-//            in = new Scanner(f);
+//        Reader in = new Reader(fileName);
+//        Solver sol = new Solver(in);
+//        int t = 1;
+//        //t = Integer.parseInt(in.readLine());
+//        for (int i = 0; i < t; i++) {
+//            sol.solve();
 //        }
-        String fileName = "sol.in";
-        Reader in = new Reader(fileName);
-        Solver sol = new Solver(in);
-        int t = 1;
-        //t = Integer.parseInt(in.readLine());
-        for (int i = 0; i < t; i++) {
-            sol.solve();
+//
+//        in.close();
+//    }
+//}
+import java.util.*;
+class Solution {
+    public static void main(String[] args){
+        String test = "11:00";
+        System.out.println(solution(test));
+    }
+    public static String solution(String s) {
+        ArrayList<String> permsAfter = new ArrayList<>(64);
+        ArrayList<String> permsAll = new ArrayList<>(64);
+        BitSet marked = new BitSet(4);
+        s = s.replaceAll(":","");
+        calcPerms(permsAfter,permsAll,s,"",marked);
+        Collections.sort(permsAfter);
+        if(permsAfter.size() > 0){
+            String ans = permsAfter.get(0);
+            ans = ans.substring(0,2) + ":" + ans.substring(2,4);
+            return ans;
         }
-
-        in.close();
+        Collections.sort(permsAll);
+        String ans = permsAll.get(0);
+        ans = ans.substring(0,2) + ":" + ans.substring(2,4);
+        return ans;
+    }
+    static void calcPerms(ArrayList<String> permsLater, ArrayList<String> permsAll, String s, String built,BitSet marked){
+        if(built.length() == 4){
+            if(!validTime(built)) return;
+            if(built.compareTo(s) > 0){
+                permsLater.add(built);
+            }
+            permsAll.add(built);
+            return;
+        }
+        for (int i = 0; i < 4; i++) {
+            if(!marked.get(i)){
+                BitSet cop = (BitSet) marked.clone();
+                cop.set(i);
+                calcPerms(permsLater,permsAll,s,built + s.charAt(i),cop);
+            }
+        }
+    }
+    static boolean validTime(String s){
+        if(Integer.parseInt(s.substring(0,2)) > 24) return false;
+        if(Integer.parseInt(s.substring(2,4)) > 60) return false;
+        return true;
     }
 }
+
+//import java.util.*;
+//class Solution {
+//    public static void main(String[] args){
+//        int [] ray = {3,1,5,4,2};
+//        int k = 4;
+//        System.out.println(solution(ray,k));
+//    }
+//    public static int solution(int[] roseBloom, int k) {
+//        int n = roseBloom.length;
+//        TreeSet<Integer> set = new TreeSet<>();
+//        // set boundaries to determine group sizes
+//        set.add(0);
+//        set.add(n+1);
+//        // initial group
+//        if(n == k) return n;
+//        // start from the last day
+//        // maintain sorted structure so that it is effecient to find the prev and next number in the list
+//        // logn insertion and lookup
+//        // every new insertion splits a group, so we just check the group size of both
+//        // of the new groups created and return the day if a group of size k is created
+//        for (int day = n - 1; day >= 0; day--) {
+//            int cur = roseBloom[day];
+//            set.add(cur);
+//            int pre = set.lower(cur);
+//            int dif1 = Math.abs(pre - cur) - 1;
+//            if (dif1 == k) return day;
+//            int next = set.higher(cur);
+//            int dif2 = Math.abs(next - cur) - 1;
+//            if (dif2 == k) return day;
+//        }
+//        return -1;
+//    }
+//}
+
+
+class hoser{
+    hoser(String one){
+        System.out.println("worked");
+    }
+}
+
 class Solver{
     Reader in; DataStructures d; CarlString sLi; CarlNumbers ma; Ray r; Graph g;
 

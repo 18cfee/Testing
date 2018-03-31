@@ -36,3 +36,90 @@ int: 2,147,483,647, 2^32
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 // Copied the reader class from http://www.geeksforgeeks.org/fast-io-in-java-in-competitive-programming/
+
+long sum = 0;
+    void printSubSets(long[] set, int index, long[] soFar, int iSoFar){
+        if(index == set.length){
+            long[] pass = new long[iSoFar];
+            for (int i = 0; i < iSoFar; i++) {
+                pass[i] = soFar[i];
+                //System.out.print(pass[i] + " ");
+            }
+            //System.out.println();
+            long ways = ways(pass);
+            //System.out.println(ways);
+            sum+=ways;
+            return;
+        }
+        long[] next1 = soFar.clone();
+        next1[iSoFar] = set[index];
+        printSubSets(set,index + 1,soFar,iSoFar);
+        printSubSets(set,index + 1,next1,iSoFar + 1);
+    }
+    int ways(long[] ray){
+        BitSet vis = new BitSet(64);
+        for (int i = 0; i < ray.length; i++) {
+            if(vis.get(i)) continue;
+            long one = ray[i];
+            for (int j = i+1; j < ray.length; j++) {
+                if(vis.get(j)) continue;
+                long two = ray[j];
+                if((two & one) != 0){
+                    vis.set(j);
+                    one = two|one;
+                }
+            }
+            ray[i] = one;
+        }
+        int sum = 64;
+        for (int i = 0; i < ray.length; i++) {
+            if(!vis.get(i)){
+                int sub = setBits(ray[i]);
+                if(sub > 1){
+                    sum++;
+                    sum -= setBits(ray[i]);
+                }
+            }
+        }
+        return sum;
+    }
+    int setBits(long num){
+        int count = 0;
+        for (int i = 0; i < 64; i++) {
+            long mod = num%2;
+            if(mod == 1 || mod == -1){
+                count++;
+            }
+            num = num >>> 1;
+        }
+        return count;
+    }
+//    int[] convert(long num2){
+//        ArrayList<Integer> list = new ArrayList<>(64);
+//        BigInteger num = new BigInteger(Long.toUnsignedString(num2));
+//        for (int i = 0; i < 64; i++) {
+//            BigInteger[] val = num.divideAndRemainder(new BigInteger("2"));
+//            if(val[1].equals(new BigInteger("1"))) list.add(i);
+//            num = val[0];
+//        }
+//        int[] set = new int[list.size()];
+//        for (int i = 0; i < list.size(); i++) {
+//            set[i] = list.get(i);
+//        }
+//        return set;
+//    }
+    int[] convert(long num){
+        ArrayList<Integer> list = new ArrayList<>(64);
+        for (int i = 0; i < 64; i++) {
+            long mod = num%2;
+            if(mod == 1 || mod == -1){
+                list.add(i);
+            }
+            num = num >>> 1;
+        }
+        int[] set = new int[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            set[i] = list.get(i);
+        }
+        return set;
+    }

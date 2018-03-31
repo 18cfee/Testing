@@ -39,102 +39,39 @@ class Solver{
         r = new Ray(in);
         g = new Graph();
     }
-    private long[][] box;
-    int k;
-    HashMap<Long,Long> prev;
+    BitSet[] marked;
     public void solve() throws IOException{
-        int n = Integer.parseInt(in.readLine());
-        long[] set = r.populateLongArray(n);
-        long[] soFar = new long[set.length];
-        printSubSets(set,0, soFar,0);
-        System.out.println(sum);
-    }
-    long sum = 0;
-    void printSubSets(long[] set, int index, long[] soFar, int iSoFar){
-        if(index == set.length){
-            long[] pass = new long[iSoFar];
-            for (int i = 0; i < iSoFar; i++) {
-                pass[i] = soFar[i];
-                //System.out.print(pass[i] + " ");
-            }
-            //System.out.println();
-            long ways = ways(pass);
-            //System.out.println(ways);
-            sum+=ways;
-            return;
+        int n = in.nextInt();
+        int m = in.nextInt();
+        marked = new BitSet[n];
+        int[][] ray = r.populateIntArray(in,n,m);
+        for (int i = 0; i < n; i++) {
+            marked[i] = new BitSet(m);
         }
-        long[] next1 = soFar.clone();
-        next1[iSoFar] = set[index];
-        printSubSets(set,index + 1,soFar,iSoFar);
-        printSubSets(set,index + 1,next1,iSoFar + 1);
-    }
-    int ways(long[] ray){
-        BitSet vis = new BitSet(64);
-        for (int i = 0; i < ray.length; i++) {
-            if(vis.get(i)) continue;
-            long one = ray[i];
-            for (int j = i+1; j < ray.length; j++) {
-                if(vis.get(j)) continue;
-                long two = ray[j];
-                if((two & one) != 0){
-                    vis.set(j);
-                    one = two|one;
-                }
-            }
-            ray[i] = one;
-        }
-        int sum = 64;
-        for (int i = 0; i < ray.length; i++) {
-            if(!vis.get(i)){
-                int sub = setBits(ray[i]);
-                if(sub > 1){
-                    sum++;
-                    sum -= setBits(ray[i]);
-                }
+        int max = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                max = Math.max(group(i,j,ray),max);
             }
         }
-        return sum;
+        System.out.println(max);
     }
-    int setBits(long num){
-        int count = 0;
-        for (int i = 0; i < 64; i++) {
-            long mod = num%2;
-            if(mod == 1 || mod == -1){
-                count++;
+    int group(int i, int j, int[][] ray) {
+        if (!r.indexInArray(ray, i, j)
+                || marked[i].get(j)
+                || ray[i][j] == 0) {
+            return 0;
+        }
+        marked[i].set(j);
+        {
+            int sum = 1;
+            for (int[] dir : ma.directions) {
+                sum += (group(i + dir[0], j + dir[1], ray));
             }
-            num = num >>> 1;
+            return sum;
         }
-        return count;
     }
-//    int[] convert(long num2){
-//        ArrayList<Integer> list = new ArrayList<>(64);
-//        BigInteger num = new BigInteger(Long.toUnsignedString(num2));
-//        for (int i = 0; i < 64; i++) {
-//            BigInteger[] val = num.divideAndRemainder(new BigInteger("2"));
-//            if(val[1].equals(new BigInteger("1"))) list.add(i);
-//            num = val[0];
-//        }
-//        int[] set = new int[list.size()];
-//        for (int i = 0; i < list.size(); i++) {
-//            set[i] = list.get(i);
-//        }
-//        return set;
-//    }
-    int[] convert(long num){
-        ArrayList<Integer> list = new ArrayList<>(64);
-        for (int i = 0; i < 64; i++) {
-            long mod = num%2;
-            if(mod == 1 || mod == -1){
-                list.add(i);
-            }
-            num = num >>> 1;
-        }
-        int[] set = new int[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            set[i] = list.get(i);
-        }
-        return set;
-    }
+
 }
 
 
@@ -367,6 +304,17 @@ class Ray {
     Ray(Reader in){
         this.in = in;
     }
+//    public boolean indexInBitSet(BitSet[] set, int i, int j){
+//        if(0 <= i && i < set.length){
+//            return indexInBitSet(set[i], , j);
+//        }
+//        return false;
+//    }
+//    public boolean indexInBitSet(BitSet set,int i, int j){
+//        int test = set.length();
+//        int test2 = set.size();
+//        return (0 <= i && i < set.length());
+//    }
     public void reverse(int[] a){
         int lastIndex = a.length - 1;
         reverse(a,0,lastIndex);

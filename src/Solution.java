@@ -18,7 +18,7 @@ public class Solution {
         Reader in = new Reader(fileName);
         Solver sol = new Solver(in);
         int t = 1;
-        //t = Integer.parseInt(in.readLine());
+        t = Integer.parseInt(in.readLine());
         for (int i = 0; i < t; i++) {
             sol.solve();
         }
@@ -40,27 +40,53 @@ class Solver{
     }
     BitSet[] marked;
     public void solve() throws IOException{
-        int n = Integer.parseInt(in.readLine());
-        String[] strings = new String[n];
-        for (int i = 0; i < n; i++) {
-            strings[i] = in.readLine();
-        }
-        //Arrays.sort(strings,new sort());
-        int pause = 0;
-        Trie test = new Trie();
-        for (int i = 0; i < n; i++) {
-            if(test.subString(strings[i])){
-                System.out.println("BAD SET");
-                System.out.println(strings[i]);
-                return;
-            }
-            test.add(strings[i]);
-        }
-        System.out.println("GOOD SET");
+        int n = in.nextInt();
+        inversions = 0;
+        int[] ray = r.populateIntArray(in,n);
+        int[] check = mergeSort(ray);
+        System.out.println(inversions);
     }
-
+    long inversions = 0;
+    int[] mergeSort(int[] ray){
+        if(ray.length == 1){
+            return ray;
+        }
+        int[] r1 = new int[ray.length/2];
+        for (int i = 0; i < ray.length/2; i++) {
+            r1[i] = ray[i];
+        }
+        int[] r2 = new int[ray.length - ray.length/2];
+        int index = 0;
+        for (int i = ray.length/2; i < ray.length; i++) {
+            r2[index++] = ray[i];
+        }
+        r1 = mergeSort(r1);
+        r2 = mergeSort(r2);
+        return merge(r1,r2);
+    }
+    int[] merge(int[] r1, int[] r2){
+        int[] ray = new int[r1.length + r2.length];
+        int rayIndex = 0;
+        int index1 = 0;
+        int index2 = 0;
+        while(index1 < r1.length && index2 < r2.length){
+            if(r1[index1] <= r2[index2]){
+                ray[rayIndex++] = r1[index1++];
+            } else {
+                inversions += index2 + r1.length - rayIndex;
+                ray[rayIndex++] = r2[index2++];
+            }
+        }
+        while(index1<r1.length){
+            ray[rayIndex++] = r1[index1++];
+        }
+        while(index2<r2.length){
+            ray[rayIndex++] = r2[index2++];
+        }
+        return ray;
+    }
 }
-
+//Arrays.sort(strings,new sort());
 class sort implements Comparator<String>{
     public int compare(String a, String b){
         return b.length() - a.length();

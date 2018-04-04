@@ -40,42 +40,30 @@ class Solver{
     }
     BitSet[] marked;
     public void solve() throws IOException{
-        int n = in.nextInt();
-        int m = in.nextInt();
-        marked = new BitSet[n];
-        int[][] ray = r.populateIntArray(in,n,m);
+        int n = Integer.parseInt(in.readLine());
+        String[] strings = new String[n];
         for (int i = 0; i < n; i++) {
-            marked[i] = new BitSet(m);
+            strings[i] = in.readLine();
         }
-        int max = 0;
+        //Arrays.sort(strings,new sort());
+        int pause = 0;
+        Trie test = new Trie();
         for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                max = Math.max(group(i,j,ray),max);
+            if(test.subString(strings[i])){
+                System.out.println("BAD SET");
+                System.out.println(strings[i]);
+                return;
             }
+            test.add(strings[i]);
         }
-        System.out.println(max);
-    }
-    int group(int i, int j, int[][] ray) {
-        if (!r.indexInArray(ray, i, j)
-                || marked[i].get(j)
-                || ray[i][j] == 0) {
-            return 0;
-        }
-        marked[i].set(j);
-        {
-            int sum = 1;
-            for (int[] dir : ma.directions) {
-                sum += (group(i + dir[0], j + dir[1], ray));
-            }
-            return sum;
-        }
+        System.out.println("GOOD SET");
     }
 
 }
 
 class sort implements Comparator<String>{
     public int compare(String a, String b){
-        return a.length() - b.length();
+        return b.length() - a.length();
     }
 }
 
@@ -83,11 +71,13 @@ class sort implements Comparator<String>{
 class Trie{
     public int numInserted = 0;
     Trie[] children;
+    boolean last = false;
     Trie(){
         children = new Trie[26];
     }
     public void add(String remaining){
         if(remaining.length() == 0){
+            last = true;
             numInserted++;
             return;
         }
@@ -97,6 +87,13 @@ class Trie{
         }
         numInserted++;
         children[a].add(remaining.substring(1));
+    }
+    public boolean subString(String word){
+        if(word.length() == 0) return true;
+        if(last) return true;
+        int cur = word.charAt(0) - 'a';
+        if( children[cur] == null) return false;
+        return (children[cur].subString(word.substring(1)));
     }
     public int numWords(String word){
         if(word.length() == 0) return 0;

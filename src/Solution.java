@@ -22,7 +22,6 @@ public class Solution {
         for (int i = 0; i < t; i++) {
             sol.solve();
         }
-
         in.close();
     }
 }
@@ -72,6 +71,12 @@ class Solver{
         }
     }
 
+}
+
+class sort implements Comparator<String>{
+    public int compare(String a, String b){
+        return a.length() - b.length();
+    }
 }
 
 

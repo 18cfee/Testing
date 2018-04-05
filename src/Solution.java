@@ -94,6 +94,107 @@ class sort implements Comparator<String>{
 }
 
 
+
+
+class Hash{
+    private int allocSize;
+    private int size;
+    private Map[][] hashMap;
+    private final double hashCap = .7;
+    private int defSectSize = 2;
+    Hash(int allocSize){
+        this.allocSize = allocSize;		//4
+        // first slot is index
+        hashMap = new Map[allocSize][defSectSize];
+    }
+    public void add(int key, int value){
+        add(new Map(key, value));
+    }
+    public void add(Map insert){
+        int hash = insert.key%allocSize;        // 1
+        Map[] curArray = hashMap[hash];
+        int index = 0;
+        while(curArray[index] != null){
+            if(curArray[index].equals(insert.key)){
+                curArray[index] = insert;
+            }
+            index++;
+        }
+        curArray[index] = insert;
+        if(index == curArray.length - 1){
+            curArray = grow(curArray);
+        }
+        size++;
+        if(size >= hashCap*allocSize){
+            grow();
+        }
+    }
+    public boolean contains(int key){
+        int hash = key%allocSize;
+        Map[] curArray = hashMap[hash];
+        int index = 0;
+        while(curArray[index] != null){
+            if(curArray[index++].equals(key)){
+                return true;
+            }
+        }
+        return false;
+    }
+    public Integer get(int key){
+        int hash = key%allocSize;
+        Map[] curArray = hashMap[hash];
+        int index = 0;
+        while(curArray[index] != null){
+            if(curArray[index].equals(key)){
+                return curArray[index].value;
+            }
+            index++;
+        }
+        return null;
+    }
+    public int size(){
+        return size;
+    }
+    private void grow(){
+        Map[][] temp = hashMap;
+        allocSize = size * 2;
+        hashMap = new Map[allocSize][defSectSize];
+        for(int i = 0; i < temp.length; i++){
+            Map[] cur = temp[i];
+            dump(hashMap, cur);
+        }
+    }
+    private void dump(Map[][] map, Map[] ray){
+        int index = 0;
+        while(ray[index] != null){
+            add(ray[index]);
+            index++;
+        }
+    }
+    private Map[] grow(Map[] map){
+        Map[] newMap = new Map[map.length*2];
+        for(int i = 0; i < map.length; i++){
+            newMap[i] = map[i];
+        }
+        return newMap;
+    }
+}
+
+class Map{
+    public int key;
+    public int value;
+    Map(int key, int value){
+        this.key = key;
+        this.value = value;
+    }
+    @Override
+    public boolean equals(Object o){
+        if(!(o instanceof Map)) return false;
+        Map cur = (Map) o;
+        return (cur.key == this.key);
+    }
+}	//
+
 class Trie{
     public int numInserted = 0;
     Trie[] children;

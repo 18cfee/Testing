@@ -18,7 +18,7 @@ public class Solution {
         Reader in = new Reader(fileName);
         Solver sol = new Solver(in);
         int t = 1;
-        t = Integer.parseInt(in.readLine());
+        //t = Integer.parseInt(in.readLine());
         for (int i = 0; i < t; i++) {
             sol.solve();
         }
@@ -40,51 +40,15 @@ class Solver{
     }
     BitSet[] marked;
     public void solve() throws IOException{
-        int n = in.nextInt();
-        inversions = 0;
-        int[] ray = r.populateIntArray(in,n);
-        int[] check = mergeSort(ray);
-        System.out.println(inversions);
+        Hash test = new Hash(4);
+        test.add(1,2);
+        test.add(13,2);
+        test.add(1,12);
+        test.add(8,2);
+        test.add(7,2);
+        test.add(6,2);
     }
-    long inversions = 0;
-    int[] mergeSort(int[] ray){
-        if(ray.length == 1){
-            return ray;
-        }
-        int[] r1 = new int[ray.length/2];
-        for (int i = 0; i < ray.length/2; i++) {
-            r1[i] = ray[i];
-        }
-        int[] r2 = new int[ray.length - ray.length/2];
-        int index = 0;
-        for (int i = ray.length/2; i < ray.length; i++) {
-            r2[index++] = ray[i];
-        }
-        r1 = mergeSort(r1);
-        r2 = mergeSort(r2);
-        return merge(r1,r2);
-    }
-    int[] merge(int[] r1, int[] r2){
-        int[] ray = new int[r1.length + r2.length];
-        int rayIndex = 0;
-        int index1 = 0;
-        int index2 = 0;
-        while(index1 < r1.length && index2 < r2.length){
-            if(r1[index1] <= r2[index2]){
-                ray[rayIndex++] = r1[index1++];
-            } else {
-                inversions += index2 + r1.length - rayIndex;
-                ray[rayIndex++] = r2[index2++];
-            }
-        }
-        while(index1<r1.length){
-            ray[rayIndex++] = r1[index1++];
-        }
-        while(index2<r2.length){
-            ray[rayIndex++] = r2[index2++];
-        }
-        return ray;
-    }
+
 }
 //Arrays.sort(strings,new sort());
 class sort implements Comparator<String>{
@@ -109,22 +73,23 @@ class Hash{
     }
     public void add(int key, int value){
         add(new Map(key, value));
+        size++;
     }
     public void add(Map insert){
         int hash = insert.key%allocSize;        // 1
         Map[] curArray = hashMap[hash];
         int index = 0;
         while(curArray[index] != null){
-            if(curArray[index].equals(insert.key)){
+            if(curArray[index].sameKey(insert.key)){
                 curArray[index] = insert;
+                return;
             }
             index++;
         }
         curArray[index] = insert;
         if(index == curArray.length - 1){
-            curArray = grow(curArray);
+            hashMap[hash] = grow(curArray);
         }
-        size++;
         if(size >= hashCap*allocSize){
             grow();
         }
@@ -134,7 +99,7 @@ class Hash{
         Map[] curArray = hashMap[hash];
         int index = 0;
         while(curArray[index] != null){
-            if(curArray[index++].equals(key)){
+            if(curArray[index++].sameKey(key)){
                 return true;
             }
         }
@@ -145,7 +110,7 @@ class Hash{
         Map[] curArray = hashMap[hash];
         int index = 0;
         while(curArray[index] != null){
-            if(curArray[index].equals(key)){
+            if(curArray[index].sameKey(key)){
                 return curArray[index].value;
             }
             index++;
@@ -161,10 +126,10 @@ class Hash{
         hashMap = new Map[allocSize][defSectSize];
         for(int i = 0; i < temp.length; i++){
             Map[] cur = temp[i];
-            dump(hashMap, cur);
+            dump(cur);
         }
     }
-    private void dump(Map[][] map, Map[] ray){
+    private void dump(Map[] ray){
         int index = 0;
         while(ray[index] != null){
             add(ray[index]);
@@ -187,12 +152,15 @@ class Map{
         this.key = key;
         this.value = value;
     }
-    @Override
-    public boolean equals(Object o){
-        if(!(o instanceof Map)) return false;
-        Map cur = (Map) o;
-        return (cur.key == this.key);
+    public boolean sameKey(int key){
+        return (key == this.key);
     }
+//    @Override
+//    public boolean equals(Object o){
+//        if(!(o instanceof Map)) return false;
+//        Map cur = (Map) o;
+//        return (cur.key == this.key);
+//    }
 }	//
 
 class Trie{

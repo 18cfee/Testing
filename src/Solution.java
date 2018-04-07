@@ -55,11 +55,14 @@ class Solver{
     final long conv = 1000000000000000000l;
     public void solve(int funcCall) throws IOException{
         int a = in.nextInt();
-        int size = (int)Math.ceil((double)a/3);
+        int size = Math.max((int)Math.ceil((double)a/3),3);
         BitSet[] marked = new BitSet[size];
-        for (int i = 1; i < size - 1; i++) {
-            while(notMarked(marked,i-1)){
-                System.out.println(1 + " " + i);
+        for (int i = 0; i < size; i++) {
+            marked[i] = new BitSet();
+        }
+        for (int i = 2; i < size; i++) {
+            while(!marked(marked[i-1])){
+                System.out.println(2 + " " + i);
                 int x = in.nextInt();
                 int y = in.nextInt();
                 if(x == 0 && y == 0){
@@ -69,13 +72,16 @@ class Solver{
             }
         }
         while(true){
-            System.out.println(1 + " " + (a - 2));
+            System.out.println(2 + " " + (size - 1));
             int x = in.nextInt();
             int y = in.nextInt();
             if(x == 0 && y == 0){
                 return;
             }
         }
+    }
+    boolean marked(BitSet set){
+        return (set.get(0) && set.get(1) && set.get(2));
     }
 }
 //Arrays.sort(strings,new sort());

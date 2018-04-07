@@ -1,5 +1,6 @@
 import java.io.*;
 import java.lang.reflect.Array;
+import java.math.BigDecimal;
 import java.util.*;
 
 // I am using a file that I use for HackerRank. The code is mine, other than
@@ -37,18 +38,40 @@ class Solver{
         r = new Ray(in);
         g = new Graph();
     }
-    public void solve(int funcCall) throws IOException{
-        float r2 = 1.4142135623730950488016887242096980785f;
-        float num = ((float)in.nextDouble())/r2;
-        float pi4 = (float)Math.PI/4;
-        float angle = (float)(Math.acos(num)) + pi4;
-        System.out.println("Case #" + funcCall + ":");
-        float x1 = (float)(-Math.sin(angle)*.5);
-        double y1 = (float)(Math.cos(angle)*.5);
-        System.out.println(x1 + " " + y1 + " " + 0);
-        System.out.println("0 0 0.5");
-    }
+//    public void solve(int funcCall) throws IOException{
+//        float r2 = 1.4142135623730950488016887242096980785f;
+//        float num = ((float)in.nextDouble())/r2;
 
+//        float angle = (float)(Math.acos(num)) + pi4;
+//        System.out.println("Case #" + funcCall + ":");
+//        float x1 = (float)(-Math.sin(angle)*.5);
+//        double y1 = (float)(Math.cos(angle)*.5);
+//        System.out.println(x1 + " " + y1 + " " + 0);
+//        System.out.println("0 0 0.5");
+//    }
+    float pi4 = (float)Math.PI/4;
+    float sqrt2 = (float)Math.sqrt(2);
+    public void solve(int funcCall) throws IOException{
+        double target = in.nextDouble();
+        BigDecimal dec = new BigDecimal(target);
+        double upper = .5;
+        double lower = .25*sqrt2;
+        double x = (lower + upper)/2;
+        double theta = Math.acos(x*2);
+        double area = Math.cos(theta- pi4)*sqrt2;
+        while(!ma.withinTolerance(area,target,.00000001)){
+               if(area > target){
+                   lower = x;
+               } else {
+                   upper = x;
+               }
+               x = (lower + upper)/2;
+               theta = Math.acos(x*2);
+               area = Math.cos(theta - pi4)*sqrt2;
+        }
+        System.out.println(x);
+        System.out.println(Math.acos(0.35383941912727135) + " " + Math.acos(0.3535533905932738));
+    }
 }
 //Arrays.sort(strings,new sort());
 class sort implements Comparator<String>{
@@ -295,6 +318,12 @@ class CarlNumbers {
         in.reverse();
         x = Integer.parseInt(in.toString());
         return x;
+    }
+    public boolean withinTolerance(double a, double b, double tolerance){
+        return(Math.abs(a - b) < tolerance);
+    }
+    public boolean withinTolerance(float a, float b, float tolerance){
+        return(Math.abs(a - b) < tolerance);
     }
 }
 class Ray {

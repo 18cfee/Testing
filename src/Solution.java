@@ -56,8 +56,8 @@ class Solver{
     public void solve(int funcCall) throws IOException{
         int a = in.nextInt();
         int size = Math.max((int)Math.ceil((double)a/3),3);
-        BitSet[] marked = new BitSet[size];
-        for (int i = 0; i < size; i++) {
+        BitSet[] marked = new BitSet[size + 2];
+        for (int i = 0; i < size + 2; i++) {
             marked[i] = new BitSet();
         }
         for (int i = 2; i < size; i++) {
@@ -81,7 +81,7 @@ class Solver{
         }
     }
     boolean marked(BitSet set){
-        return (set.get(0) && set.get(1) && set.get(2));
+        return (set.get(3) && set.get(1) && set.get(2));
     }
 }
 //Arrays.sort(strings,new sort());

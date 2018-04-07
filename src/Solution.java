@@ -38,36 +38,15 @@ class Solver{
         g = new Graph();
     }
     public void solve(int funcCall) throws IOException{
-        int n = in.nextInt();
-        int[] r1 = new int[(n + 1)/2];
-        int index1 = 0;
-        int[] r2 = new int[(n - r1.length)];
-        int index2 = 0;
-        for (int i = 0; i < n; i++) {
-            if(i%2 == 0){
-                r1[index1++] = in.nextInt();
-            } else {
-                r2[index2++] = in.nextInt();
-            }
-        }
-        Arrays.sort(r1);
-        Arrays.sort(r2);
-        index1 = 0;
-        index2 = 0;
-        for (int i = 0; i < n - 1; i++) {
-            if(i%2 == 0){
-                if(r1[index1++] > r2[index2]){
-                    System.out.println("Case #" + funcCall + ": " + i);
-                    return;
-                }
-            } else {
-                if(r1[index1] < r2[index2++]){
-                    System.out.println("Case #" + funcCall + ": " + i);
-                    return;
-                }
-            }
-        }
-        System.out.println("Case #" + funcCall + ": OK");
+        float r2 = 1.4142135623730950488016887242096980785f;
+        float num = ((float)in.nextDouble())/r2;
+        float pi4 = (float)Math.PI/4;
+        float angle = (float)(Math.acos(num)) + pi4;
+        System.out.println("Case #" + funcCall + ":");
+        float x1 = (float)(-Math.sin(angle)*.5);
+        double y1 = (float)(Math.cos(angle)*.5);
+        System.out.println(x1 + " " + y1 + " " + 0);
+        System.out.println("0 0 0.5");
     }
 
 }

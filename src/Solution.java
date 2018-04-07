@@ -1,6 +1,4 @@
 import java.io.*;
-import java.lang.reflect.Array;
-import java.math.BigInteger;
 import java.util.*;
 
 // I am using a file that I use for HackerRank. The code is mine, other than
@@ -18,9 +16,9 @@ public class Solution {
         Reader in = new Reader(fileName);
         Solver sol = new Solver(in);
         int t = 1;
-        //t = Integer.parseInt(in.readLine());
+        t = Integer.parseInt(in.readLine());
         for (int i = 0; i < t; i++) {
-            sol.solve();
+            sol.solve(i+1);
         }
         in.close();
     }
@@ -38,15 +36,50 @@ class Solver{
         r = new Ray(in);
         g = new Graph();
     }
-    BitSet[] marked;
-    public void solve() throws IOException{
-        Hash test = new Hash(4);
-        test.add(1,2);
-        test.add(13,2);
-        test.add(1,12);
-        test.add(8,2);
-        test.add(7,2);
-        test.add(6,2);
+    public void solve(int funcCall) throws IOException{
+        String[] input = in.readLine().split(" ");
+        int d = Integer.parseInt(input[0]);
+        String code = input[1];
+        Stack<Tuple> savings = new Stack<>();
+        int i = 0;
+        int curVal = 1;
+        int tot = 0;
+        int ss = 0;
+        for (int j = 0; j < code.length(); j++) {
+            if(code.charAt(j) == 'S') ss++;
+        }
+        for (; i < code.length(); i++) {
+            char cur = code.charAt(i);
+            if(cur == 'C'){
+                Tuple save =new Tuple(curVal,ss);
+                savings.push(save);
+                curVal*=2;
+            } else {
+                ss--;
+                tot += curVal;
+            }
+        }
+        if(savings.empty()){
+            System.out.println("Case #" + funcCall +": IMPOSSIBLE");
+            return;
+        }
+        int moves = 0;
+        loop:
+        while(!savings.empty()){
+            Tuple cur = savings.pop();
+            for (int j = 0; j < cur.y; j++) {
+                if(tot <= d){
+                    break loop;
+                }
+                tot -= cur.x;
+                moves++;
+            }
+        }
+        if(tot > d){
+            System.out.println("Case #" + funcCall +": IMPOSSIBLE");
+            return;
+        }
+        System.out.println("Case #" + funcCall + ": " + moves);
     }
 
 }
@@ -60,108 +93,9 @@ class sort implements Comparator<String>{
 
 
 
-class Hash{
-    private int allocSize;
-    private int size;
-    private Map[][] hashMap;
-    private final double hashCap = .7;
-    private int defSectSize = 2;
-    Hash(int allocSize){
-        this.allocSize = allocSize;		//4
-        // first slot is index
-        hashMap = new Map[allocSize][defSectSize];
-    }
-    public void add(int key, int value){
-        add(new Map(key, value));
-        size++;
-    }
-    public void add(Map insert){
-        int hash = insert.key%allocSize;        // 1
-        Map[] curArray = hashMap[hash];
-        int index = 0;
-        while(curArray[index] != null){
-            if(curArray[index].sameKey(insert.key)){
-                curArray[index] = insert;
-                return;
-            }
-            index++;
-        }
-        curArray[index] = insert;
-        if(index == curArray.length - 1){
-            hashMap[hash] = grow(curArray);
-        }
-        if(size >= hashCap*allocSize){
-            grow();
-        }
-    }
-    public boolean contains(int key){
-        int hash = key%allocSize;
-        Map[] curArray = hashMap[hash];
-        int index = 0;
-        while(curArray[index] != null){
-            if(curArray[index++].sameKey(key)){
-                return true;
-            }
-        }
-        return false;
-    }
-    public Integer get(int key){
-        int hash = key%allocSize;
-        Map[] curArray = hashMap[hash];
-        int index = 0;
-        while(curArray[index] != null){
-            if(curArray[index].sameKey(key)){
-                return curArray[index].value;
-            }
-            index++;
-        }
-        return null;
-    }
-    public int size(){
-        return size;
-    }
-    private void grow(){
-        Map[][] temp = hashMap;
-        allocSize = size * 2;
-        hashMap = new Map[allocSize][defSectSize];
-        for(int i = 0; i < temp.length; i++){
-            Map[] cur = temp[i];
-            dump(cur);
-        }
-    }
-    private void dump(Map[] ray){
-        int index = 0;
-        while(ray[index] != null){
-            add(ray[index]);
-            index++;
-        }
-    }
-    private Map[] grow(Map[] map){
-        Map[] newMap = new Map[map.length*2];
-        for(int i = 0; i < map.length; i++){
-            newMap[i] = map[i];
-        }
-        return newMap;
-    }
-}
 
-class Map{
-    public int key;
-    public int value;
-    Map(int key, int value){
-        this.key = key;
-        this.value = value;
-    }
-    public boolean sameKey(int key){
-        return (key == this.key);
-    }
-//    @Override
-//    public boolean equals(Object o){
-//        if(!(o instanceof Map)) return false;
-//        Map cur = (Map) o;
-//        return (cur.key == this.key);
-//    }
-}	//
+
+
 
 class Trie{
     public int numInserted = 0;

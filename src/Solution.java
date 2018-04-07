@@ -54,25 +54,28 @@ class Solver{
     double sqrt2 = Math.sqrt(2);
     final long conv = 1000000000000000000l;
     public void solve(int funcCall) throws IOException{
-        System.out.println(conv);
-        long target = (long)(in.nextDouble()*conv);
-        long upper = conv/2;
-        long lower = (long)(.25*sqrt2*conv);
-        long x = (lower + upper)/2;
-        double theta = Math.acos((double)(x/conv)*2);
-        long area = (long)(Math.cos(theta- pi4)*sqrt2*conv);
-        while(!ma.withinTolerance(area,target,1000)){
-               if(area > target){
-                   lower = x;
-               } else {
-                   upper = x;
-               }
-               x = (lower + upper)/2;
-                theta = Math.acos((double)(x/conv)*2);
-               area = (long)(Math.cos(theta - pi4)*sqrt2*conv);
+        int a = in.nextInt();
+        int size = (int)Math.ceil((double)a/3);
+        BitSet[] marked = new BitSet[size];
+        for (int i = 1; i < size - 1; i++) {
+            while(notMarked(marked,i-1)){
+                System.out.println(1 + " " + i);
+                int x = in.nextInt();
+                int y = in.nextInt();
+                if(x == 0 && y == 0){
+                    return;
+                }
+                marked[y].set(x);
+            }
         }
-        System.out.println((x/(double)conv));
-        //System.out.println(Math.acos(0.35383941912727135) + " " + Math.acos(0.3535533905932738));
+        while(true){
+            System.out.println(1 + " " + (a - 2));
+            int x = in.nextInt();
+            int y = in.nextInt();
+            if(x == 0 && y == 0){
+                return;
+            }
+        }
     }
 }
 //Arrays.sort(strings,new sort());

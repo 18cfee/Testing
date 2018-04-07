@@ -50,28 +50,29 @@ class Solver{
 //        System.out.println(x1 + " " + y1 + " " + 0);
 //        System.out.println("0 0 0.5");
 //    }
-    float pi4 = (float)Math.PI/4;
-    float sqrt2 = (float)Math.sqrt(2);
+    double pi4 = Math.PI/4;
+    double sqrt2 = Math.sqrt(2);
+    final long conv = 1000000000000000000l;
     public void solve(int funcCall) throws IOException{
-        double target = in.nextDouble();
-        BigDecimal dec = new BigDecimal(target);
-        double upper = .5;
-        double lower = .25*sqrt2;
-        double x = (lower + upper)/2;
-        double theta = Math.acos(x*2);
-        double area = Math.cos(theta- pi4)*sqrt2;
-        while(!ma.withinTolerance(area,target,.00000001)){
+        System.out.println(conv);
+        long target = (long)(in.nextDouble()*conv);
+        long upper = conv/2;
+        long lower = (long)(.25*sqrt2*conv);
+        long x = (lower + upper)/2;
+        double theta = Math.acos((double)(x/conv)*2);
+        long area = (long)(Math.cos(theta- pi4)*sqrt2*conv);
+        while(!ma.withinTolerance(area,target,1000)){
                if(area > target){
                    lower = x;
                } else {
                    upper = x;
                }
                x = (lower + upper)/2;
-               theta = Math.acos(x*2);
-               area = Math.cos(theta - pi4)*sqrt2;
+                theta = Math.acos((double)(x/conv)*2);
+               area = (long)(Math.cos(theta - pi4)*sqrt2*conv);
         }
-        System.out.println(x);
-        System.out.println(Math.acos(0.35383941912727135) + " " + Math.acos(0.3535533905932738));
+        System.out.println((x/(double)conv));
+        //System.out.println(Math.acos(0.35383941912727135) + " " + Math.acos(0.3535533905932738));
     }
 }
 //Arrays.sort(strings,new sort());
@@ -324,6 +325,9 @@ class CarlNumbers {
         return(Math.abs(a - b) < tolerance);
     }
     public boolean withinTolerance(float a, float b, float tolerance){
+        return(Math.abs(a - b) < tolerance);
+    }
+    public boolean withinTolerance(long a, long b, long tolerance){
         return(Math.abs(a - b) < tolerance);
     }
 }

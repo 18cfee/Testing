@@ -1,4 +1,5 @@
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.*;
 
 // I am using a file that I use for HackerRank. The code is mine, other than
@@ -37,49 +38,36 @@ class Solver{
         g = new Graph();
     }
     public void solve(int funcCall) throws IOException{
-        String[] input = in.readLine().split(" ");
-        int d = Integer.parseInt(input[0]);
-        String code = input[1];
-        Stack<Tuple> savings = new Stack<>();
-        int i = 0;
-        int curVal = 1;
-        int tot = 0;
-        int ss = 0;
-        for (int j = 0; j < code.length(); j++) {
-            if(code.charAt(j) == 'S') ss++;
-        }
-        for (; i < code.length(); i++) {
-            char cur = code.charAt(i);
-            if(cur == 'C'){
-                Tuple save =new Tuple(curVal,ss);
-                savings.push(save);
-                curVal*=2;
+        int n = in.nextInt();
+        int[] r1 = new int[(n + 1)/2];
+        int index1 = 0;
+        int[] r2 = new int[(n - r1.length)];
+        int index2 = 0;
+        for (int i = 0; i < n; i++) {
+            if(i%2 == 0){
+                r1[index1++] = in.nextInt();
             } else {
-                ss--;
-                tot += curVal;
+                r2[index2++] = in.nextInt();
             }
         }
-        if(savings.empty()){
-            System.out.println("Case #" + funcCall +": IMPOSSIBLE");
-            return;
-        }
-        int moves = 0;
-        loop:
-        while(!savings.empty()){
-            Tuple cur = savings.pop();
-            for (int j = 0; j < cur.y; j++) {
-                if(tot <= d){
-                    break loop;
+        Arrays.sort(r1);
+        Arrays.sort(r2);
+        index1 = 0;
+        index2 = 0;
+        for (int i = 0; i < n - 1; i++) {
+            if(i%2 == 0){
+                if(r1[index1++] > r2[index2]){
+                    System.out.println("Case #" + funcCall + ": " + i);
+                    return;
                 }
-                tot -= cur.x;
-                moves++;
+            } else {
+                if(r1[index1] < r2[index2++]){
+                    System.out.println("Case #" + funcCall + ": " + i);
+                    return;
+                }
             }
         }
-        if(tot > d){
-            System.out.println("Case #" + funcCall +": IMPOSSIBLE");
-            return;
-        }
-        System.out.println("Case #" + funcCall + ": " + moves);
+        System.out.println("Case #" + funcCall + ": OK");
     }
 
 }

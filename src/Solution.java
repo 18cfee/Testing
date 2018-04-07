@@ -39,10 +39,11 @@ class Solver{
         g = new Graph();
     }
 //    public void solve(int funcCall) throws IOException{
-//        float r2 = 1.4142135623730950488016887242096980785f;
-//        float num = ((float)in.nextDouble())/r2;
-
-//        float angle = (float)(Math.acos(num)) + pi4;
+//        double num = ((float)in.nextDouble())/sqrt2;
+//
+//        BigDecimal dec = new BigDecimal(num);
+//        BigDecimal angle = Math.acos(dec);
+//                //(float)(Math.acos(mnum)) + pi4;
 //        System.out.println("Case #" + funcCall + ":");
 //        float x1 = (float)(-Math.sin(angle)*.5);
 //        double y1 = (float)(Math.cos(angle)*.5);

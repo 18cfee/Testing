@@ -38,23 +38,18 @@ class Solver{
         r = new Ray(in);
         g = new Graph();
     }
-    public void solve(int funcCall) throws IOException{
-//        double num = (in.nextDouble())/sqrt2;
-//        double angle = (Math.acos(num)) + pi4;
-//        System.out.println(pi4 + "pi4");
-//        System.out.println("Case #" + funcCall + ":");
-//        double x1 = (-Math.sin(angle)*.5);
-//        double x2 = Math.cos(pi2 + angle) *.5;
-//        System.out.println(" x2 " + x2);
-//        double y1 = (Math.cos(angle)*.5);
-//        System.out.println(x1 + " " + y1 + " " + 0);
-//        System.out.println("0 0 0.5");
-//        double test = 1.414213;
-//        System.out.println(test*test);
-           //double theta = Math.acos(.353869*2);
-            double theta = Math.acos(.3535533905932738*2);
-           double area = (Math.cos(theta- pi4)*sqrt2);
-        System.out.println(area);
+    public void solve(int funcCall) throws IOException {
+        double num = (in.nextDouble())/sqrt2;
+        num = Math.min(1,num);
+        double angle = (Math.acos(num)) + pi4;
+        System.out.println("Case #" + funcCall + ":");
+        double x2 = Math.cos(angle) *.5;
+        double y2 = Math.sin(angle) *.5;
+        System.out.println(x2 + " " + y2 + " " + 0);
+        double x1 = (-Math.sin(angle)*.5);
+        double y1 = (Math.cos(angle)*.5);
+        System.out.println(x1 + " " + y1 + " " + 0);
+        System.out.println("0 0 0.5");
     }
     double pi4 = Math.PI/4;
     double pi2 = Math.PI/2;

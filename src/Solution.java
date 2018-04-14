@@ -46,7 +46,8 @@ class Solver{
         int b = Integer.parseInt(nums[1]);
         int c = Integer.parseInt(nums[2]);
         int rem = b;
-        TreeSet<Cashier> cashiers = new TreeSet<Cashier>();
+        TreeSet<Cashier> cashiers = new TreeSet<>(new sort());
+        HashSet<Cashier> test = new HashSet<>(c);
         for (int i = 0; i < c; i++) {
             nums = in.readLine().split(" ");
             int maxB = Integer.parseInt(nums[0]);
@@ -54,8 +55,9 @@ class Solver{
             int p = Integer.parseInt(nums[2]);
             int init = Math.min(rem,maxB);
             rem -= init;
-            cashiers.add(new Cashier(i,maxB,s,p,init));
-            System.out.println(s*init+p);
+            Cashier temp = new Cashier(i,maxB,s,p,init);
+            cashiers.add(temp);
+            test.add(temp);
         }
         while(canSwap(cashiers)){
             continue;
@@ -64,6 +66,7 @@ class Solver{
     }
     boolean canSwap(TreeSet<Cashier> cashiers){
         Cashier longest = cashiers.last();
+        System.out.println(" cont longest + " + cashiers.contains(longest));
         Cashier swap = null;
         for(Cashier cashier: cashiers){
             if(longest.shouldSwap(cashier)){
@@ -84,7 +87,7 @@ class Solver{
         return false;
     }
 }
-class Cashier implements Comparable{
+class Cashier {
     int id;
     long maxB;
     long s;
@@ -97,17 +100,17 @@ class Cashier implements Comparable{
         this.p = p;
         b = init;
     }
-    public int compareTo(Object c2){
-        Cashier c1 = (Cashier) c2;
-        long sol = time() - c1.time();
-        if(sol > 1){
-            return 1;
-        } else if(sol < 1){
-            return  -1;
-        } else{
-            return 0;
-        }
-    }
+//    @Override
+//    public int compareTo(Cashier c1){
+//        long sol = time() - c1.time();
+//        if(sol > 1){
+//            return 1;
+//        } else if(sol < 1){
+//            return  -1;
+//        } else{
+//            return 0;
+//        }
+//    }
     public long time(){
         return (p + b*s);
     }
@@ -118,26 +121,26 @@ class Cashier implements Comparable{
         b--;
         c1.b++;
     }
-    @Override
-    public boolean equals(Object o){
-        if(o == this){
-            return true;
-        }
-        if(!(o instanceof Cashier)){
-            return false;
-        }
-        Cashier c1 = (Cashier)o;
-        return id == c1.id;
-    }
-    @Override
-    public int hashCode(){
-        return id;
-    }
+//    @Override
+//    public boolean equals(Object o){
+//        if(o == this){
+//            return true;
+//        }
+//        if(!(o instanceof Cashier)){
+//            return false;
+//        }
+//        Cashier c1 = (Cashier)o;
+//        return time() == c1.time();
+//    }
+//    @Override
+//    public int hashCode(){
+//        return (int)time();
+//    }
 }
 //Arrays.sort(strings,new sort());
-class sort implements Comparator<String>{
-    public int compare(String a, String b){
-        return b.length() - a.length();
+class sort implements Comparator<Cashier>{
+    public int compare(Cashier a, Cashier b){
+        return (int)(a.time() - b.time());
     }
 }
 class Trie{

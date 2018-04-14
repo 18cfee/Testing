@@ -20,7 +20,12 @@ public class Solution {
         int t = 1;
         t = Integer.parseInt(in.readLine());
         for (int i = 0; i < t; i++) {
-            sol.solve(i+1);
+            boolean solved = sol.solve(i+1);
+            if(solved){
+                System.out.println("Case #" + (i+1)+ ": POSSIBLE");
+            } else {
+                System.out.println("Case #" + (i+1)+ ": IMPOSSIBLE");
+            }
         }
         in.close();
     }
@@ -38,46 +43,95 @@ class Solver{
         r = new Ray(in);
         g = new Graph();
     }
-    public void solve(int funcCall) throws IOException {
-        double num = (in.nextDouble())/sqrt2;
-        num = Math.min(1,num);
-        double angle = (Math.acos(num)) + pi4;
-        System.out.println("Case #" + funcCall + ":");
-        double x2 = Math.cos(angle) *.5;
-        double y2 = Math.sin(angle) *.5;
-        System.out.println(x2 + " " + y2 + " " + 0);
-        double x1 = (-Math.sin(angle)*.5);
-        double y1 = (Math.cos(angle)*.5);
-        System.out.println(x1 + " " + y1 + " " + 0);
-        System.out.println("0 0 0.5");
+    int[][] rows;
+    public boolean solve(int funcCall) throws IOException {
+        String[] nums = in.readLine().split(" ");
+        int r = Integer.parseInt(nums[0]);
+        int c = Integer.parseInt(nums[1]);
+        int rS = Integer.parseInt(nums[2]) + 1;
+        int cS = Integer.parseInt(nums[3]) + 1;
+        String[] ray = new String[r];
+        for (int i = 0; i < r; i++) {
+            ray[i] = in.readLine();
+        }
+        rows = new int[r][cS];
+        int count = sum(ray);
+        if(count%rS != 0 || count%cS%rS != 0){
+            return false;
+        }
+        //return solidCols(ray,count/cS,cS);
+        if(!solidCols(ray,count/cS, cS)){
+            return false;
+        }
+        return solidRows(count/rS/cS, rS);
     }
-    double pi4 = Math.PI/4;
-    double pi2 = Math.PI/2;
-    double sqrt2 = Math.sqrt(2);
-    final long conv = 1000000000000000000l;
-//    public void solve(int funcCall) throws IOException{
-//        //System.out.println(conv);
-//        System.out.println(22.0/7.0);
-//        System.out.println(Math.PI);
-//        long target = (long)(in.nextDouble()*conv);
-//        long upper = conv/2;
-//        long lower = (long)(.25*sqrt2*conv);
-//        long x = (lower + upper)/2;
-//        double theta = Math.acos((double)(x/conv)*2);
-//        long area = (long)(Math.cos(theta- pi4)*sqrt2*conv);
-//        while(!ma.withinTolerance(area,target,1000)){
-//               if(area > target){
-//                   lower = x;
-//               } else {
-//                   upper = x;
-//               }
-//               x = (lower + upper)/2;
-//                theta = Math.acos((double)(x/conv)*2);
-//               area = (long)(Math.cos(theta - pi4)*sqrt2*conv);
-//        }
-//        System.out.println((x/(double)conv));
-//        //System.out.println(Math.acos(0.35383941912727135) + " " + Math.acos(0.3535533905932738));
-//    }
+    int sum(String[] ray){
+        int count = 0;
+        for (int i = 0; i < ray.length; i++) {
+            String cur = ray[i];
+            for (int j = 0; j < cur.length(); j++) {
+                 if(cur.charAt(j) == '@') count++;
+            }
+        }
+        return count;
+    }
+    boolean solidCols(String[] ray, int colA, int part){
+        int index = 0;
+        for (int i = 0; i < part; i++) {
+            int cur = 0;
+            int startI = index;
+            while(cur < colA){
+                if(index == ray[0].length()) return false;
+                cur += col(ray,index++);
+            }
+            if(cur > colA) return false;
+            updateRows(ray,startI,index, i);
+        }
+        return true;
+    }
+    void updateRows(String[] ray, int i1, int i2, int cI){
+        for (int i = 0; i < ray.length; i++) {
+            int count = 0;
+            for (int j = i1; j < i2; j++) {
+                if(ray[i].charAt(j) == '@'){
+                    count++;
+                }
+            }
+            rows[i][cI] = count;
+        }
+    }
+    int col(String[] ray, int idx){
+        int count = 0;
+        for (int i = 0; i < ray.length; i++) {
+            if(ray[i].charAt(idx) == '@'){
+                count++;
+            }
+        }
+        return count;
+    }
+    boolean solidRows(int am, int part){
+        int col = rows[0].length;
+        int rIndex = 0;
+        for (int i = 0; i < part; i++) {
+            int[] amountC = new int[col];
+            while(!match(amountC,am)){
+                if(rIndex == rows.length) return false;
+                addRow(rIndex++,amountC);
+            }
+        }
+        return true;
+    }
+    void addRow(int index,int[] amountC){
+        for (int i = 0; i < amountC.length; i++) {
+            amountC[i] += rows[index][i];
+        }
+    }
+    boolean match(int[] amountC, int tar){
+        for (int i = 0; i < amountC.length; i++) {
+            if(amountC[i] != tar) return false;
+        }
+        return true;
+    }
 }
 //Arrays.sort(strings,new sort());
 class sort implements Comparator<String>{
@@ -85,14 +139,6 @@ class sort implements Comparator<String>{
         return b.length() - a.length();
     }
 }
-
-
-
-
-
-
-
-
 class Trie{
     public int numInserted = 0;
     Trie[] children;

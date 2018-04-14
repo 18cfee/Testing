@@ -20,12 +20,8 @@ public class Solution {
         int t = 1;
         t = Integer.parseInt(in.readLine());
         for (int i = 0; i < t; i++) {
-            boolean solved = sol.solve(i+1);
-            if(solved){
-                System.out.println("Case #" + (i+1)+ ": POSSIBLE");
-            } else {
-                System.out.println("Case #" + (i+1)+ ": IMPOSSIBLE");
-            }
+            long solved = sol.solve(i+1);
+            System.out.println("Case #" + (i+1)+ ": " + solved);
         }
         in.close();
     }
@@ -44,93 +40,98 @@ class Solver{
         g = new Graph();
     }
     int[][] rows;
-    public boolean solve(int funcCall) throws IOException {
+    public long solve(int funcCall) throws IOException {
         String[] nums = in.readLine().split(" ");
         int r = Integer.parseInt(nums[0]);
-        int c = Integer.parseInt(nums[1]);
-        int rS = Integer.parseInt(nums[2]) + 1;
-        int cS = Integer.parseInt(nums[3]) + 1;
-        String[] ray = new String[r];
-        for (int i = 0; i < r; i++) {
-            ray[i] = in.readLine();
+        int b = Integer.parseInt(nums[1]);
+        int c = Integer.parseInt(nums[2]);
+        int rem = b;
+        TreeSet<Cashier> cashiers = new TreeSet<Cashier>();
+        for (int i = 0; i < c; i++) {
+            nums = in.readLine().split(" ");
+            int maxB = Integer.parseInt(nums[0]);
+            int s = Integer.parseInt(nums[1]);
+            int p = Integer.parseInt(nums[2]);
+            int init = Math.min(rem,maxB);
+            rem -= init;
+            cashiers.add(new Cashier(i,maxB,s,p,init));
+            System.out.println(s*init+p);
         }
-        rows = new int[r][cS];
-        int count = sum(ray);
-        if(count%rS != 0 || count%cS%rS != 0){
+        while(canSwap(cashiers)){
+            continue;
+        }
+        return cashiers.last().time();
+    }
+    boolean canSwap(TreeSet<Cashier> cashiers){
+        Cashier longest = cashiers.last();
+        Cashier swap = null;
+        for(Cashier cashier: cashiers){
+            if(longest.shouldSwap(cashier)){
+                swap = cashier;
+                System.out.println(" cont cash + " + cashiers.contains(cashier));
+                System.out.println(" cont swap + " + cashiers.contains(swap));
+                break;
+            }
+        }
+        if(swap != null){
+            cashiers.remove(swap);
+            cashiers.remove(longest);
+            longest.swap(swap);
+            cashiers.add(longest);
+            cashiers.add(swap);
+            return true;
+        }
+        return false;
+    }
+}
+class Cashier implements Comparable{
+    int id;
+    long maxB;
+    long s;
+    long p;
+    long b;
+    Cashier(int id, long maxB, long s, long p, long init){
+        this.id = id;
+        this.maxB = maxB;
+        this.s = s;
+        this.p = p;
+        b = init;
+    }
+    public int compareTo(Object c2){
+        Cashier c1 = (Cashier) c2;
+        long sol = time() - c1.time();
+        if(sol > 1){
+            return 1;
+        } else if(sol < 1){
+            return  -1;
+        } else{
+            return 0;
+        }
+    }
+    public long time(){
+        return (p + b*s);
+    }
+    public boolean shouldSwap(Cashier c1){
+        return (c1.time() + c1.s < time());
+    }
+    public void swap(Cashier c1){
+        b--;
+        c1.b++;
+    }
+    @Override
+    public boolean equals(Object o){
+        if(o == this){
+            return true;
+        }
+        if(!(o instanceof Cashier)){
             return false;
         }
-        //return solidCols(ray,count/cS,cS);
-        if(!solidCols(ray,count/cS, cS)){
-            return false;
-        }
-        return solidRows(count/rS/cS, rS);
+        Cashier c1 = (Cashier)o;
+        return id == c1.id;
     }
-    int sum(String[] ray){
-        int count = 0;
-        for (int i = 0; i < ray.length; i++) {
-            String cur = ray[i];
-            for (int j = 0; j < cur.length(); j++) {
-                 if(cur.charAt(j) == '@') count++;
-            }
-        }
-        return count;
-    }
-    boolean solidCols(String[] ray, int colA, int part){
-        int index = 0;
-        for (int i = 0; i < part; i++) {
-            int cur = 0;
-            int startI = index;
-            while(cur < colA){
-                if(index == ray[0].length()) return false;
-                cur += col(ray,index++);
-            }
-            if(cur > colA) return false;
-            updateRows(ray,startI,index, i);
-        }
-        return true;
-    }
-    void updateRows(String[] ray, int i1, int i2, int cI){
-        for (int i = 0; i < ray.length; i++) {
-            int count = 0;
-            for (int j = i1; j < i2; j++) {
-                if(ray[i].charAt(j) == '@'){
-                    count++;
-                }
-            }
-            rows[i][cI] = count;
-        }
-    }
-    int col(String[] ray, int idx){
-        int count = 0;
-        for (int i = 0; i < ray.length; i++) {
-            if(ray[i].charAt(idx) == '@'){
-                count++;
-            }
-        }
-        return count;
-    }
-    boolean solidRows(int am, int part){
-        int col = rows[0].length;
-        int rIndex = 0;
-        for (int i = 0; i < part; i++) {
-            int[] amountC = new int[col];
-            while(!match(amountC,am)){
-                if(rIndex == rows.length) return false;
-                addRow(rIndex++,amountC);
-            }
-        }
-        return true;
-    }
-    void addRow(int index,int[] amountC){
-        for (int i = 0; i < amountC.length; i++) {
-            amountC[i] += rows[index][i];
-        }
-    }
-    boolean match(int[] amountC, int tar){
-        for (int i = 0; i < amountC.length; i++) {
-            if(amountC[i] != tar) return false;
-        }
-        return true;
+    @Override
+    public int hashCode(){
+        return id;
     }
 }
 //Arrays.sort(strings,new sort());

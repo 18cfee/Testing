@@ -39,10 +39,55 @@ class Solver{
         g = new Graph();
     }
     public void solve(int funcCall) throws IOException{
-        int a =in.nextInt();
-        System.out.println(a);
+        ArrayList<Integer> possibleSolutions = new ArrayList<>();
+        System.out.println("1: -> " + 0);
+        possibleSolutions.add(1);
+        for (int i = 2; i < 100; i++) {
+            possibleSolutions = incCurrent(possibleSolutions);
+            //addNewNums(possibleSolutions);
+            printNums(possibleSolutions);
+        }
+    }
+
+    void printNums(ArrayList<Integer> list)
+    {
+        for(Integer num : list)
+        {
+            System.out.println(num);
+        }
+    }
+
+    ArrayList<Integer> incCurrent(ArrayList<Integer> pos)
+    {
+        ArrayList<Integer> newList = new ArrayList<>();
+        for (Integer num: pos)
+        {
+            if(num%10 == 9)
+            {
+                continue;
+            }
+            newList.add(num+1);
+        }
+        return newList;
+    }
+
+
+}
+class Number {
+    int scale;
+    int baseVal;
+
+    boolean shouldBeRemoved()
+    {
+        return (baseVal%10 == 9);
+    }
+
+    int getVal()
+    {
+        return baseVal*scale;
     }
 }
+
 //Arrays.sort(strings,new sort());
 class sort implements Comparator<String>{
     public int compare(String a, String b){

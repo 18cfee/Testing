@@ -38,50 +38,9 @@ class Solver{
         r = new Ray(in);
         g = new Graph();
     }
-//    public void solve(int funcCall) throws IOException{
-//        double num = ((float)in.nextDouble())/sqrt2;
-//
-//        BigDecimal dec = new BigDecimal(num);
-//        BigDecimal angle = Math.acos(dec);
-//                //(float)(Math.acos(mnum)) + pi4;
-//        System.out.println("Case #" + funcCall + ":");
-//        float x1 = (float)(-Math.sin(angle)*.5);
-//        double y1 = (float)(Math.cos(angle)*.5);
-//        System.out.println(x1 + " " + y1 + " " + 0);
-//        System.out.println("0 0 0.5");
-//    }
-    double pi4 = Math.PI/4;
-    double sqrt2 = Math.sqrt(2);
-    final long conv = 1000000000000000000l;
     public void solve(int funcCall) throws IOException{
-        int a = in.nextInt();
-        int size = Math.max((int)Math.ceil((double)a/3),3);
-        BitSet[] marked = new BitSet[size + 2];
-        for (int i = 0; i < size + 2; i++) {
-            marked[i] = new BitSet();
-        }
-        for (int i = 2; i < size; i++) {
-            while(!marked(marked[i-1])){
-                System.out.println(2 + " " + i);
-                int x = in.nextInt();
-                int y = in.nextInt();
-                if(x == 0 && y == 0){
-                    return;
-                }
-                marked[y].set(x);
-            }
-        }
-        while(true){
-            System.out.println(2 + " " + (size - 1));
-            int x = in.nextInt();
-            int y = in.nextInt();
-            if(x == 0 && y == 0){
-                return;
-            }
-        }
-    }
-    boolean marked(BitSet set){
-        return (set.get(3) && set.get(1) && set.get(2));
+        int a =in.nextInt();
+        System.out.println(a);
     }
 }
 //Arrays.sort(strings,new sort());
@@ -90,13 +49,6 @@ class sort implements Comparator<String>{
         return b.length() - a.length();
     }
 }
-
-
-
-
-
-
-
 
 class Trie{
     public int numInserted = 0;

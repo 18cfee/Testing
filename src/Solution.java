@@ -39,34 +39,36 @@ class Solver{
         g = new Graph();
     }
     public void solve(int funcCall) throws IOException{
-        ArrayList<Integer> possibleSolutions = new ArrayList<>();
+        ArrayList<Number> possibleSolutions = new ArrayList<>();
         System.out.println("1: -> " + 0);
-        possibleSolutions.add(1);
+        possibleSolutions.add(new Number(1));
         for (int i = 2; i < 100; i++) {
             possibleSolutions = incCurrent(possibleSolutions);
-            //addNewNums(possibleSolutions);
+            possibleSolutions.add(addNewNums(i));
             printNums(possibleSolutions);
         }
     }
 
-    void printNums(ArrayList<Integer> list)
+    Number addNewNums(int i)
     {
-        for(Integer num : list)
+
+    }
+
+    void printNums(ArrayList<Number> list)
+    {
+        for(Number num : list)
         {
-            System.out.println(num);
+            System.out.println(num.getVal());
         }
     }
 
-    ArrayList<Integer> incCurrent(ArrayList<Integer> pos)
+    ArrayList<Number> incCurrent(ArrayList<Number> pos)
     {
-        ArrayList<Integer> newList = new ArrayList<>();
-        for (Integer num: pos)
+        ArrayList<Number> newList = new ArrayList<>();
+        for (Number num: pos)
         {
-            if(num%10 == 9)
-            {
-                continue;
-            }
-            newList.add(num+1);
+            if(num.shouldBeRemoved()) continue;
+            newList.add(num);
         }
         return newList;
     }
@@ -77,9 +79,15 @@ class Number {
     int scale;
     int baseVal;
 
+    Number(int scale)
+    {
+        this.scale = scale;
+        baseVal = 1;
+    }
+
     boolean shouldBeRemoved()
     {
-        return (baseVal%10 == 9);
+        return (baseVal++%10 == 9);
     }
 
     int getVal()

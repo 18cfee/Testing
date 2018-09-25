@@ -19,18 +19,25 @@ public class Solution {
         Solver sol = new Solver(in);
         int t = 1;
         t = Integer.parseInt(in.readLine());
+        int[] list = sol.calculateFirstFew();
         for (int i = 0; i < t; i++) {
-            sol.solve(i+1);
+            sol.solve(list);
         }
+        sol.printBuff();
         in.close();
     }
 }
 
 
-class Solver{
-    Reader in; DataStructures d; CarlString sLi; CarlNumbers ma; Ray r; Graph g;
+class Solver {
+    Reader in;
+    DataStructures d;
+    CarlString sLi;
+    CarlNumbers ma;
+    Ray r;
+    Graph g;
 
-    Solver(Reader in){
+    Solver(Reader in) {
         this.in = in;
         d = new DataStructures();
         sLi = new CarlString();
@@ -38,61 +45,70 @@ class Solver{
         r = new Ray(in);
         g = new Graph();
     }
-    public void solve(int funcCall) throws IOException{
-        ArrayList<Number> possibleSolutions = new ArrayList<>();
-        System.out.println("1: -> " + 0);
-        possibleSolutions.add(new Number(1));
-        for (int i = 2; i < 100; i++) {
-            possibleSolutions = incCurrent(possibleSolutions);
-            possibleSolutions.add(addNewNums(i));
-            printNums(possibleSolutions);
+
+    public void printBuff()
+    {
+        System.out.println(buff);
+    }
+
+    public void solve(int funcCall) throws IOException {
+        System.out.println(funcCall);
+    }
+    static StringBuffer buff = new StringBuffer();
+    void solve(int[] list) throws IOException
+    {
+        int cur = Integer.parseInt(in.readLine());
+        buff.append(list[cur-1]);
+        buff.append(System.lineSeparator());
+    }
+
+    int[] calculateFirstFew(){
+        long max = 500000;
+        ArrayList<Number> list = new ArrayList<>();
+        for (int i = 0; i < max; i++) {
+            list.add(new Number(i));
         }
-    }
-
-    Number addNewNums(int i)
-    {
-
-    }
-
-    void printNums(ArrayList<Number> list)
-    {
-        for(Number num : list)
+        Collections.sort(list);
+        int[] ray = new int[10000000];
+        for(int i = 0; i < 9000; i++)
         {
-            System.out.println(num.getVal());
+            ray[i] = list.get(i).base10;
         }
-    }
-
-    ArrayList<Number> incCurrent(ArrayList<Number> pos)
-    {
-        ArrayList<Number> newList = new ArrayList<>();
-        for (Number num: pos)
-        {
-            if(num.shouldBeRemoved()) continue;
-            newList.add(num);
-        }
-        return newList;
+        return ray;
     }
 
 
 }
-class Number {
-    int scale;
-    int baseVal;
 
-    Number(int scale)
+class Number implements Comparable<Number>
+{
+    int value;
+    int base10;
+    Number(int base10)
     {
-        this.scale = scale;
-        baseVal = 1;
+        this.base10 = base10;
+        value = calc(base10);
     }
 
-    boolean shouldBeRemoved()
+    int calc(int base10)
     {
-        return (baseVal++%10 == 9);
+        int sum = 0;
+        int inc = 1;
+        while(base10 > 0)
+        {
+            sum += inc*(base10%10);
+            base10 /= 10;
+            inc*=2;
+        }
+        return sum;
     }
 
-    int getVal()
-    {
-        return baseVal*scale;
+    @Override
+    public int compareTo(Number number) {
+        if(number.value == value){
+            return -number.base10 + base10;
+        }
+        return -number.value + value;
     }
 }
 

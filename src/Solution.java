@@ -4,12 +4,13 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import static java.lang.System.out;
+import static java.util.stream.Collectors.joining;
 
 // I am using a file that I use for HackerRank. The code is mine, other than
 
 public class Solution {
     public static void main(String[] args) throws IOException {
-        // This is just generic stuff I use for hackerrank to make it easy to use IDE (reusing though)
+//         This is just generic stuff I use for hackerrank to make it easy to use IDE (reusing though)
 //        String fileName = "sol.in";
 //        File f = new File(fileName);
 //        Scanner in = new Scanner(System.in);
@@ -18,13 +19,11 @@ public class Solution {
 //        }
         String fileName = "sol.in";
         Reader in = new Reader(fileName);
-        BufferedWriter out = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
-        Solver sol = new Solver(in,out);
+        Solver sol = new Solver(in);
         int t = Integer.parseInt(in.readLine());
         for (int i = 0; i < t; i++) {
             sol.solve();
         }
-        sol.printBuff();
         in.close();
         out.close();
     }
@@ -38,15 +37,13 @@ class Solver {
     CarlNumbers ma;
     Ray r;
     Graph g;
-    BufferedWriter bufferedWriter;
-    Solver(Reader in, BufferedWriter out) {
+    Solver(Reader in) {
         this.in = in;
         d = new DataStructures();
         sLi = new CarlString();
         ma = new CarlNumbers();
         r = new Ray(in);
         g = new Graph();
-        bufferedWriter = out;
     }
 
     public void printBuff()
@@ -64,10 +61,10 @@ class Solver {
         int num = trie.add(cur);
         //System.out.println(cur + num + " " + trie.charsIn);
         if(num>1)
-        out.println(cur + " " + num);
+            System.out.println(cur + " " + num);
         else
         {
-            out.println(cur.substring(0,trie.charsIn + 1));
+            System.out.println(cur.substring(0,Math.min(trie.charsIn + 1,cur.length())));
         }
     }
     static StringBuffer buff = new StringBuffer();

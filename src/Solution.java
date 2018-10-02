@@ -3,6 +3,8 @@ import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.util.*;
 
+import static java.lang.System.out;
+
 // I am using a file that I use for HackerRank. The code is mine, other than
 
 public class Solution {
@@ -16,15 +18,15 @@ public class Solution {
 //        }
         String fileName = "sol.in";
         Reader in = new Reader(fileName);
-        Solver sol = new Solver(in);
-        int t = 1;
-        t = Integer.parseInt(in.readLine());
-        int[] list = sol.calculateFirstFew();
+        BufferedWriter out = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
+        Solver sol = new Solver(in,out);
+        int t = Integer.parseInt(in.readLine());
         for (int i = 0; i < t; i++) {
-            sol.solve(list);
+            sol.solve();
         }
         sol.printBuff();
         in.close();
+        out.close();
     }
 }
 
@@ -36,23 +38,37 @@ class Solver {
     CarlNumbers ma;
     Ray r;
     Graph g;
-
-    Solver(Reader in) {
+    BufferedWriter bufferedWriter;
+    Solver(Reader in, BufferedWriter out) {
         this.in = in;
         d = new DataStructures();
         sLi = new CarlString();
         ma = new CarlNumbers();
         r = new Ray(in);
         g = new Graph();
+        bufferedWriter = out;
     }
 
     public void printBuff()
     {
-        System.out.println(buff);
+        out.println(buff);
     }
 
-    public void solve(int funcCall) throws IOException {
-        System.out.println(funcCall);
+    ArrayList<String> curs = new ArrayList<>();
+    char curL = 'a';
+    Trie trie = new Trie();
+
+    public void solve() throws IOException {
+        String cur = in.readLine();
+        trie.charsIn = 0;
+        int num = trie.add(cur);
+        //System.out.println(cur + num + " " + trie.charsIn);
+        if(num>1)
+        out.println(cur + " " + num);
+        else
+        {
+            out.println(cur.substring(0,trie.charsIn + 1));
+        }
     }
     static StringBuffer buff = new StringBuffer();
     void solve(int[] list) throws IOException
@@ -110,6 +126,14 @@ class Number implements Comparable<Number>
         }
         return -number.value + value;
     }
+
+    @Override
+    public String toString() {
+        return "Number{" +
+                "value=" + value +
+                ", base10=" + base10 +
+                '}';
+    }
 }
 
 //Arrays.sort(strings,new sort());
@@ -120,24 +144,29 @@ class sort implements Comparator<String>{
 }
 
 class Trie{
+    static int charsIn = 0;
     public int numInserted = 0;
     Trie[] children;
     boolean last = false;
     Trie(){
         children = new Trie[26];
     }
-    public void add(String remaining){
+    public int add(String remaining){
         if(remaining.length() == 0){
             last = true;
             numInserted++;
-            return;
+            return numInserted;
         }
         int a = remaining.charAt(0) - 'a';
         if(children[a] == null){
             children[a] = new Trie();
         }
-        numInserted++;
-        children[a].add(remaining.substring(1));
+        else
+        {
+            charsIn++;
+        }
+        //numInserted++;
+        return children[a].add(remaining.substring(1));
     }
     public boolean subString(String word){
         if(word.length() == 0) return true;
@@ -210,9 +239,9 @@ class DataStructures{
     public void printList(List<Integer> thatAr){
         int nnn = thatAr.size();
         for(int i = 0; i < nnn; i++){
-            System.out.print(thatAr.get(i) + " ");
+            out.print(thatAr.get(i) + " ");
         }
-        System.out.println();
+        out.println();
     }
     public ArrayList<Integer> genMaxList(){
         ArrayList<Integer> list = new ArrayList<Integer>();
@@ -464,20 +493,20 @@ class Ray {
     public void printArray(char[][] ray){
         int height = ray.length;
         for (int i = 0; i < height; i++) {
-            System.out.println(ray[i]);
+            out.println(ray[i]);
         }
     }
     public void printArray(long[] ray){
         int height = ray.length;
         for (int i = 0; i < height - 1; i++) {
-            System.out.print(ray[i] + " ");
+            out.print(ray[i] + " ");
         }
-        System.out.println(ray[height - 1]);
+        out.println(ray[height - 1]);
     }
     public void printArray(String[] ray){
         int height = ray.length;
         for (int i = 0; i < height; i++) {
-            System.out.println(ray[i]);
+            out.println(ray[i]);
         }
     }
     public long sumArray(int[] array){
@@ -490,9 +519,9 @@ class Ray {
     public void printArray(int[] thatAr){
         int nnn = thatAr.length;
         for(int i = 0; i < nnn; i++){
-            System.out.print(thatAr[i] + " ");
+            out.print(thatAr[i] + " ");
         }
-        System.out.println();
+        out.println();
     }
     public int[] populateIntArray(Reader in, int size) throws IOException{
         int[] array = new int[size];
@@ -568,9 +597,9 @@ class Ray {
         for(int i = 0; i < nnn; i++){
             int[] current = thatAr[i];
             for(int j= 0; j < current.length; j++){
-                System.out.print(current[j] + " ");
+                out.print(current[j] + " ");
             }
-            System.out.println();
+            out.println();
         }
     }
 }

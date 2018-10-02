@@ -11,12 +11,6 @@ import static java.util.stream.Collectors.joining;
 public class Solution {
     public static void main(String[] args) throws IOException {
 //         This is just generic stuff I use for hackerrank to make it easy to use IDE (reusing though)
-//        String fileName = "sol.in";
-//        File f = new File(fileName);
-//        Scanner in = new Scanner(System.in);
-//        if (f.exists() && !f.isDirectory()) {
-//            in = new Scanner(f);
-//        }
         String fileName = "sol.in";
         Reader in = new Reader(fileName);
         Solver sol = new Solver(in);
@@ -24,6 +18,9 @@ public class Solution {
         for (int i = 0; i < t; i++) {
             sol.solve();
         }
+        String some = System.getenv("hello");
+        out = System.out;
+        out.println(some);
         in.close();
         out.close();
     }

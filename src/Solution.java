@@ -71,6 +71,14 @@ class Solver {
         {
             ray[i] = list.get(i).base10;
         }
+        try
+        {
+            out.append("nah");
+        } catch (Exception ex)
+        {
+
+        }
+
         return ray;
     }
 

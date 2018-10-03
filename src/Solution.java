@@ -13,14 +13,12 @@ public class Solution {
 //         This is just generic stuff I use for hackerrank to make it easy to use IDE (reusing though)
         String fileName = "sol.in";
         Reader in = new Reader(fileName);
-        Solver sol = new Solver(in);
+        BufferedWriter out = new BufferedWriter(new OutputStreamWriter(System.out));
+        Solver sol = new Solver(in,out);
         int t = Integer.parseInt(in.readLine());
         for (int i = 0; i < t; i++) {
             sol.solve();
         }
-        String some = System.getenv("hello");
-        out = System.out;
-        out.println(some);
         in.close();
         out.close();
     }
@@ -34,18 +32,15 @@ class Solver {
     CarlNumbers ma;
     Ray r;
     Graph g;
-    Solver(Reader in) {
+    BufferedWriter out;
+    Solver(Reader in, BufferedWriter out) {
         this.in = in;
         d = new DataStructures();
         sLi = new CarlString();
         ma = new CarlNumbers();
         r = new Ray(in);
         g = new Graph();
-    }
-
-    public void printBuff()
-    {
-        out.println(buff);
+        this.out = out;
     }
 
     ArrayList<String> curs = new ArrayList<>();
@@ -56,20 +51,12 @@ class Solver {
         String cur = in.readLine();
         trie.charsIn = 0;
         int num = trie.add(cur);
-        //System.out.println(cur + num + " " + trie.charsIn);
         if(num>1)
-            System.out.println(cur + " " + num);
+            out.append(cur + " " + num + "\n");
         else
         {
-            System.out.println(cur.substring(0,Math.min(trie.charsIn + 1,cur.length())));
+            out.append(cur.substring(0,Math.min(trie.charsIn + 1,cur.length())) + "\n");
         }
-    }
-    static StringBuffer buff = new StringBuffer();
-    void solve(int[] list) throws IOException
-    {
-        int cur = Integer.parseInt(in.readLine());
-        buff.append(list[cur-1]);
-        buff.append(System.lineSeparator());
     }
 
     int[] calculateFirstFew(){

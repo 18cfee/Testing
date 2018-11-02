@@ -1,0 +1,74 @@
+		NavigableMap couponRates = redemptionSubProcessor.get(HydrationDataPoint.COUPON_RATES);
+
+		NavigableMap<TimedGlobalDate,Double> entries = couponRates.subMap(startDate,true,endDate,true);
+
+		Iterator rates = entries.entrySet().iterator();
+
+//		System.out.println("print using for each");
+//
+//		for(Map.Entry<TimedGlobalDate,Double> entry : entries.entrySet())
+//		{
+//			System.out.println("the key is: " + entry.getKey().toString() + " " + entry.getValue().toString());
+//		}
+//
+//		System.out.println("now printing out the iterable method way");
+//
+//		while(rates.hasNext())
+//		{
+//			Map.Entry me = (Map.Entry)rates.next();
+//			System.out.print("Key is: "+me.getKey() + " & ");
+//			System.out.println("Value is: "+me.getValue());
+//		}
+
+		// todo carl - it seemed that the endDate was after the last period endDate in the payment schedule
+		//double dayValue = 1.0/365.0;
+		double accrual = 0.0;
+		double rate;
+		Map.Entry nextRate = null;
+		if(entries.size() > 1)
+		{
+			Map.Entry firstRate = (Map.Entry) rates.next();
+			rate = (Double) firstRate.getValue();
+			nextRate = (Map.Entry) rates.next();
+		}
+		else
+		{
+			rate = entries.firstEntry().getValue();
+		}
+
+		// todo utilize the iterable functionality of the schedule rather than simply calling get
+		TimedGlobalDate endCurrentPeriod = schedule.getPeriod(startDate).getEndDate();
+
+
+
+		for (TimedGlobalDate date : new TimedGlobalDateRange(startDate.sameDateBOD(),
+				endDate.sameDateEOD().addMonths(-1)))
+		{
+			if(date.onOrAfter(endCurrentPeriod) && date.getTimeOfDay().equals(TimeOfDay.BEGINNING_OF_DAY))
+			{
+				accrual = 0.0;
+				endCurrentPeriod = schedule.getPeriod(date).getEndDate();
+			}
+			else
+			{
+				if(nextRate != null && date.onOrAfter((TimedGlobalDate) nextRate.getKey()))
+				{
+					rate = (double) nextRate.getValue();
+					if(rates.hasNext())
+					{
+						nextRate = (Map.Entry) rates.next();
+					}
+					else
+					{
+						nextRate = null;
+					}
+				}
+				if(date.getTimeOfDay().equals(TimeOfDay.END_OF_DAY))
+					accrual += rate/date.getDaysInYear();
+			}
+			accruedMap.put(date, accrual);
+		}
+
+		long endTime = System.currentTimeMillis();
+		System.out.println("the accrual took:" + (endTime - startTime));
+		return accruedMap;
